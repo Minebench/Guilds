@@ -1,0 +1,432 @@
+texts:
+  standard:
+    founderRank: 'Gründer'
+    newbyRank: 'Neuling'
+  prefix:
+    messages: '&7[&8G&7]'
+    chat: '&7[{0}&7]'
+  error:
+    noPermission: '&c Du hast keine ausreichende Berechtigung!'
+    playerOffline: '&c {0} ist offline!'
+    playerUnknown: '&c {0} ist unbekannt!'
+    playerDoesntExist: '&c {0} existiert nicht!'
+    noDbConnection: '&c Die Verbindung zur Datenbank ist gescheitert!'
+    noRequest: '&c Es gibt nichts zu bestätigen!'
+    nameTooLong: '&c Der angegebene Name ist zu lang!'
+    tagTooLong: '&c Der angegebene Tag ist zu lang!'
+    prefixTooLong: '&c Der angegebene Präfix ist zu lang!'
+    noPendingInvites: '&c Du hast derzeit keine Einladungen offen!'
+    noCurrentGuild: '&c Du bist derzeit nicht Mitglied einer Gilde!'
+    noCurrentAlliance: '&c Deine Gilde ist derzeit nicht Mitglied einer Allianz!'
+    hasPendingInvite: '&c {0} hat bereits eine Einladung erhalten!'
+    noSelfInvite: '&c Du kannst dich nicht selbst einladen!'
+    isInThisGuildAlready: '&c {0} ist bereits Mitglied von {1}!'
+    isInAGuildAlready: '&c {0} ist bereits Mitglied einer Gilde!'
+    noValidColor: '&c {0} ist keine zulässige Farbe!'
+    homeServerUnreachable: '&c Der Server ist derzeit nicht erreichbar!'
+    wrongHomeServer: '&mainColor Du befindest dich derzeit auf dem falschen Server! Serverübergreifender Teleport ist derzeit deaktiviert!'
+    noHome: '&c Deine Gilde hat derzeit kein Home gesetzt!'
+    notInThisGuild: '&c {0} ist kein Mitglied von {1}!'
+    noSelfKick: '&c Du kannst dich nicht selbst kicken!'
+    unknownRank: '&c Dieser Rang existiert nicht!'
+    guildAlreadyExists: '&c Es existiert bereits eine Gilde mit diesem Namen!'
+    allianceAlreadyExists: '&c Es existiert bereits eine Allianz mit diesem Namen!'
+    guildDoesntExist: '&c Es existiert keine Gilde mit diesem Namen!'
+    allianceDoesntExist: '&c Es existiert keine Allianz mit diesem Namen!'
+    stillInGuild: '&c Du bist noch in einer Gilde!'
+    stillInAlliance: '&c Deine Gilde ist bereits Teil einer Allianz!'
+    guildIsNotPartOfAlliance: '&c Die angegebene Gilde ist nicht Teil der angegebenen Allianz!'
+    notEnoughMoney: '&c Du hast nicht genügend Geld!'
+    notEnoughMoneyFounding: '&c Du hast nicht genügend Geld! Zum Gründen einer Gilde benötigst du {0} Bench.'
+    notEnoughExp: '&c Du hast nicht genügend Erfahrung!'
+    guildFullyUpgraded: '&c Deine Gilde hat bereits das maximale Level erreicht!'
+    cannotDeleteBaseRank: '&c Du kannst den Standardrang nicht löschen!'
+    cannotDeleteLeaderRank: '&c Du kannst den Leaderrang nicht löschen!'
+    cannotLeaveLeader: '&c Du kannst deine eigene Gilde nicht verlassen!'
+    guildFull: '&c Du kannst keine weiteren Spieler einladen! Vergrößere deine Gilde um mehr Spieler einzuladen!'
+    unknownLevel: '&c Dieses Level existiert nicht!'
+    noNumber: '&c {0} ist keine Zahl!'
+    noVault: '&c Auf diesem Server ist keine Wirtschaft aktiv. Bitte wechsele auf einen anderen Server!'
+    noSurvival: '&c Du befindest dich im Spielmodus CREATIVE!'
+    unknown: 'unbekannt'
+    rank:
+      noPermission: '&c Dir fehlt die Berechtigung ''{0}''!'
+    wrongUsage:
+      addAdmin: '&c Falsche Eingabe! Probiere /guildadmin add <Spieler> <Gilde>!'
+      color: '&c Falsche Eingabe! Probiere /guild color <Farbe>!'
+      changeNameAdmin: '&c Falsche Eingabe! Probiere /guildadmin changename <Gilde> <Name>!'
+      changeTagAdmin: '&c Falsche Eingabe! Probiere /guildadmin changetag <Gilde> <Tag>!'
+      create: '&c Falsche Eingabe! Probiere /guild create <Name> <Tag> <Farbe>!'
+      createAlliance: '&c Falsche Eingabe! Probiere /alliance create <Name> <Tag> <Farbe>'
+      createRank: '&c Falsche Eingabe! Probiere /gilde createrank <?>'
+      deletePrefix: '&c Falsche Eingabe! Probiere /guild deleteprefix <Name>'
+      deleteRank: '&c Falsche Eingabe! Probiere /guild deleterank <Rang>'
+      editRank: '&c Falsche Eingabe! Probiere /guild editrank <Name>'
+      giveExp: '&c Falsche Eingabe! Probiere /guild exp <Exp>'
+      invite: '&c Falsche Eingabe! Probiere /guild invite <Name>'
+      inviteAlliance: '&c Falsche Eingabe! Probiere /alliance invite <Gilde>'
+      kick: '&c Falsche Eingabe! Probiere /guild kick <Name>'
+      kickFromAllianceAdmin: '&c Falsche Eingabe! Probiere /guildadmin kick <Gilde> <Allianz>'
+      level: '&c Falsche Eingabe! Probiere /guild level <Level>'
+      lookup: '&c Falsche Eingabe! Probiere /guild lookup <Name>'
+      pay: '&c Falsche Eingabe! Probiere /guild pay <Geld>'
+      prefix: '&c Falsche Eingabe! Probiere /guild prefix <Name> <Prefix>'
+      promote: '&c Falsche Eingabe! Probiere /guild promote <Name> <Rang>"'
+      rank: '&c Falsche Eingabe! Probiere /guild rank <Name>'
+      withdrawMoney: '&c Falsche Eingabe! Probiere /guild pay <Geld>'
+  info:
+    chat:
+      playerJoined: '&7 {0} ist beigetreten!'
+      playerDenied: '&7 {0} hat die Einladung abgelehnt!'
+      playerKicked: '&7 {0} wurde aus der Gilde gekickt!'
+      playerLeft: '&7 {0} hat die Gilde verlassen!'
+      playerPromoted: '&7 {0} wurde in den Rang {1} befördert!'
+      playerPaid: '&7 {0} hat {1} Bench in die Gildenkasse eingezahlt!'
+      playerPaidExp: '&7 {0} hat {1} Erfahrung mit der Gilde geteilt!'
+      playerGotAdded: '&7 {0} wurde zur Gilde hinzugefügt!'
+      playerGotAddedUnknownName: 'Jemand'
+      guildUpgraded: '&7 {0} hat die Gilde auf Level {1} geupgraded!'
+      allianceCreated: '&7 {0} hat die Allianz {1} gegründet!'
+      guildDisbanded: '&7 {0} hat die Gilde aufgelöst!'
+      allianceGotInvited: '&7 Ihr wurdet von der Allianz {0} &7eingeladen &7ihnen &7beizutreten!'
+      allianceAccept: '&7 Gib &a/alliance accept&7 oder &c/alliance deny&7 ein!'
+      guildJoinedAlliance: '&7 {0} ist der Allianz beigetreten!'
+      guildLeftAlliance: '&7 {0} hat die Allianz verlassen'
+      guildKickedFromAlliance: '&7 Die Gilde {0} wurde aus der Allianz entfernt!'
+      youJoinedAlliance: '&7 Ihr seid der Allianz {0} beigetreten!'
+      youLeftAlliance: '&7 Ihr habt die Allianz {0} verlassen!'
+      youGotKickedFromAlliance: '&7 Ihr wurdet aus der Allianz {0} entfernt!'
+    alliance:
+      create:
+        name: '&accent Name:&mainColor {0}'
+        tag: '&accent Tag:&mainColor {0}'
+        color: '&accent Farbe:&mainColor {0}'
+        price: '&accent Preis:&mainColor {0}'
+        allianceCreated: '&mainColor Du hat die Allianz {0} gegründet!'
+      command:
+        head: '&2 Folgende Commands stehen dir mit &a/alliance <Command>&2 zur Verfügung: (&a{0}&2/&a{1}&2)'
+        bottom: '&2 Für andere Seiten: &a/alliance <#>:'
+      confirm:
+        confirm: '&mainColor Bestätige die Aktion mit &accent/alliance confirm&mainColor!'
+      disband:
+        allianceDisbanded: '&mainColor Die Allianz wurde aufgelöst!'
+      info:
+        head: '&2 Informationen zu &mainColor{0}: '
+        element: '&8 - &mainColor[{0}] &a{1}'
+      invite:
+        invitedGuild: '&mainColor Du hast die Gilde &accent{0}&mainColor eingeladen!'
+        youAcceptedInvite: '&mainColor Deine Gilde ist der Allianz {0} beigetreten!'
+        youDeniedInvite: '&2 Deine Gilde hat die Einladung abgelehnt!'
+      list:
+        head: '&2 Derzeit existieren folgende Allianzen: (&a{0}&2/&a{1}&2)'
+        element: '&8 - &mainColor[{0}] &a{1}: &7{2} Gilden'
+        bottom: '&2 Für andere Seiten: &a/alliance list <#>:'
+      leave:
+        youLeftAlliance: '&mainColor Deine Gilde ist aus der Allianz {0} ausgetreten!'
+    guild:
+      blackboard:
+        head: '&mainColor Gilden-Blackboard:'
+        message: '&7 [&8{0}&7] &mainColor{1}: &accent{2}'
+        cleared: '&mainColor Du hast alle Nachrichten aus dem Blackboard entfernt!'
+      color:
+        colorSet: '&accent Du hast die Farbe deiner Gilde auf&mainColor {0}&accent geändert!'
+      command:
+        head: '&2 Folgende Commands stehen dir mit &a/guild <Command>&2 zur Verfügung: (&a{0}&2/&a{1}&2)'
+        bottom: '&2 Für andere Seiten: &a/guild <#>:'
+      confirm:
+        confirm: '&mainColor Bestätige die Aktion mit &accent/guild confirm&mainColor!'
+      create:
+        name: '&accent Name:&mainColor {0}'
+        tag: '&accent Tag:&mainColor {0}'
+        color: '&accent Farbe:&mainColor {0}'
+        price: '&accent Preis:&mainColor {0}'
+        guildCreated: '&accent Du hast die Gilde &mainColor{0}&accent erfolgreich erstellt!'
+      createRank:
+        rankCreated: '&mainColor Du hast den Rang &accent {0}&mainColor erfolgreich erstellt!'
+        name: '&mainColor Wie soll der Name des Rangs lauten? Gib &accent/guild createrank <Name>&mainColor ein!'
+        invite: '&mainColor Darf dieser Rang neue Spieler einladen? Gib&accent /guild createrank <Ja/Nein>&mainColor ein!'
+        kick: '&mainColor Darf dieser Rang Spieler kicken? Gib &accent/guild createrank <Ja/Nein>&mainColor ein!'
+        promote: '&mainColor Darf dieser Rang Spieler befördern? Gib &accent/guild createrank <Ja/Nein>&mainColor ein!'
+        disband: '&mainColor Darf dieser Rang die Gilde auflösen? Gib &accent/guild createrank <Ja/Nein>&mainColor ein!'
+        upgrade: '&mainColor Darf dieser Rang die Gilde upgraden? Gib &accent/guild createrank <Ja/Nein>&mainColor ein!'
+        withdrawMoney: '&mainColor Darf dieser Rang Geld aus der Kasse abheben? Gib &accent/guild createrank <Ja/Nein>&mainColor ein!'
+        useBlackboard: '&mainColor Darf dieser Rang Nachrichten ins Blackboard eintragen? Gib &accent/guild createrank <Ja/Nein>&mainColor ein!'
+        doDiplomacy: '&mainColor Darf dieser Rang Diplomatie betreiben? Gib &accent/guild editrank <Ja/Nein> &mainColor ein!'
+        baseRank: '&mainColor Ist dieser Rang der Standardrang für neue Spieler? Gib &accent/guild createrank <Ja/Nein>&mainColor ein!'
+        finish: '&mainColor Die Erstellung ist fast abgeschlossen! Gib &accent/guild createrank fertig&mainColor ein!'
+        cancelled: '&mainColor Du hast die Rangerstellung abgebrochen!'
+      deletePrefix:
+        prefixDeleted: '&mainColor Du hast den Präfix von &accent {0}&mainColor gelöscht!'
+      deleteRank:
+        rankDeleted: '&mainColor Du hast den Rang &accent {0}&mainColor erfolgreich gelöscht!'
+      disband:
+        guildDisbanded: '&mainColor Du hast deine Gilde aufgelöst!'
+      editRank:
+        rankEdited: '&mainColor Du hast den Rang &a{0}&mainColor erfolgreich editiert!'
+        name: '&mainColor Wie soll der Name des Rangs lauten? Gib &accent/guild editrank <Name>&mainColor ein! Derzeit: {0} '
+        invite: '&mainColor Darf dieser Rang neue Spieler einladen? Gib &accent/guild editrank <Ja/Nein>&mainColor ein! Derzeit: {0} '
+        kick: '&mainColor Darf dieser Rang Spieler kicken? Gib &accent/guild editrank <Ja/Nein>&mainColor ein! Derzeit: {0} '
+        promote: '&mainColor Darf dieser Rang Spieler befördern? Gib &accent/guild editrank <Ja/Nein>&mainColor ein! Derzeit: {0} '
+        disband: '&mainColor Darf dieser Rang die Gilde auflösen? Gib &accent/guild editrank <Ja/Nein>&mainColor ein! Derzeit: {0} '
+        upgrade: '&mainColor Darf dieser Rang die Gilde upgraden? Gib &accent/guild editrank <Ja/Nein>&mainColor ein! Derzeit: {0} '
+        withdrawMoney: '&mainColor Darf dieser Rang Geld aus der Kasse abheben? Gib &accent/guild editrank <Ja/Nein>&mainColor ein! Derzeit: {0} '
+        useBlackboard: '&mainColor Darf dieser Rang Nachrichten ins Blackboard eintragen? Gib &accent/guild editrank <Ja/Nein>&mainColor ein! Derzeit: {0}'
+        doDiplomacy: '&mainColor Darf dieser Rang Diplomatie betreiben? Gib &accent/guild editrank <Ja/Nein>&mainColor ein! Derzeit: {0}'
+        baseRank: '&mainColor Ist dieser Rang der Standardrang für neue Spieler? Gib &accent/guild editrank <Ja/Nein>&mainColor ein! Derzeit: {0} '
+        finish: '&mainColor Die Editierung ist fast abgeschlossen! Gib &accent/guild editrank fertig &mainColor ein !'
+        cancelled: '&mainColor Du hast die Rangeditierung abgebrochen!'
+      exp:
+        paidExp: '&mainColor Du hast der Gilde &accent{0} Erfahrung&mainColor gespendet!'
+      home:
+        teleportedToHome: '&mainColor Du wurdest zu deinem Gilden-Home teleportiert!'
+      info:
+        head: '&mainColor Deine Gilde sieht derzeit folgendermaßen aus:'
+        name: '&mainColor Name: &accent{0}'
+        limit: '&mainColor Spieler-Limit: &accent{0}&mainColor/&accent{1}'
+        currentBalance: '&mainColor Gildenkasse: &accent{0}&mainColor/&accent{1}'
+        currentExpBalance: '&mainColor Erfahrung: &accent{0}&mainColor/&accent{1}'
+        currentLevel: '&mainColor Level: &accent{0}'
+        founded: '&mainColor Gegründet: &accent{0}'
+      invite:
+        invitedPlayer: '&mainColor Eine Einladung wurde an &accent{0}&mainColor verschickt!'
+        youGotInvited: '&mainColor Du wurdest von der Gilde &accent{0} &mainColoreingeladen &mainColorihnen &mainColorbeizutreten!'
+        accept: '&mainColor Gib &a/guild accept&mainColor oder &c/guild deny&mainColor ein!'
+        youAcceptedInvite: '&mainColor Du bist der Gilde beigetreten!'
+        youDeniedInvite: '&2 Du hast die Einladung abgelehnt!'
+      kick:
+        kickedPlayer: '&mainColor Du hast die &accent{0}&mainColor aus der Gilde gekickt!'
+        youGotKicked: '&mainColor Du wurdest von &accent{0}&mainColor aus der Gilde gekickt!'
+      leave:
+        youLeft: '&mainColor Du hast die Gilde verlassen!'
+      levels:
+        head: '&2 Folgende &aLevel&2 kann eine Gilde erreichen: '
+        element: '&8 - &7[&a{0}&7] &2{1}'
+        bottom: '&2 Für mehr Informationen zu einem Level: &a/guild level <#>'
+      level:
+        head: '&2 Das Level &a{0}&2 hat folgende Anforderungen: '
+        cost: '&8 - &2Geld: &a{0}&2 Bench'
+        expCost: '&8 - &2Geld: &a{0}&2 Erfahrung'
+        materialElement: '&8 - &2{0}:&a {1}'
+        head2: '&2 Es bietet dir folgende Aufwertungen: '
+        playerLimit: '&8 - &2Spieler-Limit: &a{0}'
+        enchantmentCost: '&8 - &2Verzauberungskosten: &a{0}%'
+        doubleCraftProbability: '&8 - &2Wahrscheinlichkeit für doppelten Crafting-Erfolg: &a{0}%'
+        specialDropChance: '&8 - &2Wahrscheinlichkeit für Special-Drop beim Abbauen: &a{0}%'
+        furnaceExpGainRatio: '&8 - &2Erhöhte Erfahrung bei der Benutzung von Öfen: &a{0}%'
+      list:
+        head: '&2 Derzeit existieren folgende Gilden: (&a{0}&2/&a{1}&2)'
+        element: '&8 - &7[&accent{0}&7] &mainColor{1}: &7{2} Mitglieder &8{3}'
+        bottom: '&2 Für andere Seiten: &a/guild list <#>:'
+      lookup:
+        head: '&mainColor Informationen über: &accent{0}'
+        guild: '&mainColor Gilde: &accent{0}'
+        prefix: '&mainColor Prefix: &accent{0}'
+        joined: '&mainColor Beigetreten: &accent{0}'
+        lastSeen: '&mainColor Zuletzt gesehen: &accent{0}'
+      pay:
+        paidMoney: '&mainColor Du hast &accent{0}&mainColor Bench in die Gildenkasse eingezahlt!'
+      prefix:
+        prefixSet: '&mainColor Du hast den Präfix von &accent{0}&mainColor auf &accent{1}&mainColor gesetzt!'
+      promote:
+        promotedPlayer: '&mainColor Du hast &accent{0}&mainColor in den Rang &accent{1}&mainColor befördert!'
+        youGotPromoted: '&mainColor Du wurdest in den Rang &accent{0}&mainColor befördert!'
+      rank:
+        head: '&accent Rang:&mainColor {0}'
+        element: '&8 - &mainColor{0}&accent: {1}'
+        info:
+          invite: 'Spieler einladen'
+          kick: 'Spieler kicken'
+          promote: 'Spieler befördern'
+          disband: 'Gilde auflösen'
+          upgrade: 'Gilde upgraden'
+          withdrawMoney: 'Geld aus der Gildenkasse entnehmen'
+          useBlackboard: 'Das Blackboard benutzen'
+          doDiplomacy: 'Diplomatie betreiben'
+          baseRank: 'Standardrang für Neulinge'
+          leader: 'Leader'
+          allowed: '&aerlaubt'
+          notAllowed: '&cnicht erlaubt'
+          bYes: '&aJa'
+          bNo: '&cNein'
+      ranks:
+        head: '&mainColor Deine Gilde verfügt über folgende Ränge: '
+        head2: '&mainColor Für mehr Informationen über einen Rang gib &accent/guild rank <Rang>&mainColor ein'
+        simpleElement: '&8 - &accent{0}'
+      roster:
+        head: '&mainColor Die Gilde {0} hat derzeit folgende Mitglieder: (&accent{1}&mainColor/&accent{2}&mainColor)'
+        headYou: '&mainColor Deine Gilde hat derzeit folgende Mitglieder: (&accent{0}&mainColor/&accent{1}&mainColor) '
+        elementOnline: '&8 - &mainColor{0}&7 {1} &a+'
+        elementOffline: '&8 - &mainColor{0}&7 {1} &c-'
+        bottom: '&mainColor Für andere Seiten: &accent /guild roster <Gilde> <#>:'
+      setHome:
+        guildHomeSet: '&mainColor Du hast das Guild-Home gesetzt!'
+      upgrade:
+        upgradedGuild: '&mainColor Du hast deine Gilde geupgraded!'
+        requirementsMissing: '&mainColor Du hast noch nicht alle Anforderungen für ein Upgrade auf den Rang &accent{0}&mainColor erfüllt: '
+        ready: '&mainColor Du hast alle Anforderungen für ein Upgrade auf den Rang &accent{0}&mainColor erfüllt: '
+        enoughMoney: '&mainColor Geld: &a{0}&7/&a{1}&mainColor: &aerfüllt'
+        notEnoughMoney: '&mainColor Geld: &c{0}&7/&c{1}&mainColor: &cnicht erfüllt'
+        enoughExp: '&mainColor Exp: &a{0}&7/&a{1}&mainColor: &aerfüllt'
+        notEnoughExp: '&mainColor Exp: &c{0}&7/&c{1}&mainColor: &cnicht erfüllt'
+        material: '&mainColor Materialien: '
+        enoughMaterialElement: '&mainColor {0}: &a{1}&7/&a{2}&mainColor: &aerfüllt'
+        notEnoughMaterialElement: '&mainColor {0}: &c{1}&7/&c{2}&mainColor: &cnicht erfüllt'
+      withdrawMoney:
+        withdrewMoney: '&mainColor Du hast &accent{0}&mainColor Bench aus der Gildenkasse genommen!'
+      enchantmentGotCheaper: '&mainColor Durch dein Gildenlevel hat sich der Preis auf &accent{0}%&mainColor verringert!'
+      craftItemDoubled: '&mainColor Durch dein Gildenlevel hat sich der Ertrag verdoppelt!'
+      furnaceExtract: '&mainColor Durch dein Gildenlevel erhälst du &accent{0}%&mainColor mehr Erfahrung!'
+      stillMoneyInGuildBank: '&c Es befinden sich noch {0} Bench in der Gildenkasse!'
+    guildadmin:
+      add:
+        addedPlayer: '&2 Du hast &a{0}&2 zur Gilde &a{1}&2 hinzugefügt!'
+        youGotAdded: '&2 Du wurdest von &a{0}&2 zur Gilde &a{1}&2 hinzugefügt!'
+      changeName:
+        changedName: '&2 Du hast den Namen von &a{0}&2 auf &a{1}&2 geändert!'
+      changeTag:
+        changedTag: '&2 Du hast den Tag von &a{0}&2 auf &a{1}&2 geändert!'
+      confirm:
+        confirm: '&2 Bestätige die Aktion mit &a/guildadmin confirm&2!'
+      kickguild:
+        kickedGuildFromAlliance: '&2 Die Gilde &a{0}&2 wurde aus der Allianz &a{1}&2 entfernt!'
+      reload:
+        configReloaded: '&2 Die Config wurde neu geladen!'
+      sync:
+        synced: '&2 Die Daten wurden erfolgreich synchronisiert!'
+  help:
+    guildadmin:
+      command:
+        add: '&2add <Spieler> <Gilde>: &aFüge &2Spieler&a zu einer &2Gilde&a hinzu'
+        changeName: '&2changename <Gilde> <Name>:&a Ändert den &2Namen&a einer &2Gilde&a!'
+        changeTag: '&2changetag <Gilde> <Tag>:&a Ändert den &Tag&a einer &2Gilde&a'
+        confirm: '&2confirm:&a Führe eine zu bestätigende Aktion aus'
+        kickGuild: '&2 kickguild <Gilde> <Allianz>: Kickt eine &aGilde&2 aus einer &aAllianz&2'
+        sync: '&2sync:&a Sychronisiert alle Gilden und Allianzen'
+        reload: '&2reload:&a Lädt die Config-Dateien neu'
+    guild:
+      command:
+        hasGuild:
+          bb: '&2blackboard:&a Zeige das Gilden-Blackboard an'
+          bb2: '&2blackboard <Nachricht>:&a Füge eine &2Nachricht&a hinzu'
+          createRank: '&2createRank:&a Erstelle einen neuen Rang in deiner Gilde'
+          deletePrefix: '&2deletePrefix <Name>:&a Lösche &2Name&as Präfix'
+          deleteRank: '&2deleteRank <Rang>:&a Lösche den Rang &2Rang'
+          disband: '&2disband:&a Löse deine Gilde auf'
+          editRank: '&2editRank <Rang>:&a Bearbeite den Rang &2<Rang>'
+          exp: '&2exp <Erfahrung>:&a Spende &2Erfahrung&a an die Gilde'
+          home: '&2home:&a Teleportiere dich zu deinem Guild-Home'
+          info: '&2info:&a Zeige Infos zu deiner Gilde an'
+          invite: '&2invite <Name>:&a Lade den Spieler &2Name&a in die Gilde ein'
+          kick: '&2kick <Name>:&a Kicke den Spieler &2Name&a aus der Gilde'
+          leave: '&2leave:&a Verlasse deine derzeitige Gilde'
+          pay: '&2pay <Geld>:&a Zahle &2<Geld>&a in die Gildenkasse ein'
+          prefix: '&2prefix <Name> <Präfix>:&a Setze &2Name&as Präfix'
+          promote: '&2promote <Name> <Rang>:&a Setze &2Name&as Rang auf &2Rang'
+          rank: '&2rank <Rang>:&a Erhalte Details über den Rang &2Rang'
+          ranks: '&2ranks:&a Zeige eine Liste aller Ränge deiner Gilde'
+          roster: '&2roster:&a Zeige die Mitglieder deiner Gilde'
+          sethome: '&2sethome:&a Setze das Guild-Home an deiner Position'
+          upgrade: '&2upgrade:&a Upgrade deine Gilde'
+          withdraw: '&2withdraw <Geld>:&a Nimm &2Geld&a aus deiner Gildenkasse'
+        hasNoGuild:
+          accept: '&2accept:&a Nimm eine Einladung an'
+          create: '&2create <Name> <Tag> <Farbe>:&a Erstelle die Gilde &2Name'
+          deny: '&2deny:&a Lehne eine Einladung ab'
+        both:
+          confirm: '&2confirm:&a Führe eine zu bestätigende Aktion aus'
+          info2: '&2info <Gilde>:&a Zeige Infos zu einer &2Gilde&a an'
+          level: '&2level <Level>:&a Zeige Informationen zu einem &2Level'
+          levels: '&2levels:&a Zeige eine Liste aller Gildenlevel'
+          lookup: '&2lookup <Name>:&a Zeige Details zum Spieler &2Name'
+          list: '&2list:&a Zeige eine Liste aller Gilden'
+          roster2: '&2roster <Name>:&a Zeige die Mitglieder der Gilde &2Name'
+    alliance:
+      command:
+        hasAlliance:
+          invite: '&2invite <Gilde>:&a Lade eine &2Gilde&a in die Allianz ein'
+        hasNoAlliance:
+          accept: '&2accept:&a Nimm eine Einladung zu einer Allianz an'
+          create: '&2create <Name> <Tag> <Farbe>:&a Erstelle die Allianz &2Name'
+          deny: '&2deny:&a Lehne eine Allianzeinladung ab'
+        both:
+          info: '&2info:&a Zeige Infos zu deiner Allianz an'
+          leave: '&2leave:&a Deine Gilde verlässt die Allianz'
+          list: '&2list:&a Zeige eine Liste aller Allianzen'
+chatColors:
+####### no one can read this shit
+  BLACK:
+    aliases:
+    - BLACK
+    - SCHWARZ
+    - DUNKEL
+####### no one can read this shit
+  DARK_BLUE:
+    aliases:
+    - DARK_BLUE
+    - DUNKELBLAU
+    - DARKBLUE
+  DARK_GREEN:
+    aliases:
+    - DARK_GREEN
+    - DUNKELGRÜN
+    - DUNKELGRUEN
+    - DARKGREEN
+  DARK_RED:
+    aliases:
+    - DARK_RED
+    - DUNKELROT
+    - DARKRED
+  DARK_PURPLE:
+    aliases:
+    - DARK_PURPLE
+    - DUNKELLILA
+    - DUNKELVIOLETT
+    - DARKPUPRPLE
+    - PURPLE
+    - VIOLETT
+    - LILA
+  GOLD:
+    aliases:
+    - GOLD
+    - BEIGE
+    - BRONZE
+    - ORANGE
+  GRAY:
+    aliases:
+    - GRAY
+    - GRAU
+    - DUNKELGRAU
+    - DARKGRAY
+  BLUE:
+    aliases:
+    - BLUE
+    - BLAU
+  GREEN:
+    aliases:
+    - GREEN
+    - 'GRÜN'
+    - GRUEN
+    - HELLGRUEN
+    - HELLGRÜN
+  RED:
+    aliases:
+    - RED
+    - ROT
+    - HELLROT
+  LIGHT_PURPLE:
+    aliases:
+    - LIGHT_PURPLE
+    - LIGHTPURPLE
+    - PINK
+    - HELLLILA
+    - HELLVIOLETT
+  YELLOW:
+    aliases:
+    - YELLOW
+    - GELB
+    - HELLGOLD
+  WHITE:
+    aliases:
+    - WHITE
+    - WEIß
+    - WEISS

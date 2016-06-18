@@ -1,0 +1,182 @@
+name: Guilds
+version: 1.0.3
+main: io.github.apfelcreme.Guilds.Guilds
+commands:
+   guild:
+      aliases: [clan, gilde]
+      description: Alle Gildencommands
+      usage:
+      permission:
+      permission-message:
+   alliance:
+      aliases: [allianz]
+      description: Alle Allianzcommands
+      usage:
+      permission:
+      permission-message:
+   '.':
+      description: Gildenchat
+      usage:
+      permission:
+      permission-message:
+   ',':
+      description: Allianzchat
+      usage:
+      permission:
+      permission-message:
+   guildadmin:
+      aliases: [ga]
+      description: Alle Admincommands
+      usage:
+      permission:
+      permission-message:
+permissions:
+  Guilds.*:
+    description:
+  Guilds.mod:
+    description: reload & sync
+    children:
+      Guilds.reload: true
+      Guilds.sync: true
+      Guilds.add: true
+      Guilds.kickFromAlliance: true
+      Guilds.changeTag: true
+      Guilds.changeName: true
+  Guilds.user:
+    description: all other commands
+    children:
+      Guilds.createAlliance: true
+      Guilds.disbandAlliance: true
+      Guilds.allianceInfo: true
+      Guilds.acceptAllianceInvite: true
+      Guilds.denyAllianceInvite: true
+      Guilds.allianceInvite: true
+      Guilds.leaveAlliance: true
+      Guilds.allianceList: true
+      Guilds.voteKick: true
+      Guilds.guildBlackboard: true
+      Guilds.confirm: true
+      Guilds.color: true
+      Guilds.createGuild: true
+      Guilds.createRank: true
+      Guilds.deleteRank: true
+      Guilds.editRank: true
+      Guilds.setPrefix: true
+      Guilds.deletePrefix: true
+      Guilds.disbandGuild: true
+      Guilds.giveExp: true
+      Guilds.guildInfo: true
+      Guilds.guildHome: true
+      Guilds.level: true
+      Guilds.levels: true
+      Guilds.acceptGuildInvite: true
+      Guilds.denyGuildInvite: true
+      Guilds.guildInvite: true
+      Guilds.kickFromGuild: true
+      Guilds.leaveGuild: true
+      Guilds.listGuild: true
+      Guilds.lookup: true
+      Guilds.pay: true
+      Guilds.promoteGuildMember: true
+      Guilds.rankInfo: true
+      Guilds.rankList: true
+      Guilds.roster: true
+      Guilds.setGuildHome: true
+      Guilds.upgradeGuild: true
+      Guilds.withdrawFromGuild: true
+  Guilds.reload:
+    description: reload the config
+  Guilds.sync:
+    description: make all servers sync the guilds and alliances
+  Guilds.add:
+    description: add a player to a guild without invitation
+  Guilds.kickFromAlliance:
+    description: kick a guild from an alliance by force
+  Guilds.changeTag:
+    description: change a guilds tag
+  Guilds.changeName:
+    description: change a guilds name
+  Guilds.createAlliance:
+    description: create an alliance
+  Guilds.disbandAlliance:
+    description: disband an alliance
+  Guilds.allianceInfo:
+    description: show info on an alliance
+  Guilds.acceptAllianceInvite:
+    description: accept an alliance invite
+  Guilds.denyAllianceInvite:
+    description: deny an alliance invite
+  Guilds.allianceInvite:
+    description: invite other guilds into your alliance
+  Guilds.leaveAlliance:
+    description: leave an alliance
+  Guilds.levels:
+    description: show Levels list
+  Guilds.level:
+    description: show Levels list
+  Guilds.allianceList:
+    description: show a list of all alliances
+  Guilds.voteKick:
+    description: allow to start and participate in votekicks
+  Guilds.guildBlackboard:
+    description: show and use the guilds blackboard
+  Guilds.confirm:
+    description: confirm a request
+  Guilds.color:
+    description: change the color of the guild
+  Guilds.createGuild:
+    description: create a guild
+  Guilds.createRank:
+    description: create a rank in a guild
+  Guilds.deleteRank:
+    description: delete a rank
+  Guilds.editRank:
+    description: edit a rank
+  Guilds.setPrefix:
+    description: set a players prefix
+  Guilds.deletePrefix:
+    description: deletes a players prefix
+  Guilds.disbandGuild:
+    description: disbands a guild
+  Guilds.giveExp:
+    description: gives exp to a guild
+  Guilds.guildInfo:
+    description: show some info on a guild
+  Guilds.guildHome:
+    description: teleport to the guild home
+  Guilds.acceptGuildInvite:
+    description: accept a guild invite
+  Guilds.denyGuildInvite:
+    description: deny a guild invite
+  Guilds.guildInvite:
+    description: invite a player to join the guild
+  Guilds.kickFromAlliance:
+    description: kick a guild from an alliance (may only be used with /ga kick)
+  Guilds.kickFromGuild:
+    description: kick a member from the guild
+  Guilds.leaveGuild:
+    description: leave a guild
+  Guilds.listGuild:
+    description: show a list of all guilds
+  Guilds.lookup:
+    description: show info on a guild member
+  Guilds.payGuild:
+    description: pay money to a guild
+  Guilds.promoteGuildMember:
+    description: promotes a guild member
+  Guilds.rankInfo:
+    description: shows info on a rank
+  Guilds.rankList:
+    description: shows a list of all ranks
+  Guilds.roster:
+    description: shows a list of all players of a guild
+  Guilds.setGuildHome:
+    description: set the guild home
+  Guilds.upgradeGuild:
+    description: upgrades a guild
+  Guilds.withdrawFromGuild:
+    description: takes money from a guild
+
+
+
+

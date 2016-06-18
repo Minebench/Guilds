@@ -1,0 +1,211 @@
+mysql:
+  user: ####
+  password: ####
+  database: ####
+  url: ####
+  tables:
+    player: Guilds_Player
+    guilds: Guilds_Guilds
+    ranks: Guilds_Ranks
+    invites: Guilds_Invites
+    blackboard: Guilds_Blackboard
+    alliance: Guilds_Alliances
+    allianceInvites: Guilds_AllianceInvites
+guilds:
+  blackboard:
+    limit: 6
+  lists:
+    pageSize: 10
+  guildNameLength: 30
+  guildTagLength: 4
+  prefixLength: 25
+  crossServerTeleport: true
+bonus:
+  cheaperEnchantment: true
+  moreFurnaceExp: false
+  doubleCrafting: false
+  specialDrop: true
+specialDrops:
+  COAL: 0.5
+  IRON_INGOT: 0.25
+  GOLD_INGOT: 0.1
+  EMERALD: 0.05
+  DIAMOND: 0.05
+  EMERALD_ORE: 0.03
+  DIAMOND_ORE: 0.02
+level:
+  '1':
+    name: 'Bruderschaft'
+    limit: 10
+    enchantmentCost: 0.97
+    doubleCraftProbability: 0.01
+    specialDropChance: 0.001
+    furnaceExpGainRatio: 1.05
+    upgradeCost: 2500
+    upgradeExpCost: 0
+    upgradeMaterials:
+      # the list must not be emtpy, ignore this
+      DIRT: 1
+  '2':
+    name: 'Gruppe'
+    limit: 15
+    enchantmentCost: 0.95
+    doubleCraftProbability: 0.02
+    specialDropChance: 0.002
+    furnaceExpGainRatio: 1.1
+    upgradeCost: 5000
+    upgradeExpCost: 3500
+    upgradeMaterials:
+      DIAMOND: 16
+      MOSSY_COBBLESTONE: 64
+      SAPLING: 64
+      GLOWSTONE: 64
+  '3':
+    name: 'Mannschaft'
+    limit: 20
+    enchantmentCost: 0.93
+    doubleCraftProbability: 0.03
+    specialDropChance: 0.003
+    furnaceExpGainRatio: 1.15
+    upgradeCost: 7500
+    upgradeExpCost: 10000
+    upgradeMaterials:
+      DIAMOND: 24
+      ANVIL: 1
+      IRON_SWORD: 3
+      GOLD_SWORD: 2
+      DIAMOND_SWORD: 1
+  '4':
+    name: 'Horde'
+    limit: 25
+    enchantmentCost: 0.9
+    doubleCraftProbability: 0.04
+    specialDropChance: 0.004
+    furnaceExpGainRatio: 1.2
+    upgradeCost: 10000
+    upgradeExpCost: 15000
+    upgradeMaterials:
+      DIAMOND: 32
+      SADDLE: 3
+      LEASH: 32
+      LEATHER: 64
+      CARROT_ITEM: 64
+  '5':
+    name: 'Schar'
+    limit: 30
+    enchantmentCost: 0.87
+    doubleCraftProbability: 0.05
+    specialDropChance: 0.005
+    furnaceExpGainRatio: 1.25
+    upgradeCost: 15000
+    upgradeExpCost: 30000
+    upgradeMaterials:
+      GOLD_INGOT: 64
+      IRON_INGOT: 64
+      IRON_SWORD: 4
+      IRON_CHESTPLATE: 4
+  '6':
+    name: 'Front'
+    limit: 35
+    enchantmentCost: 0.83
+    doubleCraftProbability: 0.06
+    specialDropChance: 0.006
+    furnaceExpGainRatio: 1.3
+    upgradeCost: 20000
+    upgradeExpCost: 40000
+    upgradeMaterials:
+      SHIELD: 12
+      IRON_INGOT: 64
+      BREAD: 64
+      POTATO_ITEM: 64
+  '7':
+    name: 'Bund'
+    limit: 40
+    enchantmentCost: 0.80
+    doubleCraftProbability: 0.07
+    specialDropChance: 0.007
+    furnaceExpGainRatio: 1.35
+    upgradeCost: 30000
+    upgradeExpCost: 50000
+    upgradeMaterials:
+      RED_ROSE: 16
+      DIAMOND: 32
+      GOLD_INGOT: 64
+      ANVIL: 1
+      BOOK_AND_QUILL: 1
+  '8':
+    name: 'Liga'
+    limit: 45
+    enchantmentCost: 0.77
+    doubleCraftProbability: 0.08
+    specialDropChance: 0.008
+    furnaceExpGainRatio: 1.4
+    upgradeCost: 40000
+    upgradeExpCost: 75000
+    upgradeMaterials:
+      BOOK_AND_QUILL: 3
+      EMPTY_MAP: 64
+      IRON_SWORD: 16
+      DIAMOND: 64
+  '9':
+    name: 'Legion'
+    limit: 50
+    enchantmentCost: 0.73
+    doubleCraftProbability: 0.09
+    specialDropChance: 0.009
+    furnaceExpGainRatio: 1.45
+    upgradeCost: 50000
+    upgradeExpCost: 100000
+    upgradeMaterials:
+      SHIELD: 16
+      GOLD_SWORD: 16
+      RED_ROSE: 16
+      BREAD: 64
+      PUMPKIN_PIE: 64
+      COOKED_MUTTON: 64
+  '10':
+    name: 'Armee'
+    limit: 60
+    enchantmentCost: 0.70
+    doubleCraftProbability: 0.1
+    specialDropChance: 0.01
+    furnaceExpGainRatio: 1.5
+    upgradeCost: 60000
+    upgradeExpCost: 125000
+    upgradeMaterials:
+      BEACON: 1
+      DIAMOND_HELMET: 5
+      DIAMOND_CHESTPLATE: 5
+      DIAMOND_LEGGINGS: 5
+      DIAMOND_BOOTS: 5
+  '11':
+    name: 'Heer'
+    limit: 75
+    enchantmentCost: 0.67
+    doubleCraftProbability: 0.11
+    specialDropChance: 0.011
+    furnaceExpGainRatio: 1.55
+    upgradeCost: 75000
+    upgradeExpCost: 150000
+    upgradeMaterials:
+      GOLDEN_APPLE: 64
+      GOLD_BLOCK: 64
+      WATCH: 4
+      GOLD_SWORD: 16
+  '12':
+    name: 'Streitmacht'
+    limit: 100
+    enchantmentCost: 0.63
+    doubleCraftProbability: 0.12
+    specialDropChance: 0.012
+    furnaceExpGainRatio: 1.6
+    upgradeCost: 100000
+    upgradeExpCost: 200000
+    upgradeMaterials:
+      DRAGON_EGG: 1
+      BANNER: 1
+      INK_SACK: 64
+      IRON_BARDING: 1
+      GOLD_BARDING: 1
+      DIAMOND_BARDING: 1
+

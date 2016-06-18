@@ -1,0 +1,64 @@
+package io.github.apfelcreme.Guilds.Command.Guild.Request;
+
+import io.github.apfelcreme.Guilds.Command.Request;
+import io.github.apfelcreme.Guilds.Guild.Guild;
+import io.github.apfelcreme.Guilds.Guilds;
+import io.github.apfelcreme.Guilds.GuildsConfig;
+import org.bukkit.Bukkit;
+import org.bukkit.Sound;
+import org.bukkit.entity.Player;
+
+/**
+ * Alliances
+ * Copyright (C) 2015 Lord36 aka Apfelcreme
+ * <p/>
+ * This program is free software;
+ * you can redistribute it and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation; either version 3
+ * of the License, or (at your option) any later version.
+ * <p/>
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ * <p/>
+ * You should have received a copy of the GNU General Public License along with
+ * this program; if not, see <http://www.gnu.org/licenses/>.
+ *
+ * @author Lord36 aka Apfelcreme on 22.05.2015.
+ */
+public class GiveExpRequest extends Request {
+
+    private Guild guild;
+    private Integer exp;
+
+    public GiveExpRequest(Player sender, Guild guild, Integer exp) {
+        super(sender);
+        this.guild = guild;
+        this.exp = exp;
+    }
+
+    /**
+     * executes the Request
+     */
+    @Override
+    public void execute() {
+        guild.setExp(guild.getExp() + exp);
+        int total = sender.getTotalExperience();
+        sender.setTotalExperience(0);
+        sender.setLevel(0);
+        sender.setExp(0.0f);
+        sender.giveExp(total - exp);
+        sender.getWorld().playSound(sender.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 3.0f, 5.0f);
+        Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                .getColoredText("info.guild.exp.paidExp", guild.getColor())
+                .replace("{0}", exp.toString()));
+        Guilds.getInstance().getChat().sendGuildChannelBroadcast(guild,
+                GuildsConfig.getText("info.chat.playerPaidExp")
+                        .replace("{0}", sender.getName())
+                        .replace("{1}", exp.toString())
+        );
+        Guilds.getInstance().getLogger().info(sender.getName() + " has payed " + exp.toString() + " exp to guild '"
+                + guild.getName() + "'");
+    }
+}
