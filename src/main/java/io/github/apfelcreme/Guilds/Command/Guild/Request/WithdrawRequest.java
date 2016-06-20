@@ -39,7 +39,7 @@ public class WithdrawRequest extends Request {
 
     @Override
     public void execute() {
-        EconomyResponse economyResponse = Guilds.getEconomy().depositPlayer(sender.getPlayer(), amount);
+        EconomyResponse economyResponse = Guilds.getInstance().getEconomy().depositPlayer(sender.getPlayer(), amount);
         if (economyResponse.transactionSuccess()) {
             guild.setBalance(guild.getBalance() - amount);
             Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig

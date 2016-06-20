@@ -62,12 +62,27 @@ public class Guilds extends JavaPlugin {
      */
     private Map<Integer, Alliance> alliances;
 
+    /**
+     * the UUIDDB plugin
+     */
     private static UUIDDB uuiddb;
+
+    /**
+     * the vault economy
+     */
+
+    private Economy economy;
 
     /**
      * do stuff on enable
      */
     public void onEnable() {
+
+        if (!setupEconomy() ) {
+            getLogger().severe("No Vault economy found?");
+            getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
 
         guilds = new Hashtable<Integer, Guild>();
         alliances = new Hashtable<Integer, Alliance>();
@@ -119,6 +134,18 @@ public class Guilds extends JavaPlugin {
      */
     public void onDisable() {
 
+    }
+
+    private boolean setupEconomy() {
+        if (!hasVault()) {
+            return false;
+        }
+        RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
+        if (rsp == null) {
+            return false;
+        }
+        economy = rsp.getProvider();
+        return economy != null;
     }
 
     /**
@@ -675,14 +702,7 @@ public class Guilds extends JavaPlugin {
      *
      * @return Vault economy object
      */
-    public static Economy getEconomy() {
-        RegisteredServiceProvider<Economy> economyProvider = Guilds
-                .getInstance().getServer().getServicesManager()
-                .getRegistration(net.milkbowl.vault.economy.Economy.class);
-        Economy economy = null;
-        if (economyProvider != null) {
-            economy = economyProvider.getProvider();
-        }
+    public Economy getEconomy() {
         return economy;
     }
 

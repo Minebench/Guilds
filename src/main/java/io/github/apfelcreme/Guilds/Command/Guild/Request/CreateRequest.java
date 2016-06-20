@@ -44,7 +44,7 @@ public class CreateRequest extends Request {
     public void execute() {
         Guild guild = new Guild(null, name, tag, color, 0.0);
         guild.create(sender);
-        Guilds.getEconomy().withdrawPlayer(sender, GuildsConfig.getLevelData(1).getCost());
+        Guilds.getInstance().getEconomy().withdrawPlayer(sender, GuildsConfig.getLevelData(1).getCost());
         Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
                 .getColoredText("info.guild.create.guildCreated", guild.getColor())
                 .replace("{0}", guild.getName()));

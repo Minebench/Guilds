@@ -54,7 +54,7 @@ public class CreateCommand implements SubCommand {
                             if (color != null) {
                                 if (Guilds.getInstance().getGuild(sender) == null) {
                                     if (Guilds.getInstance().getGuild(name) == null) {
-                                        if (Guilds.getEconomy().has(sender, GuildsConfig.getLevelData(1).getCost())) {
+                                        if (Guilds.getInstance().getEconomy().has(sender, GuildsConfig.getLevelData(1).getCost())) {
                                             RequestController.getInstance().addRequest(
                                                     new CreateRequest(sender, name, tag, color));
                                             Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig

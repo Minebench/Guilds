@@ -39,7 +39,7 @@ public class PayRequest extends Request {
 
     @Override
     public void execute() {
-        EconomyResponse economyResponse = Guilds.getEconomy().withdrawPlayer(sender.getPlayer(), amount);
+        EconomyResponse economyResponse = Guilds.getInstance().getEconomy().withdrawPlayer(sender.getPlayer(), amount);
         if (economyResponse.transactionSuccess()) {
             guild.setBalance(guild.getBalance() + amount);
             Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig

@@ -46,7 +46,7 @@ public class PayCommand implements SubCommand {
                         Double amount = Double.parseDouble(strings[1]);
                         Guild guild = Guilds.getInstance().getGuild(sender);
                         if (guild != null) {
-                            if (Guilds.getEconomy().getBalance(sender) >= amount) {
+                            if (Guilds.getInstance().getEconomy().getBalance(sender) >= amount) {
                                 RequestController.getInstance().addRequest(new PayRequest(sender, guild, amount));
                                 Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
                                         .getColoredText("info.guild.confirm.confirm", guild.getColor()));
