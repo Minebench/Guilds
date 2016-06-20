@@ -3,15 +3,11 @@ package io.github.apfelcreme.Guilds.Listener;
 import io.github.apfelcreme.Guilds.Guild.Guild;
 import io.github.apfelcreme.Guilds.Guilds;
 import io.github.apfelcreme.Guilds.GuildsConfig;
-import org.bukkit.enchantments.Enchantment;
-import org.bukkit.enchantments.EnchantmentWrapper;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.enchantment.EnchantItemEvent;
-import org.bukkit.event.enchantment.PrepareItemEnchantEvent;
-
-import java.util.Arrays;
-import java.util.Map;
+import org.bukkit.scheduler.BukkitRunnable;
 
 /**
  * Alliances
@@ -35,31 +31,24 @@ import java.util.Map;
 public class EnchantmentListener implements Listener {
 
     @EventHandler
-    public void onEnchantmentPrepare(PrepareItemEnchantEvent event) {
-        Guild guild = Guilds.getInstance().getGuild(event.getEnchanter());
-        if (guild != null) {
-            int[] enchantmentCosts = event.getExpLevelCostsOffered();
-            for (int i = 0; i < enchantmentCosts.length; i++) {
-//                enchantmentCosts[i] = (int) (enchantmentCosts[i] * guild.getCurrentLevel().getEnchantmentCost());
-                enchantmentCosts[i] = i;
-            }
-            //TODO
-        }
-    }
-
-    @EventHandler
     public void onEnchantment(EnchantItemEvent event) {
-        Guild guild = Guilds.getInstance().getGuild(event.getEnchanter());
+        final Guild guild = Guilds.getInstance().getGuild(event.getEnchanter());
         if (guild != null) {
             System.out.println(event.getExpLevelCost());
 
-            int enchantmentCost = (int) (event.getExpLevelCost() * guild.getCurrentLevel().getEnchantmentCost());
-            event.setExpLevelCost(enchantmentCost);
-            System.out.println(enchantmentCost);
-            System.out.println(event.getExpLevelCost());
-            Guilds.getInstance().getChat().sendMessage(event.getEnchanter(),
-                    GuildsConfig.getColoredText("info.guild.enchantmentGotCheaper", guild.getColor())
-                            .replace("{0}", Double.toString(guild.getCurrentLevel().getEnchantmentCost() * 100)));
+            final Player player = event.getEnchanter();
+            final int enchantmentRefund = (int) (event.getExpLevelCost() * (1 - guild.getCurrentLevel().getEnchantmentCost()));
+            System.out.println(enchantmentRefund);
+            new BukkitRunnable() {
+                public void run() {
+                    if (player.isOnline()) {
+                        player.giveExp(enchantmentRefund);
+                        Guilds.getInstance().getChat().sendMessage(player,
+                                GuildsConfig.getColoredText("info.guild.enchantmentGotCheaper", guild.getColor())
+                                        .replace("{0}", Double.toString(guild.getCurrentLevel().getEnchantmentCost() * 100)));
+                    }
+                }
+            }.runTaskLater(Guilds.getInstance(), 1);
         }
     }
 }
