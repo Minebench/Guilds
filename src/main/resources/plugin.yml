@@ -1,5 +1,5 @@
 name: Guilds
-version: 1.0.3
+version: '${minecraft.plugin.version}'
 main: io.github.apfelcreme.Guilds.Guilds
 commands:
    guild:
