@@ -9,7 +9,6 @@ import io.github.apfelcreme.Guilds.Command.Alliance.AllianceCommandExecutor;
 import io.github.apfelcreme.Guilds.Command.Chat.GuildChatCommandExecutor;
 import io.github.apfelcreme.Guilds.Command.Guild.GuildCommandExecutor;
 import io.github.apfelcreme.Guilds.Command.Guild.GuildTabCompleter;
-import io.github.apfelcreme.Guilds.Guild.GuildMember;
 import io.github.apfelcreme.Guilds.Listener.*;
 import io.github.apfelcreme.Guilds.Manager.*;
 import net.milkbowl.vault.economy.Economy;
@@ -183,6 +182,7 @@ public class Guilds extends JavaPlugin {
      *
      * @param playerName the players name
      * @return the players uuid
+     * @deprecated Why is this deprecated? Maybe it should be replaced with a full getGuildMember method?
      */
     @Deprecated
     public UUID getUUID(String playerName) {
@@ -233,9 +233,10 @@ public class Guilds extends JavaPlugin {
      * returns the plugin instance
      *
      * @return the plugin instance
+     * @deprecated References to the plugin should be passed directly instead of using a static getInstance() method
      */
+    @Deprecated
     public static Guilds getInstance() {
-        // TODO: Only the SessionController uses this anymore. Maybe we can find a way to remove it there too?
         return (Guilds) Bukkit.getServer().getPluginManager().getPlugin("Guilds");
     }
 

@@ -1,11 +1,7 @@
 package io.github.apfelcreme.Guilds.Guild;
 
-import io.github.apfelcreme.Guilds.Guilds;
 import io.github.apfelcreme.Guilds.GuildsUtil;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
 
 import java.util.*;
 import java.util.Date;
@@ -34,7 +30,7 @@ public class Guild implements Comparable<Guild> {
     /**
      * the guild id
      */
-    private Integer id;
+    private int id;
 
     /**
      * the guild name
@@ -59,12 +55,12 @@ public class Guild implements Comparable<Guild> {
     /**
      * the amount of money in the guild bank
      */
-    private Double balance;
+    private double balance;
 
     /**
      * the amount of exp
      */
-    private Integer exp;
+    private int exp;
 
     /**
      * a list of all ranks that are available for this guild
@@ -85,27 +81,27 @@ public class Guild implements Comparable<Guild> {
     /**
      * the x coordinate of the guild home
      */
-    private Double guildHomeX;
+    private double homeX;
 
     /**
      * the y coordinate of the guild home
      */
-    private Double guildHomeY;
+    private double homeY;
 
     /**
      * the u coordinate of the guild home
      */
-    private Double guildHomeZ;
+    private double homeZ;
 
     /**
      * the world of the guild home
      */
-    private String guildHomeWorld;
+    private String homeWorld;
 
     /**
      * the server of the guild home (ip adress with port)
      */
-    private String guildHomeServer;
+    private String homeServer;
 
     /**
      * the list of invites that haven't been answered yet
@@ -117,7 +113,7 @@ public class Guild implements Comparable<Guild> {
      */
     private List<BlackboardMessage> blackboardMessages;
 
-    public Guild(Integer id, String name, String tag, ChatColor color, Double balance) {
+    public Guild(int id, String name, String tag, ChatColor color, double balance) {
         this.id = id;
         this.name = name;
         this.tag = tag;
@@ -129,8 +125,8 @@ public class Guild implements Comparable<Guild> {
         blackboardMessages = new ArrayList<BlackboardMessage>();
     }
 
-    public Guild(Integer id, String name, String tag, ChatColor color, Double balance, Integer exp, List<GuildMember> members, List<Rank> ranks,
-                 GuildLevel currentLevel, Date founded, Double guildHomeX, Double guildHomeY, Double guildHomeZ, String guildHomeWorld, String guildHomeServer) {
+    public Guild(int id, String name, String tag, ChatColor color, double balance, int exp, List<GuildMember> members, List<Rank> ranks,
+                 GuildLevel currentLevel, Date founded, double guildHomeX, double guildHomeY, double guildHomeZ, String guildHomeWorld, String guildHomeServer) {
         this.id = id;
         this.name = name;
         this.tag = tag;
@@ -141,11 +137,11 @@ public class Guild implements Comparable<Guild> {
         this.ranks = ranks;
         this.currentLevel = currentLevel;
         this.founded = founded;
-        this.guildHomeX = guildHomeX;
-        this.guildHomeY = guildHomeY;
-        this.guildHomeZ = guildHomeZ;
-        this.guildHomeWorld = guildHomeWorld;
-        this.guildHomeServer = guildHomeServer;
+        this.homeX = guildHomeX;
+        this.homeY = guildHomeY;
+        this.homeZ = guildHomeZ;
+        this.homeWorld = guildHomeWorld;
+        this.homeServer = guildHomeServer;
         blackboardMessages = new ArrayList<BlackboardMessage>();
         pendingInvites = new HashMap<UUID, Invite>();
     }
@@ -155,7 +151,7 @@ public class Guild implements Comparable<Guild> {
      *
      * @return the guild id
      */
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
@@ -215,8 +211,8 @@ public class Guild implements Comparable<Guild> {
      *
      * @return the server name of the guild home
      */
-    public String getGuildHomeServer() {
-        return guildHomeServer;
+    public String getHomeServer() {
+        return homeServer;
     }
 
     /**
@@ -248,7 +244,7 @@ public class Guild implements Comparable<Guild> {
      *
      * @return the clan balance
      */
-    public Double getBalance() {
+    public double getBalance() {
         return balance;
     }
 
@@ -257,7 +253,7 @@ public class Guild implements Comparable<Guild> {
      *
      * @return the clan exp
      */
-    public Integer getExp() {
+    public int getExp() {
         return exp;
     }
 
@@ -351,19 +347,19 @@ public class Guild implements Comparable<Guild> {
         this.balance = balance;
     }
 
-    public Double getGuildHomeX() {
-        return guildHomeX;
+    public double getHomeX() {
+        return homeX;
     }
 
-    public Double getGuildHomeY() {
-        return guildHomeY;
+    public double getHomeY() {
+        return homeY;
     }
 
-    public Double getGuildHomeZ() {
-        return guildHomeZ;
+    public double getHomeZ() {
+        return homeZ;
     }
 
-    public String getGuildHomeWorld() {
-        return guildHomeWorld;
+    public String getHomeWorld() {
+        return homeWorld;
     }
 }

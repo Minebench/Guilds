@@ -1,6 +1,5 @@
 package io.github.apfelcreme.Guilds.Manager;
 
-import io.github.apfelcreme.Guilds.Bungee.BungeeConnection;
 import io.github.apfelcreme.Guilds.Command.Guild.Session.EditRankSession;
 import io.github.apfelcreme.Guilds.Guild.BlackboardMessage;
 import io.github.apfelcreme.Guilds.Guild.Guild;
@@ -9,7 +8,6 @@ import io.github.apfelcreme.Guilds.Guild.GuildMember;
 import io.github.apfelcreme.Guilds.Guild.Invite;
 import io.github.apfelcreme.Guilds.Guild.Rank;
 import io.github.apfelcreme.Guilds.Guilds;
-import io.github.apfelcreme.Guilds.GuildsConfig;
 import io.github.apfelcreme.Guilds.GuildsUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -1316,10 +1314,10 @@ public class GuildManager {
      * @return the guild home location
      */
     public Location getHome(Guild guild) {
-        if (guild.getGuildHomeX() != null && guild.getGuildHomeY() != null && guild.getGuildHomeZ() != null
-                && guild.getGuildHomeWorld() != null && guild.getGuildHomeServer() != null) {
-            return new Location(plugin.getServer().getWorld(guild.getGuildHomeWorld()),
-                    guild.getGuildHomeX(), guild.getGuildHomeY(), guild.getGuildHomeZ());
+        if (guild.getHomeX() != null && guild.getHomeY() != null && guild.getHomeZ() != null
+                && guild.getHomeWorld() != null && guild.getHomeServer() != null) {
+            return new Location(plugin.getServer().getWorld(guild.getHomeWorld()),
+                    guild.getHomeX(), guild.getHomeY(), guild.getHomeZ());
         } else {
             return null;
         }

@@ -45,7 +45,7 @@ public class AllianceLeaveRequest extends Request {
             plugin.getLogger().info(guild.getName() + " has left alliance '"
                     + guild.getName() + "'");
         } else {
-            alliance.delete();
+            plugin.getAllianceManager().delete(alliance);
             plugin.getLogger().info(guild.getName() + " has left alliance '"
                     + guild.getName() + "'. The alliance was disbanded as they were the last members!");
         }

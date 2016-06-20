@@ -39,7 +39,7 @@ public class Alliance implements Comparable<Alliance> {
     /**
      * the alliance id
      */
-    private Integer id;
+    private int id;
 
     /**
      * the alliance name
@@ -59,7 +59,7 @@ public class Alliance implements Comparable<Alliance> {
     /**
      * the date this alliance was founded
      */
-    private Long founded;
+    private long founded;
 
     /**
      * the list of guilds
@@ -71,7 +71,7 @@ public class Alliance implements Comparable<Alliance> {
      */
     private List<AllianceInvite> allianceInvites;
 
-    public Alliance(Integer id, String name, String tag, ChatColor color, Long founded, List<Guild> guilds) {
+    public Alliance(int id, String name, String tag, ChatColor color, long founded, List<Guild> guilds) {
         this.id = id;
         this.name = name;
         this.tag = tag;
@@ -81,25 +81,13 @@ public class Alliance implements Comparable<Alliance> {
         allianceInvites = new ArrayList<AllianceInvite>();
     }
 
-    public Alliance(String name, String tag, ChatColor color, Long founded, Guild founder) {
+    public Alliance(String name, String tag, ChatColor color, long founded, Guild founder) {
         this.name = name;
         this.tag = tag;
         this.color = color;
         this.founded = founded;
         guilds = new ArrayList<Guild>();
         guilds.add(founder);
-    }
-
-    /**
-     * saves the alliance to the database
-     */
-    public void create() {
-    }
-
-    /**
-     * deletes the alliance
-     */
-    public void delete() {
     }
 
     /**
@@ -111,7 +99,6 @@ public class Alliance implements Comparable<Alliance> {
         this.color = color;
     }
 
-
     /**
      * adds an invite to the list
      *
@@ -120,7 +107,6 @@ public class Alliance implements Comparable<Alliance> {
     public void putPendingAllianceInvite(AllianceInvite invite) {
         allianceInvites.add(invite);
     }
-
 
     /**
      * returns the list of invites
@@ -136,7 +122,7 @@ public class Alliance implements Comparable<Alliance> {
      *
      * @return the alliance id
      */
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
@@ -221,9 +207,9 @@ public class Alliance implements Comparable<Alliance> {
     }
 
     /**
-     * compares the guild to another guild
+     * compares the alliance to another alliance
      *
-     * @param that the other guild
+     * @param that the other alliance
      * @return 1, 0 or -1
      */
     public int compareTo(Alliance that) {

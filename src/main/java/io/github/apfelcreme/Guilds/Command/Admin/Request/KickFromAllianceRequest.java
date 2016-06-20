@@ -45,7 +45,7 @@ public class KickFromAllianceRequest extends Request {
             plugin.getLogger().info(guild.getName() + " was kicked from alliance '"
                     + guild.getName() + "' by '" + sender.getName() + "'");
         } else {
-            alliance.delete();
+            plugin.getAllianceManager().delete(alliance);
             plugin.getLogger().info(guild.getName() + " was kicked from alliance '"
                     + guild.getName() + "' by '" + sender.getName() + "'. The alliance was disbanded as " +
                     "they were the last members!");

@@ -1,10 +1,8 @@
 package io.github.apfelcreme.Guilds.Command.Guild.Command;
 
-import io.github.apfelcreme.Guilds.Bungee.BungeeConnection;
 import io.github.apfelcreme.Guilds.Command.SubCommand;
 import io.github.apfelcreme.Guilds.Guild.Guild;
 import io.github.apfelcreme.Guilds.Guilds;
-import io.github.apfelcreme.Guilds.GuildsConfig;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -45,7 +43,7 @@ public class HomeCommand extends SubCommand {
         if (sender.hasPermission("Guilds.guildHome")) {
             final Guild guild = plugin.getGuildManager().getGuild(sender);
             if (guild != null) {
-                if (guild.getGuildHomeServer() != null) {
+                if (guild.getHomeServer() != null) {
                     plugin.getBungeeConnection().sendPlayerToGuildHome(sender, guild);
                 } else{
                     plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noHome"));

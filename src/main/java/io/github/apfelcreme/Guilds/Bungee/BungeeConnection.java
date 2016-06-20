@@ -125,7 +125,7 @@ public class BungeeConnection {
                 out.writeUTF("SendPlayerToGuildHome");
                 out.writeUTF(player.getUniqueId().toString());
                 out.writeUTF(guild.getName());
-                out.writeUTF(guild.getGuildHomeServer());
+                out.writeUTF(guild.getHomeServer());
                 player.sendPluginMessage(plugin,
                         "Guilds", b.toByteArray());
                 out.close();
@@ -136,7 +136,7 @@ public class BungeeConnection {
         } else {
             String serverAddress = plugin.getServer().getIp()
                     + ":" + Integer.toString(plugin.getServer().getPort());
-            if (serverAddress.equals(guild.getGuildHomeServer())) {
+            if (serverAddress.equals(guild.getHomeServer())) {
                 player.teleport(plugin.getGuildManager().getHome(guild));
                 plugin.getChat().sendMessage(player,
                         plugin.getGuildsConfig().getColoredText(
