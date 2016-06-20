@@ -29,7 +29,11 @@ import org.bukkit.entity.Player;
  *
  * @author Lord36 aka Apfelcreme on 12.05.2015.
  */
-public class PayCommand implements SubCommand {
+public class PayCommand extends SubCommand {
+
+    public PayCommand(Guilds plugin) {
+        super(plugin);
+    }
 
     /**
      * executes the command
@@ -39,35 +43,35 @@ public class PayCommand implements SubCommand {
      */
     public void execute(CommandSender commandSender, String[] strings) {
         Player sender = (Player) commandSender;
-        if (Guilds.getInstance().hasVault()) {
+        if (plugin.hasVault()) {
             if (sender.hasPermission("Guilds.pay")) {
                 if (strings.length >= 2) {
                     if (GuildsUtil.isNumeric(strings[1])) {
                         Double amount = Double.parseDouble(strings[1]);
-                        Guild guild = Guilds.getInstance().getGuild(sender);
+                        Guild guild = plugin.getGuildManager().getGuild(sender);
                         if (guild != null) {
-                            if (Guilds.getInstance().getEconomy().getBalance(sender) >= amount) {
-                                RequestController.getInstance().addRequest(new PayRequest(sender, guild, amount));
-                                Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                            if (plugin.getEconomy().getBalance(sender) >= amount) {
+                                plugin.getRequestController().addRequest(new PayRequest(plugin, sender, guild, amount));
+                                plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                         .getColoredText("info.guild.confirm.confirm", guild.getColor()));
                             } else {
-                                Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.notEnoughMoney"));
+                                plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.notEnoughMoney"));
                             }
                         } else {
-                            Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.noCurrentGuild"));
+                            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noCurrentGuild"));
                         }
                     } else {
-                        Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.noNumber")
+                        plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noNumber")
                                 .replace("{0}", strings[1]));
                     }
                 } else {
-                    Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.wrongUsage.pay"));
+                    plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.wrongUsage.pay"));
                 }
             } else {
-                Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.noPermission"));
+                plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noPermission"));
             }
         } else {
-            Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.noVault"));
+            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noVault"));
         }
     }
 }

@@ -26,7 +26,11 @@ import org.bukkit.entity.Player;
  *
  * @author Lord36 aka Apfelcreme on 28.04.2015.
  */
-public class AdminSyncCommand implements SubCommand {
+public class AdminSyncCommand extends SubCommand {
+
+    public AdminSyncCommand(Guilds plugin) {
+        super(plugin);
+    }
 
     /**
      * executes the command
@@ -37,10 +41,10 @@ public class AdminSyncCommand implements SubCommand {
     public void execute(CommandSender commandSender, String[] strings) {
         Player sender = (Player) commandSender;
         if (sender.hasPermission("Guilds.sync")) {
-            BungeeConnection.forceGuildsSync();
-            Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("info.guildadmin.sync.synced"));
+            plugin.getBungeeConnection().forceGuildsSync();
+            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("info.guildadmin.sync.synced"));
         } else {
-            Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.noPermission"));
+            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noPermission"));
         }
     }
 }

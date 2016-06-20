@@ -29,7 +29,11 @@ import java.util.UUID;
  *
  * @author Lord36 aka Apfelcreme
  */
-public class AdminAddCommand implements SubCommand {
+public class AdminAddCommand extends SubCommand {
+    public AdminAddCommand(Guilds plugin) {
+        super(plugin);
+    }
+
     /**
      * executes the command
      *
@@ -40,36 +44,36 @@ public class AdminAddCommand implements SubCommand {
         Player sender = (Player) commandSender;
         if (sender.hasPermission("Guilds.addCommand")) {
             if (strings.length >= 2) {
-                UUID uuid = Guilds.getUUID(strings[1]);
+                UUID uuid = plugin.getUUID(strings[1]);
                 if (uuid != null) {
-                    Guild guild = Guilds.getInstance().getGuild(uuid);
+                    Guild guild = plugin.getGuildManager().getGuild(uuid);
                     if (guild == null) {
-                        Guild targetGuild = Guilds.getInstance().getGuild(strings[2]);
+                        Guild targetGuild = plugin.getGuildManager().getGuild(strings[2]);
                         if (targetGuild != null) {
                             if (targetGuild.getMembers().size() < targetGuild.getCurrentLevel().getPlayerLimit()) {
-                                RequestController.getInstance().addRequest(new AddToGuildRequest(sender, uuid, targetGuild));
-                                Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                                plugin.getRequestController().addRequest(new AddToGuildRequest(plugin, sender, uuid, targetGuild));
+                                plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                         .getText("info.guildadmin.confirm.confirm"));
                             } else {
-                                Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                                plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                         .getText("error.guildFull"));
                             }
                         } else {
-                            Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.guildDoesntExist"));
+                            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.guildDoesntExist"));
 
                         }
                     } else {
-                        Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.isInAGuildAlready"));
+                        plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.isInAGuildAlready"));
                     }
                 } else {
-                    Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.playerDoesntExist")
+                    plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.playerDoesntExist")
                             .replace("{0}", strings[1]));
                 }
             } else {
-                Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.wrongUsage.addAdmin"));
+                plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.wrongUsage.addAdmin"));
             }
         } else {
-            Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.noPermission"));
+            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noPermission"));
         }
     }
 }

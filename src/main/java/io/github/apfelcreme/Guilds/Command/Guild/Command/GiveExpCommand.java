@@ -30,7 +30,11 @@ import org.bukkit.entity.Player;
  *
  * @author Lord36 aka Apfelcreme on 22.05.2015.
  */
-public class GiveExpCommand implements SubCommand {
+public class GiveExpCommand extends SubCommand {
+
+    public GiveExpCommand(Guilds plugin) {
+        super(plugin);
+    }
 
     /**
      * executes the command
@@ -40,38 +44,38 @@ public class GiveExpCommand implements SubCommand {
      */
     public void execute(CommandSender commandSender, String[] strings) {
         Player sender = (Player) commandSender;
-        if ((Guilds.getInstance().getServer().getDefaultGameMode() != GameMode.CREATIVE)
+        if ((plugin.getServer().getDefaultGameMode() != GameMode.CREATIVE)
                 && (sender.getGameMode() != GameMode.CREATIVE)) {
             if (sender.hasPermission("Guilds.giveExp")) {
                 if (strings.length >= 2) {
                     if (GuildsUtil.isNumeric(strings[1])) {
                         Integer exp = Integer.parseInt(strings[1]);
-                        Guild guild = Guilds.getInstance().getGuild(sender);
+                        Guild guild = plugin.getGuildManager().getGuild(sender);
                         if (guild != null) {
                             if (sender.getTotalExperience() >= exp) {
-                                RequestController.getInstance().addRequest(new GiveExpRequest(sender, guild, exp));
-                                Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                                plugin.getRequestController().addRequest(new GiveExpRequest(plugin, sender, guild, exp));
+                                plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                         .getColoredText("info.guild.confirm.confirm", guild.getColor()));
                             } else {
-                                Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                                plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                         .getText("error.notEnoughExp"));
                             }
                         } else {
-                            Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                     .getText("error.noCurrentGuild"));
                         }
                     } else {
-                        Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.noNumber")
+                        plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noNumber")
                                 .replace("{0}", strings[1]));
                     }
                 } else {
-                    Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.wrongUsage.giveExp"));
+                    plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.wrongUsage.giveExp"));
                 }
             } else {
-                Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.noPermission"));
+                plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noPermission"));
             }
         } else {
-            Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                     .getText("error.noSurvival"));
         }
     }

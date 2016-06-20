@@ -4,7 +4,6 @@ import io.github.apfelcreme.Guilds.Command.Guild.Request.KickRequest;
 import io.github.apfelcreme.Guilds.Command.SubCommand;
 import io.github.apfelcreme.Guilds.Guild.Guild;
 import io.github.apfelcreme.Guilds.Guilds;
-import io.github.apfelcreme.Guilds.GuildsConfig;
 import io.github.apfelcreme.Guilds.Manager.RequestController;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -30,7 +29,11 @@ import java.util.UUID;
  *
  * @author Lord36 aka Apfelcreme on 26.04.2015.
  */
-public class KickCommand implements SubCommand {
+public class KickCommand extends SubCommand {
+
+    public KickCommand(Guilds plugin) {
+        super(plugin);
+    }
 
     /**
      * executes the command
@@ -42,41 +45,41 @@ public class KickCommand implements SubCommand {
         Player sender = (Player) commandSender;
         if (sender.hasPermission("Guilds.kickFromGuild")) {
             if (strings.length >= 2) {
-                UUID uuid = Guilds.getUUID(strings[1]);
+                UUID uuid = plugin.getUUID(strings[1]);
                 if (uuid != null) {
                     if (uuid != sender.getUniqueId()) {
-                        Guild guild = Guilds.getInstance().getGuild(sender);
-                        Guild targetGuild = Guilds.getInstance().getGuild(uuid);
+                        Guild guild = plugin.getGuildManager().getGuild(sender);
+                        Guild targetGuild = plugin.getGuildManager().getGuild(uuid);
                         if (guild != null) {
                             if (targetGuild != null && guild.equals(targetGuild)) {
                                 if (guild.getMember(sender.getUniqueId()).getRank().canKick()) {
-                                    RequestController.getInstance().addRequest(
-                                            new KickRequest(sender, guild.getMember(uuid), guild));
-                                    Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                                    plugin.getRequestController().addRequest(
+                                            new KickRequest(plugin, sender, guild.getMember(uuid), guild));
+                                    plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                             .getColoredText("info.guild.confirm.confirm", guild.getColor()));
                                 } else {
-                                    Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
-                                            .getText("error.rank.noPermission").replace("{0}", GuildsConfig.getText("info.guild.rank.info.kick")));
+                                    plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
+                                            .getText("error.rank.noPermission").replace("{0}", plugin.getGuildsConfig().getText("info.guild.rank.info.kick")));
                                 }
                             } else {
-                                Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.notInThisGuild")
+                                plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.notInThisGuild")
                                         .replace("{0}", strings[1]).replace("{1}", guild.getName()));
                             }
                         } else {
-                            Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.noCurrentGuild"));
+                            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noCurrentGuild"));
                         }
                     } else {
-                        Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.noSelfKick"));
+                        plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noSelfKick"));
                     }
                 } else {
-                    Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.playerDoesntExist")
+                    plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.playerDoesntExist")
                             .replace("{0}", strings[1]));
                 }
             } else {
-                Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.wrongUsage.kick"));
+                plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.wrongUsage.kick"));
             }
         } else {
-            Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.noPermission"));
+            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noPermission"));
         }
     }
 }

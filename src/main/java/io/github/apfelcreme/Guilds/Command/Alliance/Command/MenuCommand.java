@@ -8,7 +8,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -30,7 +29,11 @@ import java.util.List;
  *
  * @author Lord36 aka Apfelcreme on 30.05.2015.
  */
-public class MenuCommand implements SubCommand {
+public class MenuCommand extends SubCommand {
+
+    public MenuCommand(Guilds plugin) {
+        super(plugin);
+    }
 
     /**
      * executes the command
@@ -46,25 +49,25 @@ public class MenuCommand implements SubCommand {
             page = Integer.parseInt(strings[0]) - 1;
         }
         if (page >= 0) {
-            List<String> commands = GuildsConfig.getAllianceCommandStrings(Guilds.getInstance().getAlliance(sender) != null);
-            Integer pageSize = GuildsConfig.getListsPageSize();
+            List<String> commands = plugin.getGuildsConfig().getAllianceCommandStrings(plugin.getAllianceManager().getAlliance(sender) != null);
+            Integer pageSize = plugin.getGuildsConfig().getListsPageSize();
             Integer maxPages = (int) Math.ceil((float) commands.size() / pageSize);
             if (page >= maxPages - 1) {
                 page = maxPages - 1;
             }
-            Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("info.alliance.command.head")
+            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("info.alliance.command.head")
                     .replace("{0}", Integer.toString(page + 1))
                     .replace("{1}", maxPages.toString()));
             for (int i = page * pageSize; i < (page * pageSize) + pageSize; i++) {
                 if (i < commands.size()) {
                     if (!commands.get(i).startsWith("MemorySection")) {
-                        Guilds.getInstance().getChat().sendMessage(sender, ChatColor.DARK_GRAY + " - " + GuildsUtil
+                        plugin.getChat().sendMessage(sender, ChatColor.DARK_GRAY + " - " + GuildsUtil
                                 .replaceChatColors(commands.get(i)));
                     }
                 }
             }
             if (commands.size() > pageSize) {
-                Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("info.alliance.command.bottom"));
+                plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("info.alliance.command.bottom"));
             }
         }
     }

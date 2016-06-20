@@ -29,7 +29,11 @@ import org.bukkit.entity.Player;
  *
  * @author Lord36 aka Apfelcreme on 28.04.2015.
  */
-public class CreateRankCommand implements SubCommand {
+public class CreateRankCommand extends SubCommand {
+
+    public CreateRankCommand(Guilds plugin) {
+        super(plugin);
+    }
 
     /**
      * executes the command
@@ -41,7 +45,7 @@ public class CreateRankCommand implements SubCommand {
 
         Player sender = (Player) commandSender;
         if (sender.hasPermission("Guilds.createRank")) {
-            Guild guild = Guilds.getInstance().getGuild(sender);
+            Guild guild = plugin.getGuildManager().getGuild(sender);
             if (guild != null) {
                 if (guild.getMember(sender.getUniqueId()).getRank().isLeader()) {
                     CreateRankSession createRankSession = SessionController.getInstance().getCreateRankSession(
@@ -50,75 +54,75 @@ public class CreateRankCommand implements SubCommand {
                         createRankSession = new CreateRankSession(sender);
                         SessionController.getInstance().addCreateRankSession(guild.getMember(sender.getUniqueId())
                                 , createRankSession);
-                        Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                        plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                 .getColoredText("info.guild.createRank.name", guild.getColor()));
                     } else {
                         if (strings.length >= 2) {
                             if (strings[1].equalsIgnoreCase("cancel")) {
                                 SessionController.getInstance().removeCreateRankSession(
                                         guild.getMember(sender.getUniqueId()));
-                                Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                                plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                         .getText("info.guild.createRank.cancelled"));
                                 return;
                             }
                             switch (createRankSession.getCurrentState()) {
                                 case ENTERNAME:
                                     createRankSession.setRankName(strings[1]);
-                                    Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                                    plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                             .getColoredText("info.guild.createRank.invite", guild.getColor()));
                                     createRankSession.nextStep();
                                     break;
                                 case ENTERCANINVITE:
                                     createRankSession.setCanInvite(strings[1].equalsIgnoreCase("ja"));
-                                    Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                                    plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                             .getColoredText("info.guild.createRank.kick", guild.getColor()));
                                     createRankSession.nextStep();
                                     break;
                                 case ENTERCANKICK:
                                     createRankSession.setCanKick(strings[1].equalsIgnoreCase("ja"));
-                                    Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                                    plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                             .getColoredText("info.guild.createRank.promote", guild.getColor()));
                                     createRankSession.nextStep();
                                     break;
                                 case ENTERCANPROMOTE:
                                     createRankSession.setCanPromote(strings[1].equalsIgnoreCase("ja"));
-                                    Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                                    plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                             .getColoredText("info.guild.createRank.disband", guild.getColor()));
                                     createRankSession.nextStep();
                                     break;
                                 case ENTERCANDISBAND:
                                     createRankSession.setCanDisband(strings[1].equalsIgnoreCase("ja"));
-                                    Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                                    plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                             .getColoredText("info.guild.createRank.upgrade", guild.getColor()));
                                     createRankSession.nextStep();
                                     break;
                                 case ENTERCANUPGRADE:
                                     createRankSession.setCanUpgrade(strings[1].equalsIgnoreCase("ja"));
-                                    Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                                    plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                             .getColoredText("info.guild.createRank.withdrawMoney", guild.getColor()));
                                     createRankSession.nextStep();
                                     break;
                                 case ENTERCANWITHDRAWMONEY:
                                     createRankSession.setCanWithdrawMoney(strings[1].equalsIgnoreCase("ja"));
-                                    Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                                    plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                             .getColoredText("info.guild.createRank.useBlackboard", guild.getColor()));
                                     createRankSession.nextStep();
                                     break;
                                 case ENTERCANUSEBLACKBOARD:
                                     createRankSession.setCanUseBlackboard(strings[1].equalsIgnoreCase("ja"));
-                                    Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                                    plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                             .getColoredText("info.guild.createRank.doDiplomacy", guild.getColor()));
                                     createRankSession.nextStep();
                                     break;
                                 case ENTERCANDODIPLOMACY:
                                     createRankSession.setCanDoDiplomacy(strings[1].equalsIgnoreCase("ja"));
-                                    Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                                    plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                             .getColoredText("info.guild.createRank.baseRank", guild.getColor()));
                                     createRankSession.nextStep();
                                     break;
                                 case ENTERISBASERANK:
                                     createRankSession.setIsBaseRank(strings[1].equalsIgnoreCase("ja"));
-                                    Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                                    plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                             .getColoredText("info.guild.createRank.finish", guild.getColor()));
                                     createRankSession.nextStep();
                                     break;
@@ -138,8 +142,8 @@ public class CreateRankCommand implements SubCommand {
                                             false
                                     );
                                     rank.setGuild(guild);
-                                    rank.save();
-                                    Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                                    plugin.getGuildManager().addRank(rank);
+                                    plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                             .getColoredText("info.guild.createRank.rankCreated", guild.getColor())
                                             .replace("{0}", createRankSession.getRankName()));
                                     SessionController.getInstance().removeCreateRankSession(
@@ -147,19 +151,19 @@ public class CreateRankCommand implements SubCommand {
                                     break;
                             }
                         } else {
-                            Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.wrongUsage.createRank"));
+                            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.wrongUsage.createRank"));
                         }
 
                     }
                 } else {
-                    Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
-                            .getText("error.rank.noPermission").replace("{0}", GuildsConfig.getText("info.guild.rank.info.leader")));
+                    plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
+                            .getText("error.rank.noPermission").replace("{0}", plugin.getGuildsConfig().getText("info.guild.rank.info.leader")));
                 }
             } else {
-                Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.noCurrentGuild"));
+                plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noCurrentGuild"));
             }
         } else {
-            Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.noPermission"));
+            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noPermission"));
         }
 
     }

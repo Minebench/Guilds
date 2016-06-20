@@ -2,13 +2,11 @@ package io.github.apfelcreme.Guilds.Bungee;
 
 import io.github.apfelcreme.Guilds.Guild.Guild;
 import io.github.apfelcreme.Guilds.Guilds;
-import io.github.apfelcreme.Guilds.GuildsConfig;
 import org.bukkit.entity.Player;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.net.InetAddress;
 
 /**
  * Alliances
@@ -31,19 +29,23 @@ import java.net.InetAddress;
  */
 public class BungeeConnection {
 
+    private Guilds plugin;
+
+    public BungeeConnection(Guilds plugin) {
+        this.plugin = plugin;
+    }
+
     /**
      * sends a request to the bungee to sync the list of guilds on all servers
      */
-    public static void forceGuildsSync() {
+    public void forceGuildsSync() {
         ByteArrayOutputStream b = new ByteArrayOutputStream();
         DataOutputStream out = new DataOutputStream(b);
 
         try {
             out.writeUTF("SyncGuilds");
-            Player player =
-                    Guilds.getInstance().getServer().getOnlinePlayers().iterator().next();
-            player.sendPluginMessage(Guilds.getInstance(),
-                    "Guilds", b.toByteArray());
+            Player player =  plugin.getServer().getOnlinePlayers().iterator().next();
+            player.sendPluginMessage(plugin, "Guilds", b.toByteArray());
             out.close();
             b.close();
         } catch (IOException e) {
@@ -54,17 +56,15 @@ public class BungeeConnection {
     /**
      * sends a request to the bungee to sync a single guild on all servers
      */
-    public static void forceGuildSync(Integer guildId) {
+    public void forceGuildSync(Integer guildId) {
         ByteArrayOutputStream b = new ByteArrayOutputStream();
         DataOutputStream out = new DataOutputStream(b);
 
         try {
             out.writeUTF("SyncGuild");
             out.writeInt(guildId);
-            Player player =
-                    Guilds.getInstance().getServer().getOnlinePlayers().iterator().next();
-            player.sendPluginMessage(Guilds.getInstance(),
-                    "Guilds", b.toByteArray());
+            Player player =  plugin.getServer().getOnlinePlayers().iterator().next();
+            player.sendPluginMessage(plugin, "Guilds", b.toByteArray());
             out.close();
             b.close();
         } catch (IOException e) {
@@ -75,16 +75,14 @@ public class BungeeConnection {
     /**
      * sends a request to the bungee to sync the list of alliances on all servers
      */
-    public static void forceAlliancesSync() {
+    public void forceAlliancesSync() {
         ByteArrayOutputStream b = new ByteArrayOutputStream();
         DataOutputStream out = new DataOutputStream(b);
 
         try {
             out.writeUTF("SyncAlliances");
-            Player player =
-                    Guilds.getInstance().getServer().getOnlinePlayers().iterator().next();
-            player.sendPluginMessage(Guilds.getInstance(),
-                    "Guilds", b.toByteArray());
+            Player player = plugin.getServer().getOnlinePlayers().iterator().next();
+            player.sendPluginMessage(plugin, "Guilds", b.toByteArray());
             out.close();
             b.close();
         } catch (IOException e) {
@@ -95,17 +93,15 @@ public class BungeeConnection {
     /**
      * sends a request to the bungee to sync a single alliance on all servers
      */
-    public static void forceAllianceSync(Integer allianceId) {
+    public void forceAllianceSync(Integer allianceId) {
         ByteArrayOutputStream b = new ByteArrayOutputStream();
         DataOutputStream out = new DataOutputStream(b);
 
         try {
             out.writeUTF("SyncAlliance");
             out.writeInt(allianceId);
-            Player player =
-                    Guilds.getInstance().getServer().getOnlinePlayers().iterator().next();
-            player.sendPluginMessage(Guilds.getInstance(),
-                    "Guilds", b.toByteArray());
+            Player player = plugin.getServer().getOnlinePlayers().iterator().next();
+            player.sendPluginMessage(plugin, "Guilds", b.toByteArray());
             out.close();
             b.close();
         } catch (IOException e) {
@@ -119,9 +115,9 @@ public class BungeeConnection {
      * @param player the player that shall be teleported
      * @param guild  the guild
      */
-    public static void sendPlayerToGuildHome(Player player, Guild guild) {
+    public void sendPlayerToGuildHome(Player player, Guild guild) {
 
-        if (GuildsConfig.isCrossServerTeleportAllowed()) {
+        if (plugin.getGuildsConfig().isCrossServerTeleportAllowed()) {
             ByteArrayOutputStream b = new ByteArrayOutputStream();
             DataOutputStream out = new DataOutputStream(b);
 
@@ -130,7 +126,7 @@ public class BungeeConnection {
                 out.writeUTF(player.getUniqueId().toString());
                 out.writeUTF(guild.getName());
                 out.writeUTF(guild.getGuildHomeServer());
-                player.sendPluginMessage(Guilds.getInstance(),
+                player.sendPluginMessage(plugin,
                         "Guilds", b.toByteArray());
                 out.close();
                 b.close();
@@ -138,15 +134,16 @@ public class BungeeConnection {
                 e.printStackTrace();
             }
         } else {
-            String serverAddress = Guilds.getInstance().getServer().getIp()
-                    + ":" + Integer.toString(Guilds.getInstance().getServer().getPort());
+            String serverAddress = plugin.getServer().getIp()
+                    + ":" + Integer.toString(plugin.getServer().getPort());
             if (serverAddress.equals(guild.getGuildHomeServer())) {
-                player.teleport(guild.getGuildHome());
-                Guilds.getInstance().getChat().sendMessage(player, GuildsConfig
-                        .getColoredText("info.guild.home.teleportedToHome", guild.getColor()));
+                player.teleport(plugin.getGuildManager().getHome(guild));
+                plugin.getChat().sendMessage(player,
+                        plugin.getGuildsConfig().getColoredText(
+                                "info.guild.home.teleportedToHome", guild.getColor()));
             } else {
-                Guilds.getInstance().getChat().sendMessage(player, GuildsConfig
-                        .getText("error.wrongHomeServer"));
+                plugin.getChat().sendMessage(player,
+                        plugin.getGuildsConfig().getText("error.wrongHomeServer"));
             }
         }
     }

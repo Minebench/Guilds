@@ -5,7 +5,6 @@ import io.github.apfelcreme.Guilds.Guild.Guild;
 import io.github.apfelcreme.Guilds.Guild.Rank;
 import io.github.apfelcreme.Guilds.Guilds;
 import io.github.apfelcreme.Guilds.GuildsConfig;
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -28,7 +27,11 @@ import org.bukkit.entity.Player;
  *
  * @author Lord36 aka Apfelcreme on 15.05.2015.
  */
-public class RankInfoCommand implements SubCommand {
+public class RankInfoCommand extends SubCommand {
+
+    public RankInfoCommand(Guilds plugin) {
+        super(plugin);
+    }
 
     /**
      * executes the command
@@ -40,71 +43,71 @@ public class RankInfoCommand implements SubCommand {
         Player sender = (Player) commandSender;
         if (sender.hasPermission("Guilds.rankInfo")) {
             if (strings.length >= 2) {
-                Guild guild = Guilds.getInstance().getGuild(sender);
+                Guild guild = plugin.getGuildManager().getGuild(sender);
                 if (guild != null) {
                     Rank rank = guild.getRank(strings[1]);
                     if (rank != null) {
-                        Guilds.getInstance().getChat().sendMessage(sender,
-                                GuildsConfig.getColoredText("info.guild.rank.head", guild.getColor())
+                        plugin.getChat().sendMessage(sender,
+                                plugin.getGuildsConfig().getColoredText("info.guild.rank.head", guild.getColor())
                                         .replace("{0}", rank.getName()));
 
-                        Guilds.getInstance().getChat().sendMessage(sender,
-                                GuildsConfig.getColoredText("info.guild.rank.element", guild.getColor())
-                                        .replace("{0}", GuildsConfig.getText("info.guild.rank.info.invite"))
-                                        .replace("{1}", (rank.canInvite() ? GuildsConfig.getText("info.guild.rank.info.allowed") :
-                                                GuildsConfig.getText("info.guild.rank.info.notAllowed"))));
-                        Guilds.getInstance().getChat().sendMessage(sender,
-                                GuildsConfig.getColoredText("info.guild.rank.element", guild.getColor())
-                                        .replace("{0}", GuildsConfig.getText("info.guild.rank.info.kick"))
-                                        .replace("{1}", (rank.canKick() ? GuildsConfig.getText("info.guild.rank.info.allowed") :
-                                                GuildsConfig.getText("info.guild.rank.info.notAllowed"))));
-                        Guilds.getInstance().getChat().sendMessage(sender,
-                                GuildsConfig.getColoredText("info.guild.rank.element", guild.getColor())
-                                        .replace("{0}", GuildsConfig.getText("info.guild.rank.info.promote"))
-                                        .replace("{1}", (rank.canPromote() ? GuildsConfig.getText("info.guild.rank.info.allowed") :
-                                                GuildsConfig.getText("info.guild.rank.info.notAllowed"))));
-                        Guilds.getInstance().getChat().sendMessage(sender,
-                                GuildsConfig.getColoredText("info.guild.rank.element", guild.getColor())
-                                        .replace("{0}", GuildsConfig.getText("info.guild.rank.info.disband"))
-                                        .replace("{1}", (rank.canDisband() ? GuildsConfig.getText("info.guild.rank.info.allowed") :
-                                                GuildsConfig.getText("info.guild.rank.info.notAllowed"))));
-                        Guilds.getInstance().getChat().sendMessage(sender,
-                                GuildsConfig.getColoredText("info.guild.rank.element", guild.getColor())
-                                        .replace("{0}", GuildsConfig.getText("info.guild.rank.info.upgrade"))
-                                        .replace("{1}", (rank.canUpgrade() ? GuildsConfig.getText("info.guild.rank.info.allowed") :
-                                                GuildsConfig.getText("info.guild.rank.info.notAllowed"))));
-                        Guilds.getInstance().getChat().sendMessage(sender,
-                                GuildsConfig.getColoredText("info.guild.rank.element", guild.getColor())
-                                        .replace("{0}", GuildsConfig.getText("info.guild.rank.info.withdrawMoney"))
-                                        .replace("{1}", (rank.canWithdrawMoney() ? GuildsConfig.getText("info.guild.rank.info.allowed") :
-                                                GuildsConfig.getText("info.guild.rank.info.notAllowed"))));
-                        Guilds.getInstance().getChat().sendMessage(sender,
-                                GuildsConfig.getColoredText("info.guild.rank.element", guild.getColor())
-                                        .replace("{0}", GuildsConfig.getText("info.guild.rank.info.useBlackboard"))
-                                        .replace("{1}", (rank.canUseBlackboard() ? GuildsConfig.getText("info.guild.rank.info.allowed") :
-                                                GuildsConfig.getText("info.guild.rank.info.notAllowed"))));
-                        Guilds.getInstance().getChat().sendMessage(sender,
-                                GuildsConfig.getColoredText("info.guild.rank.element", guild.getColor())
-                                        .replace("{0}", GuildsConfig.getText("info.guild.rank.info.doDiplomacy"))
-                                        .replace("{1}", (rank.canDoDiplomacy() ? GuildsConfig.getText("info.guild.rank.info.allowed") :
-                                                GuildsConfig.getText("info.guild.rank.info.notAllowed"))));
-                        Guilds.getInstance().getChat().sendMessage(sender,
-                                GuildsConfig.getColoredText("info.guild.rank.element", guild.getColor())
-                                        .replace("{0}", GuildsConfig.getText("info.guild.rank.info.baseRank"))
-                                        .replace("{1}", (rank.isBaseRank() ? GuildsConfig.getText("info.guild.rank.info.bYes") :
-                                                GuildsConfig.getText("info.guild.rank.info.bNo"))));
+                        plugin.getChat().sendMessage(sender,
+                                plugin.getGuildsConfig().getColoredText("info.guild.rank.element", guild.getColor())
+                                        .replace("{0}", plugin.getGuildsConfig().getText("info.guild.rank.info.invite"))
+                                        .replace("{1}", (rank.canInvite() ? plugin.getGuildsConfig().getText("info.guild.rank.info.allowed") :
+                                                plugin.getGuildsConfig().getText("info.guild.rank.info.notAllowed"))));
+                        plugin.getChat().sendMessage(sender,
+                                plugin.getGuildsConfig().getColoredText("info.guild.rank.element", guild.getColor())
+                                        .replace("{0}", plugin.getGuildsConfig().getText("info.guild.rank.info.kick"))
+                                        .replace("{1}", (rank.canKick() ? plugin.getGuildsConfig().getText("info.guild.rank.info.allowed") :
+                                                plugin.getGuildsConfig().getText("info.guild.rank.info.notAllowed"))));
+                        plugin.getChat().sendMessage(sender,
+                                plugin.getGuildsConfig().getColoredText("info.guild.rank.element", guild.getColor())
+                                        .replace("{0}", plugin.getGuildsConfig().getText("info.guild.rank.info.promote"))
+                                        .replace("{1}", (rank.canPromote() ? plugin.getGuildsConfig().getText("info.guild.rank.info.allowed") :
+                                                plugin.getGuildsConfig().getText("info.guild.rank.info.notAllowed"))));
+                        plugin.getChat().sendMessage(sender,
+                                plugin.getGuildsConfig().getColoredText("info.guild.rank.element", guild.getColor())
+                                        .replace("{0}", plugin.getGuildsConfig().getText("info.guild.rank.info.disband"))
+                                        .replace("{1}", (rank.canDisband() ? plugin.getGuildsConfig().getText("info.guild.rank.info.allowed") :
+                                                plugin.getGuildsConfig().getText("info.guild.rank.info.notAllowed"))));
+                        plugin.getChat().sendMessage(sender,
+                                plugin.getGuildsConfig().getColoredText("info.guild.rank.element", guild.getColor())
+                                        .replace("{0}", plugin.getGuildsConfig().getText("info.guild.rank.info.upgrade"))
+                                        .replace("{1}", (rank.canUpgrade() ? plugin.getGuildsConfig().getText("info.guild.rank.info.allowed") :
+                                                plugin.getGuildsConfig().getText("info.guild.rank.info.notAllowed"))));
+                        plugin.getChat().sendMessage(sender,
+                                plugin.getGuildsConfig().getColoredText("info.guild.rank.element", guild.getColor())
+                                        .replace("{0}", plugin.getGuildsConfig().getText("info.guild.rank.info.withdrawMoney"))
+                                        .replace("{1}", (rank.canWithdrawMoney() ? plugin.getGuildsConfig().getText("info.guild.rank.info.allowed") :
+                                                plugin.getGuildsConfig().getText("info.guild.rank.info.notAllowed"))));
+                        plugin.getChat().sendMessage(sender,
+                                plugin.getGuildsConfig().getColoredText("info.guild.rank.element", guild.getColor())
+                                        .replace("{0}", plugin.getGuildsConfig().getText("info.guild.rank.info.useBlackboard"))
+                                        .replace("{1}", (rank.canUseBlackboard() ? plugin.getGuildsConfig().getText("info.guild.rank.info.allowed") :
+                                                plugin.getGuildsConfig().getText("info.guild.rank.info.notAllowed"))));
+                        plugin.getChat().sendMessage(sender,
+                                plugin.getGuildsConfig().getColoredText("info.guild.rank.element", guild.getColor())
+                                        .replace("{0}", plugin.getGuildsConfig().getText("info.guild.rank.info.doDiplomacy"))
+                                        .replace("{1}", (rank.canDoDiplomacy() ? plugin.getGuildsConfig().getText("info.guild.rank.info.allowed") :
+                                                plugin.getGuildsConfig().getText("info.guild.rank.info.notAllowed"))));
+                        plugin.getChat().sendMessage(sender,
+                                plugin.getGuildsConfig().getColoredText("info.guild.rank.element", guild.getColor())
+                                        .replace("{0}", plugin.getGuildsConfig().getText("info.guild.rank.info.baseRank"))
+                                        .replace("{1}", (rank.isBaseRank() ? plugin.getGuildsConfig().getText("info.guild.rank.info.bYes") :
+                                                plugin.getGuildsConfig().getText("info.guild.rank.info.bNo"))));
 
                     } else {
-                        Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.unknownRank"));
+                        plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.unknownRank"));
                     }
                 } else {
-                    Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.noCurrentGuild"));
+                    plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noCurrentGuild"));
                 }
             } else {
-                Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.wrongUsage.rank"));
+                plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.wrongUsage.rank"));
             }
         } else {
-            Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.noPermission"));
+            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noPermission"));
         }
     }
 }

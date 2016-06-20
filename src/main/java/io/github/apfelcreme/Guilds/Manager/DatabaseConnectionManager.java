@@ -1,7 +1,6 @@
 package io.github.apfelcreme.Guilds.Manager;
 
 import io.github.apfelcreme.Guilds.Guilds;
-import io.github.apfelcreme.Guilds.GuildsConfig;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -29,10 +28,11 @@ import java.sql.SQLException;
  */
 public class DatabaseConnectionManager {
 
-    private static DatabaseConnectionManager instance = null;
+    private Guilds plugin;
 
-    private DatabaseConnectionManager() {
-
+    public DatabaseConnectionManager(Guilds plugin) {
+        this.plugin = plugin;
+        initConnection();
     }
 
     /**
@@ -40,28 +40,28 @@ public class DatabaseConnectionManager {
      *
      * @return
      */
-    public Connection initConnection() {
+    private Connection initConnection() {
         Connection connection;
         try {
-            if (GuildsConfig.getMysqlDatabase().isEmpty() || GuildsConfig.getMysqlDatabase() == null) {
+            if (plugin.getGuildsConfig().getMysqlDatabase().isEmpty() || plugin.getGuildsConfig().getMysqlDatabase() == null) {
                 return null;
             } else {
                 Class.forName("com.mysql.jdbc.Driver");
-                connection = DriverManager.getConnection("jdbc:mysql://" + GuildsConfig.getMysqlUrl()
-                        + "/" + "", GuildsConfig.getMysqlUser(), GuildsConfig.getMysqlPassword());
+                connection = DriverManager.getConnection("jdbc:mysql://" + plugin.getGuildsConfig().getMysqlUrl()
+                        + "/" + "", plugin.getGuildsConfig().getMysqlUser(), plugin.getGuildsConfig().getMysqlPassword());
                 if (connection != null) {
                     try {
                         connection.createStatement().execute(
-                                "CREATE DATABASE IF NOT EXISTS " + GuildsConfig.getMysqlDatabase());
+                                "CREATE DATABASE IF NOT EXISTS " + plugin.getGuildsConfig().getMysqlDatabase());
                     } catch (SQLException e) {
                         e.printStackTrace();
                     }
                 }
-                connection = DriverManager.getConnection("jdbc:mysql://" + GuildsConfig.getMysqlUrl()
+                connection = DriverManager.getConnection("jdbc:mysql://" + plugin.getGuildsConfig().getMysqlUrl()
                                 + "/" +
-                                GuildsConfig.getMysqlDatabase(),
-                        GuildsConfig.getMysqlUser(),
-                        GuildsConfig.getMysqlPassword());
+                                plugin.getGuildsConfig().getMysqlDatabase(),
+                        plugin.getGuildsConfig().getMysqlUser(),
+                        plugin.getGuildsConfig().getMysqlPassword());
                 initTables();
                 return connection;
             }
@@ -81,12 +81,12 @@ public class DatabaseConnectionManager {
         if (connection != null) {
             PreparedStatement statement;
             statement = connection.prepareStatement("CREATE DATABASE IF NOT EXISTS "
-                    + GuildsConfig.getMysqlDatabase());
+                    + plugin.getGuildsConfig().getMysqlDatabase());
             statement.executeUpdate();
             statement.close();
 
             statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS "
-                    + GuildsConfig.getAllianceTable() + " (" +
+                    + plugin.getGuildsConfig().getAllianceTable() + " (" +
                     "allianceId INTEGER AUTO_INCREMENT, " +
                     "alliance VARCHAR(90) NOT NULL UNIQUE, " +
                     "tag VARCHAR(12) NOT NULL, " +
@@ -97,7 +97,7 @@ public class DatabaseConnectionManager {
             statement.close();
 
             statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS "
-                    + GuildsConfig.getGuildsTable() + " (" +
+                    + plugin.getGuildsConfig().getGuildsTable() + " (" +
                     "guildId INTEGER AUTO_INCREMENT, " +
                     "guild VARCHAR(90) NOT NULL UNIQUE, " +
                     "tag VARCHAR(12) NOT NULL, " +
@@ -112,13 +112,13 @@ public class DatabaseConnectionManager {
                     "guildHomeZ DOUBLE, " +
                     "guildHomeWorld VARCHAR(50), " +
                     "guildHomeServer VARCHAR(50), " +
-                    "FOREIGN KEY (allianceId) references " + GuildsConfig.getAllianceTable() + " (allianceId), " +
+                    "FOREIGN KEY (allianceId) references " + plugin.getGuildsConfig().getAllianceTable() + " (allianceId), " +
                     "PRIMARY KEY (guildId));");
             statement.executeUpdate();
             statement.close();
 
             statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS "
-                    + GuildsConfig.getRanksTable() + " (" +
+                    + plugin.getGuildsConfig().getRanksTable() + " (" +
                     "rankId INTEGER AUTO_INCREMENT, " +
                     "rankName VARCHAR(50) NOT NULL, " +
                     "canInvite TINYINT(1) default 0, " +
@@ -132,13 +132,13 @@ public class DatabaseConnectionManager {
                     "isBaseRank TINYINT(1) default 0, " +
                     "isLeader TINYINT(1) default 0, " +
                     "guildId INTEGER, " +
-                    "FOREIGN KEY (guildId) REFERENCES " + GuildsConfig.getGuildsTable() + " (guildId), " +
+                    "FOREIGN KEY (guildId) REFERENCES " + plugin.getGuildsConfig().getGuildsTable() + " (guildId), " +
                     "PRIMARY KEY (rankId));");
             statement.executeUpdate();
             statement.close();
 
             statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS "
-                    + GuildsConfig.getPlayerTable() + " (" +
+                    + plugin.getGuildsConfig().getPlayerTable() + " (" +
                     "uuid VARCHAR(36) NOT NULL UNIQUE, " +
                     "playerName VARCHAR(50) NOT NULL, " +
                     "prefix VARCHAR(75), " +
@@ -146,48 +146,48 @@ public class DatabaseConnectionManager {
                     "rankId INTEGER, " +
                     "joined BIGINT, " +
                     "lastSeen BIGINT, " +
-                    "FOREIGN KEY (guildId) REFERENCES " + GuildsConfig.getGuildsTable() + " (guildId), " +
-                    "FOREIGN KEY (rankId) REFERENCES " + GuildsConfig.getRanksTable() + " (rankId), " +
+                    "FOREIGN KEY (guildId) REFERENCES " + plugin.getGuildsConfig().getGuildsTable() + " (guildId), " +
+                    "FOREIGN KEY (rankId) REFERENCES " + plugin.getGuildsConfig().getRanksTable() + " (rankId), " +
                     "PRIMARY KEY (uuid));");
             statement.executeUpdate();
             statement.close();
 
             statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS "
-                    + GuildsConfig.getBlackboardTable() + " (" +
+                    + plugin.getGuildsConfig().getBlackboardTable() + " (" +
                     "messageId BIGINT auto_increment not null, " +
                     "player VARCHAR(36) NOT NULL, " +
                     "guildId INTEGER, " +
                     "message VARCHAR(255), " +
                     "timestamp TIMESTAMP, " +
                     "cleared TINYINT DEFAULT 0, " +
-                    "FOREIGN KEY (player) REFERENCES " + GuildsConfig.getPlayerTable() + " (uuid), " +
-                    "FOREIGN KEY (guildId) REFERENCES " + GuildsConfig.getGuildsTable() + " (guildId), " +
+                    "FOREIGN KEY (player) REFERENCES " + plugin.getGuildsConfig().getPlayerTable() + " (uuid), " +
+                    "FOREIGN KEY (guildId) REFERENCES " + plugin.getGuildsConfig().getGuildsTable() + " (guildId), " +
                     "PRIMARY KEY (messageId));");
             statement.executeUpdate();
             statement.close();
 
             statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS "
-                    + GuildsConfig.getInvitesTable() + " (" +
+                    + plugin.getGuildsConfig().getInvitesTable() + " (" +
                     "inviteId INTEGER AUTO_INCREMENT, " +
                     "player VARCHAR(36) NOT NULL, " +
                     "targetPlayer VARCHAR(36) NOT NULL, " +
                     "guildId INTEGER NOT NULL, " +
                     "status SMALLINT DEFAULT 0, " +
-                    "FOREIGN KEY (guildId) REFERENCES " + GuildsConfig.getGuildsTable() + " (guildId), " +
-                    "FOREIGN KEY (player) REFERENCES " + GuildsConfig.getPlayerTable() + " (uuid), " +
-                    "FOREIGN KEY (targetPlayer) REFERENCES " + GuildsConfig.getPlayerTable() + " (uuid), " +
+                    "FOREIGN KEY (guildId) REFERENCES " + plugin.getGuildsConfig().getGuildsTable() + " (guildId), " +
+                    "FOREIGN KEY (player) REFERENCES " + plugin.getGuildsConfig().getPlayerTable() + " (uuid), " +
+                    "FOREIGN KEY (targetPlayer) REFERENCES " + plugin.getGuildsConfig().getPlayerTable() + " (uuid), " +
                     "PRIMARY KEY (inviteId));");
             statement.executeUpdate();
             statement.close();
 
             statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS "
-                    + GuildsConfig.getAllianceInviteTable() + " (" +
+                    + plugin.getGuildsConfig().getAllianceInviteTable() + " (" +
                     "allianceInviteId INTEGER AUTO_INCREMENT, " +
                     "allianceId INTEGER NOT NULL, " +
                     "guildId INTEGER NOT NULL, " +
                     "status SMALLINT DEFAULT 0, " +
-                    "FOREIGN KEY (guildId) REFERENCES " + GuildsConfig.getGuildsTable() + " (guildId), " +
-                    "FOREIGN KEY (allianceId) REFERENCES " + GuildsConfig.getAllianceTable() + " (allianceId), " +
+                    "FOREIGN KEY (guildId) REFERENCES " + plugin.getGuildsConfig().getGuildsTable() + " (guildId), " +
+                    "FOREIGN KEY (allianceId) REFERENCES " + plugin.getGuildsConfig().getAllianceTable() + " (allianceId), " +
                     "PRIMARY KEY (allianceInviteId));");
             statement.executeUpdate();
             statement.close();
@@ -204,27 +204,15 @@ public class DatabaseConnectionManager {
     public Connection getConnection() {
         try {
             return DriverManager.getConnection("jdbc:mysql://" +
-                            GuildsConfig.getMysqlUrl()
+                            plugin.getGuildsConfig().getMysqlUrl()
                             + "/" +
-                            GuildsConfig.getMysqlDatabase(),
-                    GuildsConfig.getMysqlUser(),
-                    GuildsConfig.getMysqlPassword());
+                            plugin.getGuildsConfig().getMysqlDatabase(),
+                    plugin.getGuildsConfig().getMysqlUser(),
+                    plugin.getGuildsConfig().getMysqlPassword());
         } catch (SQLException e) {
-            Guilds.getInstance().getLogger().severe("Database connection could not be built");
+            plugin.getLogger().severe("Database connection could not be built");
         }
         return null;
-    }
-
-    /**
-     * return the DatabaseConnectionManager instance
-     *
-     * @return the instance
-     */
-    public static DatabaseConnectionManager getInstance() {
-        if (instance == null) {
-            instance = new DatabaseConnectionManager();
-        }
-        return instance;
     }
 
 }

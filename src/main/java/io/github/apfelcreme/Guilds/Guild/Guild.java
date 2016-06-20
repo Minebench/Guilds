@@ -1,17 +1,12 @@
 package io.github.apfelcreme.Guilds.Guild;
 
-import io.github.apfelcreme.Guilds.Bungee.BungeeConnection;
 import io.github.apfelcreme.Guilds.Guilds;
-import io.github.apfelcreme.Guilds.GuildsConfig;
 import io.github.apfelcreme.Guilds.GuildsUtil;
-import io.github.apfelcreme.Guilds.Manager.DatabaseConnectionManager;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
-import java.sql.*;
 import java.util.*;
 import java.util.Date;
 
@@ -156,16 +151,6 @@ public class Guild implements Comparable<Guild> {
     }
 
     /**
-     * sends a new invite to the targetPlayer
-     *
-     * @param sender       the sender
-     * @param targetPlayer the receiver
-     */
-    public void sendInviteTo(GuildMember sender, UUID targetPlayer, String targetPlayerName) {
-        new Invite(this, targetPlayer, getMember(sender.getPlayer().getUniqueId()), targetPlayerName).save();
-    }
-
-    /**
      * returns the guild id
      *
      * @return the guild id
@@ -226,21 +211,6 @@ public class Guild implements Comparable<Guild> {
     }
 
     /**
-     * returns the guild home location of the guild
-     *
-     * @return the guild home location
-     */
-    public Location getGuildHome() {
-        if (guildHomeX != null && guildHomeY != null && guildHomeZ != null
-                && guildHomeWorld != null && guildHomeServer != null) {
-            return new Location(Guilds.getInstance().getServer()
-                    .getWorld(guildHomeWorld), guildHomeX, guildHomeY, guildHomeZ);
-        } else {
-            return null;
-        }
-    }
-
-    /**
      * returns the server name of the guild home
      *
      * @return the server name of the guild home
@@ -262,30 +232,6 @@ public class Guild implements Comparable<Guild> {
             }
         }
         return null;
-    }
-
-    /**
-     * is the guild ready for upgrade
-     *
-     * @param upgrader the player who upgrades the guild (has to have the upgrade requirements in his inventory)
-     * @return true or false
-     */
-    public boolean canBeUpgraded(Player upgrader) {
-        if (!currentLevel.hasNextLevel()) {
-            return false;
-        }
-        if (balance < currentLevel.nextLevel().getCost()) {
-            return false;
-        }
-        if (exp < currentLevel.nextLevel().getExpCost()) {
-            return false;
-        }
-        for (Map.Entry<Material, Integer> entry : currentLevel.nextLevel().getMaterialRequirements().entrySet()) {
-            if (GuildsUtil.countItems(upgrader.getInventory(), entry.getKey()) < entry.getValue()) {
-                return false;
-            }
-        }
-        return true;
     }
 
     /**
@@ -371,578 +317,6 @@ public class Guild implements Comparable<Guild> {
     }
 
     /**
-     * creates a new guild
-     *
-     * @param founder the creator of the guild
-     */
-    public void create(final OfflinePlayer founder) {
-        Guilds.getInstance().getServer().getScheduler().runTaskAsynchronously(Guilds.getInstance(),
-                new Runnable() {
-                    public void run() {
-                        Connection connection = DatabaseConnectionManager.getInstance().getConnection();
-                        if (connection != null) {
-                            try {
-                                PreparedStatement statement;
-
-                                statement = connection
-                                        .prepareStatement("INSERT INTO " + GuildsConfig.getGuildsTable() +
-                                                " (guild, tag, color, balance, exp, level, founded) VALUES (?, ?, ?, ?, ?, 1, ?);");
-                                statement.setString(1, getName());
-                                statement.setString(2, getTag());
-                                statement.setString(3, getColor().name());
-                                statement.setDouble(4, 0.0);
-                                statement.setDouble(5, 0.0);
-                                statement.setLong(6, new Date().getTime());
-                                statement.executeUpdate();
-                                statement.close();
-
-                                statement = connection.prepareStatement("Select guildId from " + GuildsConfig.getGuildsTable() + " where guild = ?");
-                                statement.setString(1, getName());
-                                ResultSet resultSet = statement.executeQuery();
-                                resultSet.first();
-                                id = resultSet.getInt("guildId");
-
-                                statement = connection.prepareStatement("INSERT IGNORE INTO "
-                                        + GuildsConfig.getPlayerTable() + " (playerName, uuid, guildId, lastSeen, joined) " +
-                                        "VALUES (?, ?, ?, ?, ?) " +
-                                        "ON DUPLICATE KEY UPDATE guildId = ?;");
-                                statement.setString(1, founder.getName());
-                                statement.setString(2, founder.getUniqueId().toString());
-                                statement.setInt(3, id);
-                                statement.setLong(4, new Date().getTime());
-                                statement.setLong(5, new Date().getTime());
-                                statement.setInt(6, id);
-                                statement.executeUpdate();
-                                statement.close();
-
-
-                                //add the founder rank
-                                statement = connection.prepareStatement(
-                                        "INSERT INTO " + GuildsConfig.getRanksTable() +
-                                                "(rankName, guildId, canInvite, canKick, canPromote," +
-                                                " canDisband, canUpgrade, canWithdrawMoney, canUseBlackboard," +
-                                                " canDoDiplomacy, isBaseRank, isLeader) VALUES(" +
-                                                " ?, ?, " +
-                                                " true, true, true, true, true, true, true, true, false, true)"
-                                );
-                                statement.setString(1, GuildsConfig.getText("standard.founderRank"));
-                                statement.setInt(2, id);
-                                statement.executeUpdate();
-                                statement.close();
-
-                                //add the base rank for all new members
-                                statement = connection.prepareStatement(
-                                        "INSERT INTO " + GuildsConfig.getRanksTable() +
-                                                "(rankName, guildId, canInvite, canKick, canPromote," +
-                                                " canDisband, canUpgrade, canWithdrawMoney, canUseBlackboard," +
-                                                " canDoDiplomacy, isBaseRank, isLeader) VALUES(" +
-                                                " ?, ?," +
-                                                " false, false, false, false, false, false, false, false, true, false)"
-                                );
-                                statement.setString(1, GuildsConfig.getText("standard.newbyRank"));
-                                statement.setInt(2, id);
-                                statement.executeUpdate();
-                                statement.close();
-
-                                statement = connection.prepareStatement(
-                                        "Select * from " + GuildsConfig.getRanksTable() +
-                                                " where rankName = ? and guildId = ?");
-                                statement.setString(1, GuildsConfig.getText("standard.founderRank"));
-                                statement.setInt(2, id);
-                                resultSet = statement.executeQuery();
-
-                                resultSet.first();
-
-                                Rank leaderRank =
-                                        new Rank(
-                                                resultSet.getInt("rankId"),
-                                                resultSet.getString("rankName"),
-                                                resultSet.getBoolean("canInvite"),
-                                                resultSet.getBoolean("canKick"),
-                                                resultSet.getBoolean("canPromote"),
-                                                resultSet.getBoolean("canDisband"),
-                                                resultSet.getBoolean("canUpgrade"),
-                                                resultSet.getBoolean("canWithdrawMoney"),
-                                                resultSet.getBoolean("canUseBlackboard"),
-                                                resultSet.getBoolean("canDoDiplomacy"),
-                                                resultSet.getBoolean("isBaseRank"),
-                                                resultSet.getBoolean("isLeader")
-                                        );
-
-                                statement.close();
-
-                                connection.close();
-
-                                //add the command sender as the new owner
-                                setLeader(founder);
-                                setPlayerRank(founder, leaderRank);
-
-                                BungeeConnection.forceGuildSync(getId());
-                            } catch (SQLException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }
-                });
-    }
-
-    /**
-     * sets the players rank to the given
-     *
-     * @param guildMember the player
-     * @param rank        the new rank
-     */
-    public void setPlayerRank(final OfflinePlayer guildMember, final Rank rank) {
-
-        Guilds.getInstance().getServer().getScheduler().runTaskAsynchronously(Guilds.getInstance(), new Runnable() {
-            public void run() {
-                Connection connection = DatabaseConnectionManager.getInstance().getConnection();
-                if (connection != null) {
-                    try {
-                        PreparedStatement statement = connection.prepareStatement(
-                                "UPDATE " + GuildsConfig.getPlayerTable() + " SET rankId = ? " +
-                                        "where uuid = ?;");
-                        statement.setInt(1, rank.getId());
-                        statement.setString(2, guildMember.getUniqueId().toString());
-                        statement.executeUpdate();
-                        statement.close();
-
-                        BungeeConnection.forceGuildSync(getId());
-
-                        connection.close();
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        });
-    }
-
-    /**
-     * sets the guilds leader
-     *
-     * @param guildMember the members targetPlayer
-     */
-    private void setLeader(final OfflinePlayer guildMember) {
-        Guilds.getInstance().getServer().getScheduler().runTaskAsynchronously(
-                Guilds.getInstance(), new Runnable() {
-                    public void run() {
-                        try {
-                            Connection connection = DatabaseConnectionManager.getInstance().getConnection();
-                            if (connection != null) {
-                                PreparedStatement statement = connection.prepareStatement(
-                                        "UPDATE " + GuildsConfig.getPlayerTable() +
-                                                " SET " +
-                                                " rankId = (Select rankId from " + GuildsConfig.getRanksTable() +
-                                                "  WHERE guildId = ? " +
-                                                "  and isLeader = 1 )" +
-                                                " where uuid = ?;"
-                                );
-                                statement.setInt(1, id);
-                                statement.setString(2, guildMember.getUniqueId().toString());
-                                statement.executeUpdate();
-                                statement.close();
-
-                                connection.close();
-                            }
-                        } catch (SQLException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
-    }
-
-    /**
-     * deletes the guild
-     */
-    public void delete() {
-        final Guild thisGuild = this;
-        Guilds.getInstance().getServer().getScheduler().runTaskAsynchronously(Guilds.getInstance(),
-                new Runnable() {
-                    public void run() {
-                        Connection connection = DatabaseConnectionManager.getInstance().getConnection();
-                        if (connection != null) {
-                            try {
-                                PreparedStatement statement = connection.prepareStatement(
-                                        "UPDATE " + GuildsConfig.getPlayerTable() + " SET guildId = NULL, rankId = NULL" +
-                                                " where guildId = ? "
-                                );
-                                statement.setInt(1, id);
-                                statement.executeUpdate();
-                                statement.close();
-
-                                statement = connection.prepareStatement(
-                                        "DELETE FROM " + GuildsConfig.getInvitesTable() + " WHERE guildId = ? ");
-                                statement.setInt(1, id);
-                                statement.executeUpdate();
-                                statement.close();
-
-                                statement = connection.prepareStatement(
-                                        "DELETE FROM " + GuildsConfig.getAllianceInviteTable() + " WHERE guildId = ? ");
-                                statement.setInt(1, id);
-                                statement.executeUpdate();
-                                statement.close();
-
-                                statement = connection.prepareStatement(
-                                        "DELETE FROM " + GuildsConfig.getBlackboardTable() + " WHERE guildId = ? ");
-                                statement.setInt(1, id);
-                                statement.executeUpdate();
-                                statement.close();
-
-                                statement = connection.prepareStatement(
-                                        "DELETE FROM " + GuildsConfig.getRanksTable() + " WHERE guildId = ? ");
-                                statement.setInt(1, id);
-                                statement.executeUpdate();
-                                statement.close();
-
-                                statement = connection.prepareStatement(
-                                        "DELETE FROM " + GuildsConfig.getGuildsTable() + " WHERE guildId = ? ");
-                                statement.setInt(1, id);
-                                statement.executeUpdate();
-                                statement.close();
-
-                                connection.close();
-
-                                BungeeConnection.forceGuildsSync();
-                                BungeeConnection.forceAlliancesSync();
-
-                            } catch (SQLException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }
-                });
-    }
-
-    /**
-     * adds a member to the given guild
-     *
-     * @param targetPlayer the target uuid
-     */
-    public void addMember(final UUID targetPlayer) {
-        final Guild thisGuild = this;
-        Guilds.getInstance().getServer().getScheduler().runTaskAsynchronously(
-                Guilds.getInstance(), new Runnable() {
-                    public void run() {
-                        try {
-                            Connection connection = DatabaseConnectionManager.getInstance().getConnection();
-                            if (connection != null) {
-                                PreparedStatement statement = connection.prepareStatement(
-                                        "UPDATE " + GuildsConfig.getPlayerTable() +
-                                                " SET " +
-                                                "guildId = ?, " +
-                                                "rankId = (Select rankId from " + GuildsConfig.getRanksTable() +
-                                                " where isBaseRank = 1 " +
-                                                " and guildId = ?) " +
-                                                "WHERE uuid = ? ");
-                                statement.setInt(1, id);
-                                statement.setInt(2, id);
-                                statement.setString(3, targetPlayer.toString());
-                                statement.executeUpdate();
-                                statement.close();
-
-                                connection.close();
-                                Guilds.getInstance().getLogger().info("Player '" + targetPlayer + "' was added to "
-                                        + getName());
-                                BungeeConnection.forceGuildSync(getId());
-                                if (Guilds.getInstance().getAlliance(thisGuild) != null) {
-                                    BungeeConnection.forceAllianceSync(Guilds.getInstance().getAlliance(thisGuild).getId());
-                                }
-                            }
-                        } catch (SQLException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
-    }
-
-    /**
-     * removes a member from the guild
-     *
-     * @param guildMember the player uuid that shall be removed
-     */
-    public void removeMember(final GuildMember guildMember) {
-        final Guild thisGuild = this;
-        Guilds.getInstance().getServer().getScheduler().runTaskAsynchronously(Guilds.getInstance(),
-                new Runnable() {
-                    public void run() {
-                        try {
-                            Connection connection = DatabaseConnectionManager.getInstance().getConnection();
-                            if (connection != null) {
-                                PreparedStatement statement = connection.prepareStatement(
-                                        "UPDATE " + GuildsConfig.getPlayerTable() +
-                                                " SET guildId = NULL, rankId = null, prefix = null" +
-                                                " WHERE uuid = ?");
-                                statement.setString(1, guildMember.getUuid().toString());
-                                statement.executeUpdate();
-                                statement.close();
-
-                                connection.close();
-
-                                Guilds.getInstance().getLogger().info("Player '" + guildMember.getUuid().toString()
-                                        + "' was removed from " + getName());
-
-                                BungeeConnection.forceGuildSync(getId());
-                                if (Guilds.getInstance().getAlliance(thisGuild) != null) {
-                                    BungeeConnection.forceAllianceSync(Guilds.getInstance().getAlliance(thisGuild).getId());
-                                }
-
-                            }
-                        } catch (SQLException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
-    }
-
-    /**
-     * sets the guilds balance to a given amount
-     *
-     * @param balance the new balance
-     */
-    public void setBalance(final double balance) {
-
-        Guilds.getInstance().getServer().getScheduler().runTaskAsynchronously(Guilds.getInstance(), new Runnable() {
-            public void run() {
-                Connection connection = DatabaseConnectionManager.getInstance().getConnection();
-                if (connection != null) {
-                    try {
-                        PreparedStatement statement = connection.prepareStatement(
-                                "UPDATE " + GuildsConfig.getGuildsTable() +
-                                        " SET balance = ? where guildId = ? ");
-                        statement.setDouble(1, balance);
-                        statement.setInt(2, id);
-                        statement.executeUpdate();
-                        statement.close();
-                        connection.close();
-
-                        BungeeConnection.forceGuildSync(getId());
-
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        });
-    }
-
-    /**
-     * sets the guild color
-     *
-     * @param color the new color
-     */
-    public void setColor(final ChatColor color) {
-        Guilds.getInstance().getServer().getScheduler().runTaskAsynchronously(Guilds.getInstance(), new Runnable() {
-            public void run() {
-                Connection connection = DatabaseConnectionManager.getInstance().getConnection();
-                if (connection != null) {
-                    try {
-                        PreparedStatement statement = connection.prepareStatement(
-                                "UPDATE " + GuildsConfig.getGuildsTable() +
-                                        " SET color = ? where guildId = ? ");
-                        statement.setString(1, color.name());
-                        statement.setInt(2, id);
-                        statement.executeUpdate();
-                        statement.close();
-                        connection.close();
-                        BungeeConnection.forceGuildSync(getId());
-
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        });
-    }
-
-    /**
-     * sets the guild color
-     *
-     * @param newName the new name
-     */
-    public void setName(final String newName) {
-        Guilds.getInstance().getServer().getScheduler().runTaskAsynchronously(Guilds.getInstance(), new Runnable() {
-            public void run() {
-                Connection connection = DatabaseConnectionManager.getInstance().getConnection();
-                if (connection != null) {
-                    try {
-                        PreparedStatement statement = connection.prepareStatement(
-                                "UPDATE " + GuildsConfig.getGuildsTable() +
-                                        " SET guild = ? where guildId = ? ");
-                        statement.setString(1, newName);
-                        statement.setInt(2, id);
-                        statement.executeUpdate();
-                        statement.close();
-                        connection.close();
-                        BungeeConnection.forceGuildSync(getId());
-
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        });
-    }
-
-    /**
-     * sets the guild color
-     *
-     * @param newTag the new name
-     */
-    public void setTag(final String newTag) {
-        Guilds.getInstance().getServer().getScheduler().runTaskAsynchronously(Guilds.getInstance(), new Runnable() {
-            public void run() {
-                Connection connection = DatabaseConnectionManager.getInstance().getConnection();
-                if (connection != null) {
-                    try {
-                        PreparedStatement statement = connection.prepareStatement(
-                                "UPDATE " + GuildsConfig.getGuildsTable() +
-                                        " SET tag = ? where guildId = ? ");
-                        statement.setString(1, newTag);
-                        statement.setInt(2, id);
-                        statement.executeUpdate();
-                        statement.close();
-                        connection.close();
-                        BungeeConnection.forceGuildSync(getId());
-
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        });
-    }
-
-    /**
-     * sets the guilds balance to a given amount
-     *
-     * @param exp the new exp
-     */
-    public void setExp(final int exp) {
-
-        Guilds.getInstance().getServer().getScheduler().runTaskAsynchronously(Guilds.getInstance(), new Runnable() {
-            public void run() {
-                Connection connection = DatabaseConnectionManager.getInstance().getConnection();
-                if (connection != null) {
-                    try {
-                        PreparedStatement statement = connection.prepareStatement(
-                                "UPDATE " + GuildsConfig.getGuildsTable() +
-                                        " SET exp = ? where guildId = ? ");
-                        statement.setInt(1, exp);
-                        statement.setInt(2, id);
-                        statement.executeUpdate();
-                        statement.close();
-                        connection.close();
-
-                        BungeeConnection.forceGuildSync(getId());
-
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        });
-    }
-
-    /**
-     * increases the guild level by 1
-     */
-    public void upgrade() {
-        Guilds.getInstance().getServer().getScheduler().runTaskAsynchronously(Guilds.getInstance(), new Runnable() {
-            public void run() {
-                Connection connection = DatabaseConnectionManager.getInstance().getConnection();
-                if (connection != null) {
-                    try {
-                        PreparedStatement statement = connection.prepareStatement(
-                                "UPDATE " + GuildsConfig.getGuildsTable() +
-                                        " SET level = ?, balance = ?, exp = ? where guildId = ? ");
-                        statement.setInt(1, currentLevel.nextLevel().getLevel());
-                        statement.setDouble(2, getBalance() - currentLevel.nextLevel().getCost());
-                        statement.setDouble(3, getExp() - currentLevel.nextLevel().getExpCost());
-                        statement.setInt(4, id);
-                        statement.executeUpdate();
-                        statement.close();
-                        connection.close();
-
-                        BungeeConnection.forceGuildSync(getId());
-
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        });
-    }
-
-    /**
-     * sets the guild home
-     *
-     * @param location the location
-     */
-    public void setHome(final Location location) {
-        Guilds.getInstance().getServer().getScheduler().runTaskAsynchronously(Guilds.getInstance(), new Runnable() {
-            public void run() {
-                Connection connection = DatabaseConnectionManager.getInstance().getConnection();
-                if (connection != null) {
-                    try {
-                        PreparedStatement statement = connection.prepareStatement(
-                                "UPDATE " + GuildsConfig.getGuildsTable() + " SET " +
-                                        "guildHomeX = ?, " +
-                                        "guildHomeY = ?, " +
-                                        "guildHomeZ = ?, " +
-                                        "guildHomeWorld = ?, " +
-                                        "guildHomeServer = ? " +
-                                        "where guildId = ?");
-                        statement.setDouble(1, location.getX());
-                        statement.setDouble(2, location.getY());
-                        statement.setDouble(3, location.getZ());
-                        statement.setString(4, location.getWorld().getName());
-                        statement.setString(5, Guilds.getInstance().getServer().getIp() + ":"
-                                + Guilds.getInstance().getServer().getPort());
-                        statement.setInt(6, id);
-                        statement.executeUpdate();
-                        statement.close();
-                        connection.close();
-
-                        BungeeConnection.forceGuildSync(getId());
-
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        });
-    }
-
-    /**
-     * sets the message status to cleared, so it wont be shown again
-     */
-    public void clearMessages() {
-        Guilds.getInstance().getServer().getScheduler().runTaskAsynchronously(Guilds.getInstance(), new Runnable() {
-            public void run() {
-                try {
-                    Connection connection = DatabaseConnectionManager.getInstance().getConnection();
-                    if (connection != null) {
-
-                        PreparedStatement statement;
-                        statement = connection.prepareStatement(
-                                "UPDATE " + GuildsConfig.getBlackboardTable() + " SET cleared = 1 where guildId = ?");
-                        statement.setInt(1, id);
-                        statement.executeUpdate();
-                        statement.close();
-
-                        connection.close();
-                        BungeeConnection.forceGuildSync(getId());
-
-                    }
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
-
-    /**
      * compares the guild to another guild
      *
      * @param that the other guild
@@ -967,5 +341,29 @@ public class Guild implements Comparable<Guild> {
             return -1;
         }
         return 0;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setBalance(double balance) {
+        this.balance = balance;
+    }
+
+    public Double getGuildHomeX() {
+        return guildHomeX;
+    }
+
+    public Double getGuildHomeY() {
+        return guildHomeY;
+    }
+
+    public Double getGuildHomeZ() {
+        return guildHomeZ;
+    }
+
+    public String getGuildHomeWorld() {
+        return guildHomeWorld;
     }
 }

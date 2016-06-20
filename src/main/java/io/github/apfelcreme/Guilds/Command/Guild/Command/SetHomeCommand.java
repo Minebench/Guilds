@@ -1,6 +1,5 @@
 package io.github.apfelcreme.Guilds.Command.Guild.Command;
 
-import io.github.apfelcreme.Guilds.Command.Guild.Request.DisbandRequest;
 import io.github.apfelcreme.Guilds.Command.Guild.Request.SetHomeRequest;
 import io.github.apfelcreme.Guilds.Command.SubCommand;
 import io.github.apfelcreme.Guilds.Guild.Guild;
@@ -29,7 +28,11 @@ import org.bukkit.entity.Player;
  *
  * @author Lord36 aka Apfelcreme on 11.08.2015.
  */
-public class SetHomeCommand implements SubCommand {
+public class SetHomeCommand extends SubCommand {
+
+    public SetHomeCommand(Guilds plugin) {
+        super(plugin);
+    }
 
     /**
      * executes the command
@@ -40,23 +43,23 @@ public class SetHomeCommand implements SubCommand {
     public void execute(CommandSender commandSender, String[] strings) {
         Player sender = (Player) commandSender;
         if (sender.hasPermission("Guilds.setGuildHome")) {
-            Guild guild = Guilds.getInstance().getGuild(sender);
+            Guild guild = plugin.getGuildManager().getGuild(sender);
             if (guild != null) {
                 if (guild.getMember(sender.getUniqueId()).getRank().isLeader()) {
-                    RequestController.getInstance().addRequest(
-                            new SetHomeRequest(sender, guild, sender.getLocation()));
-                    Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                    plugin.getRequestController().addRequest(
+                            new SetHomeRequest(plugin, sender, guild, sender.getLocation()));
+                    plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                             .getColoredText("info.guild.confirm.confirm", guild.getColor()));
                 } else {
-                    Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                    plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                             .getText("error.rank.noPermission")
-                            .replace("{0}", GuildsConfig.getText("info.guild.rank.info.leader")));
+                            .replace("{0}", plugin.getGuildsConfig().getText("info.guild.rank.info.leader")));
                 }
             } else {
-                Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.noCurrentGuild"));
+                plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noCurrentGuild"));
             }
         } else {
-            Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.noPermission"));
+            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noPermission"));
         }
 
 

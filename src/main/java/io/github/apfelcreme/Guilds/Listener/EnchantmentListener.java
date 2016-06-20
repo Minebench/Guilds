@@ -2,7 +2,6 @@ package io.github.apfelcreme.Guilds.Listener;
 
 import io.github.apfelcreme.Guilds.Guild.Guild;
 import io.github.apfelcreme.Guilds.Guilds;
-import io.github.apfelcreme.Guilds.GuildsConfig;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -30,9 +29,15 @@ import org.bukkit.scheduler.BukkitRunnable;
  */
 public class EnchantmentListener implements Listener {
 
+    private Guilds plugin;
+
+    public EnchantmentListener(Guilds plugin) {
+        this.plugin = plugin;
+    }
+
     @EventHandler
     public void onEnchantment(EnchantItemEvent event) {
-        final Guild guild = Guilds.getInstance().getGuild(event.getEnchanter());
+        final Guild guild = plugin.getGuildManager().getGuild(event.getEnchanter());
         if (guild != null) {
             System.out.println(event.getExpLevelCost());
 
@@ -43,12 +48,12 @@ public class EnchantmentListener implements Listener {
                 public void run() {
                     if (player.isOnline()) {
                         player.giveExp(enchantmentRefund);
-                        Guilds.getInstance().getChat().sendMessage(player,
-                                GuildsConfig.getColoredText("info.guild.enchantmentGotCheaper", guild.getColor())
+                        plugin.getChat().sendMessage(player,
+                                plugin.getGuildsConfig().getColoredText("info.guild.enchantmentGotCheaper", guild.getColor())
                                         .replace("{0}", Double.toString(guild.getCurrentLevel().getEnchantmentCost() * 100)));
                     }
                 }
-            }.runTaskLater(Guilds.getInstance(), 1);
+            }.runTaskLater(plugin, 1);
         }
     }
 }

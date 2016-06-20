@@ -4,7 +4,6 @@ import io.github.apfelcreme.Guilds.Alliance.Alliance;
 import io.github.apfelcreme.Guilds.Command.Request;
 import io.github.apfelcreme.Guilds.Guild.Guild;
 import io.github.apfelcreme.Guilds.Guilds;
-import io.github.apfelcreme.Guilds.GuildsConfig;
 import org.bukkit.entity.Player;
 
 /**
@@ -30,8 +29,8 @@ public class KickFromAllianceRequest extends Request {
     private Guild guild;
     private Alliance alliance;
 
-    public KickFromAllianceRequest(Player sender, Guild guild, Alliance alliance) {
-        super(sender);
+    public KickFromAllianceRequest(Guilds plugin, Player sender, Guild guild, Alliance alliance) {
+        super(plugin, sender);
         this.guild = guild;
         this.alliance = alliance;
     }
@@ -42,24 +41,24 @@ public class KickFromAllianceRequest extends Request {
     @Override
     public void execute() {
         if (alliance.getGuilds().size() > 1) {
-            alliance.removeMember(guild);
-            Guilds.getInstance().getLogger().info(guild.getName() + " was kicked from alliance '"
+            plugin.getAllianceManager().removeMember(alliance, guild);
+            plugin.getLogger().info(guild.getName() + " was kicked from alliance '"
                     + guild.getName() + "' by '" + sender.getName() + "'");
         } else {
             alliance.delete();
-            Guilds.getInstance().getLogger().info(guild.getName() + " was kicked from alliance '"
+            plugin.getLogger().info(guild.getName() + " was kicked from alliance '"
                     + guild.getName() + "' by '" + sender.getName() + "'. The alliance was disbanded as " +
                     "they were the last members!");
         }
-        Guilds.getInstance().getChat().sendMessage(sender,
-                GuildsConfig.getText("info.guildadmin.kickguild.kickedGuildFromAlliance")
+        plugin.getChat().sendMessage(sender,
+                plugin.getGuildsConfig().getText("info.guildadmin.kickguild.kickedGuildFromAlliance")
                         .replace("{0}", guild.getName())
                         .replace("{1}", alliance.getName()));
-        Guilds.getInstance().getChat().sendGuildChannelBroadcast(
-                guild, GuildsConfig.getText("info.chat.youGotKickedFromAlliance")
+        plugin.getChat().sendGuildChannelBroadcast(
+                guild, plugin.getGuildsConfig().getText("info.chat.youGotKickedFromAlliance")
                         .replace("{0}", alliance.getName()));
-        Guilds.getInstance().getChat().sendAllianceChannelBroadcast(
-                alliance, GuildsConfig.getText("info.chat.guildKickedFromAlliance")
+        plugin.getChat().sendAllianceChannelBroadcast(
+                alliance, plugin.getGuildsConfig().getText("info.chat.guildKickedFromAlliance")
                         .replace("{0}", guild.getName()));
     }
 

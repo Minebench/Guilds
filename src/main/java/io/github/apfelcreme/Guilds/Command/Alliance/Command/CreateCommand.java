@@ -31,7 +31,11 @@ import org.bukkit.entity.Player;
  *
  * @author Lord36 aka Apfelcreme on 30.05.2015.
  */
-public class CreateCommand implements SubCommand{
+public class CreateCommand extends SubCommand {
+
+    public CreateCommand(Guilds plugin) {
+        super(plugin);
+    }
 
     /**
      * executes the command
@@ -45,59 +49,59 @@ public class CreateCommand implements SubCommand{
             if (strings.length >= 4) {
                 String name = strings[1];
                 String tag = strings[2];
-                ChatColor color = GuildsConfig.parseColor(strings[3]);
-                if (name.length() <= GuildsConfig.getGuildNameLength()) {
-                    if (GuildsUtil.strip(tag).length() <= GuildsConfig.getGuildTagLength()) {
+                ChatColor color = plugin.getGuildsConfig().parseColor(strings[3]);
+                if (name.length() <= plugin.getGuildsConfig().getGuildNameLength()) {
+                    if (GuildsUtil.strip(tag).length() <= plugin.getGuildsConfig().getGuildTagLength()) {
                         if (color != null) {
-                            Guild guild = Guilds.getInstance().getGuild(sender);
+                            Guild guild = plugin.getGuildManager().getGuild(sender);
                             if (guild != null) {
-                                if (Guilds.getInstance().getAlliance(sender) == null) {
-                                    if (Guilds.getInstance().getAlliance(name) == null) {
-                                        RequestController.getInstance().addRequest(
-                                                new CreateRequest(guild, sender, name, tag, color));
-                                        Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                                if (plugin.getAllianceManager().getAlliance(sender) == null) {
+                                    if (plugin.getAllianceManager().getAlliance(name) == null) {
+                                        plugin.getRequestController().addRequest(
+                                                new CreateRequest(plugin, guild, sender, name, tag, color));
+                                        plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                                 .getColoredText("info.alliance.create.name", color)
                                                 .replace("{0}", GuildsUtil.replaceChatColors(name)));
-                                        Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                                        plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                                 .getColoredText("info.alliance.create.tag", color)
                                                 .replace("{0}", GuildsUtil.replaceChatColors(tag)));
-                                        Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                                        plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                                 .getColoredText("info.alliance.create.color", color)
                                                 .replace("{0}", WordUtils.capitalize(color.name()
                                                         .replace("_", " ").toLowerCase())));
-                                        Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                                        plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                                 .getColoredText("info.alliance.confirm.confirm", color));
                                     } else {
-                                        Guilds.getInstance().getChat().sendMessage(sender,
-                                                GuildsConfig.getText("error.allianceAlreadyExists"));
+                                        plugin.getChat().sendMessage(sender,
+                                                plugin.getGuildsConfig().getText("error.allianceAlreadyExists"));
                                     }
                                 } else {
-                                    Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                                    plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                             .getText("error.stillInAlliance"));
                                 }
                             } else {
-                                Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                                plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                         .getText("error.noCurrentGuild"));
                             }
                         } else {
-                            Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                     .getText("error.noValidColor")
                                     .replace("{0}", strings[3]));
                         }
                     } else {
-                        Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                        plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                 .getText("error.tagTooLong"));
                     }
                 } else {
-                    Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                    plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                             .getText("error.nameTooLong"));
                 }
             } else {
-                Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                         .getText("error.wrongUsage.createAlliance"));
             }
         } else {
-            Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                     .getText("error.noPermission"));
         }
     }

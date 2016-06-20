@@ -32,7 +32,11 @@ import java.util.UUID;
  *
  * @author Lord36 aka Apfelcreme on 22.05.2015.
  */
-public class LookupCommand implements SubCommand {
+public class LookupCommand extends SubCommand {
+
+    public LookupCommand(Guilds plugin) {
+        super(plugin);
+    }
 
     /**
      * executes the command
@@ -44,39 +48,39 @@ public class LookupCommand implements SubCommand {
         Player sender = (Player) commandSender;
         if (sender.hasPermission("Guilds.lookup")) {
             if (strings.length >= 2) {
-                UUID uuid = Guilds.getUUID(strings[1]);
+                UUID uuid = plugin.getUUID(strings[1]);
                 if (uuid != null) {
-                    Guild guild = Guilds.getInstance().getGuild(uuid);
+                    Guild guild = plugin.getGuildManager().getGuild(uuid);
                     if (guild != null) {
-                        GuildMember guildMember = Guilds.getInstance().getGuildMember(uuid);
+                        GuildMember guildMember = plugin.getGuildManager().getGuildMember(uuid);
                         if (guildMember != null) {
-                            Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                     .getColoredText("info.guild.lookup.head", guild.getColor())
                                     .replace("{0}", strings[1]));
-                            Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                     .getColoredText("info.guild.lookup.guild", guild.getColor())
                                     .replace("{0}", guild.getName()));
-                            Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                     .getColoredText("info.guild.lookup.prefix", guild.getColor())
                                     .replace("{0}", guildMember.getPrefix() != null ? guildMember.getPrefix() : ""));
-                            Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                     .getColoredText("info.guild.lookup.joined", guild.getColor())
                                     .replace("{0}",
                                             new SimpleDateFormat("dd.MM.YY HH:mm").format(
                                                     new Date(guildMember.getJoined()))));
-                            Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                     .getColoredText("info.guild.lookup.lastSeen", guild.getColor())
                                     .replace("{0}",
                                             new SimpleDateFormat("dd.MM.YY HH:mm").format(
                                                     new Date(guildMember.getLastSeen()))));
                         }
                     } else {
-                        Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                        plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                 .getColoredText("info.guild.lookup.head", ChatColor.DARK_GREEN)
                                 .replace("{0}", strings[1])
                                 .replace("&gc", "")
                                 .replace("&gcD", ""));
-                        Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                        plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                 .getColoredText("info.guild.lookup.guild", ChatColor.DARK_GREEN)
                                 .replace("{0}", "keine")
                                 .replace("&gc", "")
@@ -84,14 +88,14 @@ public class LookupCommand implements SubCommand {
                     }
 
                 } else {
-                    Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.playerDoesntExist")
+                    plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.playerDoesntExist")
                             .replace("{0}", strings[1]));
                 }
             } else {
-                Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.wrongUsage.lookup"));
+                plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.wrongUsage.lookup"));
             }
         } else {
-            Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.noPermission"));
+            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noPermission"));
         }
     }
 }

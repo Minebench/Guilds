@@ -25,7 +25,12 @@ import org.bukkit.entity.Player;
  *
  * @author Lord36 aka Apfelcreme
  */
-public class LevelsCommand implements SubCommand {
+public class LevelsCommand extends SubCommand {
+
+    public LevelsCommand(Guilds plugin) {
+        super(plugin);
+    }
+
     /**
      * executes the command
      *
@@ -35,17 +40,17 @@ public class LevelsCommand implements SubCommand {
     public void execute(CommandSender commandSender, String[] strings) {
         Player sender = (Player) commandSender;
         if (sender.hasPermission("Guilds.levels")) {
-            ConfigurationSection configurationSection = Guilds.getInstance().getConfig().getConfigurationSection("level");
+            ConfigurationSection configurationSection = plugin.getConfig().getConfigurationSection("level");
 
-            Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("info.guild.levels.head"));
+            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("info.guild.levels.head"));
             for (Object o : configurationSection.getKeys(false)) {
-                Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("info.guild.levels.element")
+                plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("info.guild.levels.element")
                         .replace("{0}", o.toString())
-                        .replace("{1}", GuildsConfig.getLevelData(Integer.parseInt(o.toString())).getName()));
+                        .replace("{1}", plugin.getGuildsConfig().getLevelData(Integer.parseInt(o.toString())).getName()));
             }
-            Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("info.guild.levels.bottom"));
+            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("info.guild.levels.bottom"));
         } else {
-            Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.noPermission"));
+            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noPermission"));
         }
     }
 }

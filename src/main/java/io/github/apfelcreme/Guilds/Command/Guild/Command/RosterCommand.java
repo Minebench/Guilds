@@ -30,7 +30,11 @@ import java.util.*;
  *
  * @author Lord36 aka Apfelcreme on 27.04.2015.
  */
-public class RosterCommand implements SubCommand {
+public class RosterCommand extends SubCommand {
+
+    public RosterCommand(Guilds plugin) {
+        super(plugin);
+    }
 
     /**
      * executes the command
@@ -48,8 +52,8 @@ public class RosterCommand implements SubCommand {
                 guildName = strings[1];
                 wantsToSeeHisOwnGuild = false;
             } else {
-                if (Guilds.getInstance().getGuild(sender) != null) {
-                    guildName = Guilds.getInstance().getGuild(sender).getName();
+                if (plugin.getGuildManager().getGuild(sender) != null) {
+                    guildName = plugin.getGuildManager().getGuild(sender).getName();
                 } else {
                     guildName = "";
                 }
@@ -59,24 +63,24 @@ public class RosterCommand implements SubCommand {
                     page = Integer.parseInt(strings[i]) - 1;
                 }
             }
-            Guild guild = Guilds.getInstance().getGuild(guildName);
+            Guild guild = plugin.getGuildManager().getGuild(guildName);
             if (guild == null) {
-                guild = Guilds.getInstance().getGuildByTag(guildName);
+                guild = plugin.getGuildManager().getGuildByTag(guildName);
             }
             if (guild != null) {
                 if (page >= 0) {
-                    Integer pageSize = GuildsConfig.getListsPageSize();
+                    Integer pageSize = plugin.getGuildsConfig().getListsPageSize();
                     Integer maxPages = (int) Math.ceil((float) guild.getMembers().size() / pageSize);
                     if (page >= maxPages - 1) {
                         page = maxPages - 1;
                     }
                     if (wantsToSeeHisOwnGuild) {
-                        Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                        plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                 .getColoredText("info.guild.roster.headYou", guild.getColor())
                                 .replace("{0}", Integer.toString(page + 1))
                                 .replace("{1}", maxPages.toString()));
                     } else {
-                        Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                        plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                 .getColoredText("info.guild.roster.head", guild.getColor())
                                 .replace("{0}", guild.getName())
                                 .replace("{1}", Integer.toString(page + 1))
@@ -87,7 +91,7 @@ public class RosterCommand implements SubCommand {
                     for (int i = page * pageSize; i < (page * pageSize) + pageSize; i++) {
                         if (i < members.size()) {
                             if (members.get(i).isOnline()) {
-                                Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                                plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                         .getColoredText("info.guild.roster.elementOnline", guild.getColor())
                                         .replace("{0}", members.get(i).getRank().getName()
                                                 + (members.get(i).getPrefix() != null ?
@@ -96,7 +100,7 @@ public class RosterCommand implements SubCommand {
                                         )
                                         .replace("{1}", members.get(i).getName()));
                             } else {
-                                Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                                plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                         .getColoredText("info.guild.roster.elementOffline", guild.getColor())
                                         .replace("{0}", members.get(i).getRank().getName()
                                                 + (members.get(i).getPrefix() != null ?
@@ -108,19 +112,19 @@ public class RosterCommand implements SubCommand {
                         }
                     }
                     if (members.size() > pageSize) {
-                        Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                        plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                 .getColoredText("info.guild.roster.bottom", guild.getColor()));
                     }
                 }
             } else {
                 if (strings.length >= 2 && guildName.equals(strings[1])) {
-                    Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.guildDoesntExist"));
+                    plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.guildDoesntExist"));
                 } else {
-                    Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.noCurrentGuild"));
+                    plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noCurrentGuild"));
                 }
             }
         } else {
-            Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.noPermission"));
+            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noPermission"));
         }
     }
 }

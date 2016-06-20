@@ -94,152 +94,23 @@ public class Alliance implements Comparable<Alliance> {
      * saves the alliance to the database
      */
     public void create() {
-        Guilds.getInstance().getServer().getScheduler().runTaskAsynchronously(Guilds.getInstance(), new Runnable() {
-            public void run() {
-                Connection connection = DatabaseConnectionManager.getInstance().getConnection();
-                if (connection != null) {
-                    try {
-                        PreparedStatement statement = connection.prepareStatement(
-                                "INSERT INTO " + GuildsConfig.getAllianceTable() + "(alliance, founded, tag, color) VALUES (?, ?, ?, ?)");
-                        statement.setString(1, name);
-                        statement.setLong(2, new Date().getTime());
-                        statement.setString(3, tag);
-                        statement.setString(4, color.name());
-                        statement.executeUpdate();
-
-
-                        statement = connection.prepareStatement(
-                                "Select allianceId from " + GuildsConfig.getAllianceTable() + " where alliance = ?");
-                        statement.setString(1, name);
-                        ResultSet resultSet = statement.executeQuery();
-                        resultSet.first();
-                        id = resultSet.getInt("allianceId");
-
-                        for (Guild guild : guilds) {
-                            statement = connection.prepareStatement(
-                                    "UPDATE " + GuildsConfig.getGuildsTable() + " SET allianceId = ? " +
-                                            "where guildId = ?");
-                            statement.setInt(1, id);
-                            statement.setInt(2, guild.getId());
-                            statement.executeUpdate();
-                        }
-                        connection.close();
-
-                        BungeeConnection.forceGuildSync(guilds.get(0).getId());
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        });
     }
 
     /**
      * deletes the alliance
      */
     public void delete() {
-        Guilds.getInstance().getServer().getScheduler().runTaskAsynchronously(Guilds.getInstance(), new Runnable() {
-            public void run() {
-                Connection connection = DatabaseConnectionManager.getInstance().getConnection();
-                if (connection != null) {
-                    try {
-                        PreparedStatement statement = connection.prepareStatement(
-                                "UPDATE " + GuildsConfig.getGuildsTable() + " SET allianceId = null " +
-                                        "WHERE allianceId = ? ");
-                        statement.setInt(1, getId());
-                        statement.executeUpdate();
-
-                        statement = connection.prepareStatement("DELETE FROM " + GuildsConfig.getAllianceInviteTable() +
-                                " WHERE allianceId = ? ");
-                        statement.setInt(1, getId());
-                        statement.executeUpdate();
-
-                        statement = connection.prepareStatement("DELETE FROM " + GuildsConfig.getAllianceTable() +
-                                " WHERE allianceId = ? ");
-                        statement.setInt(1, getId());
-                        statement.executeUpdate();
-
-                        BungeeConnection.forceGuildsSync();
-                        BungeeConnection.forceAlliancesSync();
-
-                        connection.close();
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        });
     }
 
     /**
-     * sets the guild color
+     * sets the alliance color
      *
      * @param color the new color
      */
-    public void setColor(final ChatColor color) {
-        Guilds.getInstance().getServer().getScheduler().runTaskAsynchronously(Guilds.getInstance(), new Runnable() {
-            public void run() {
-                Connection connection = DatabaseConnectionManager.getInstance().getConnection();
-                if (connection != null) {
-                    try {
-                        PreparedStatement statement = connection.prepareStatement(
-                                "UPDATE " + GuildsConfig.getAllianceTable() +
-                                        " SET color = ? where allianceId = ? ");
-                        statement.setString(1, color.name());
-                        statement.setInt(2, id);
-                        statement.executeUpdate();
-                        statement.close();
-                        connection.close();
-
-                        BungeeConnection.forceGuildSync(getId());
-
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        });
+    public void setColor(ChatColor color) {
+        this.color = color;
     }
 
-    /**
-     * removes a guild from the alliance
-     *
-     * @param guild the guild
-     */
-    public void removeMember(final Guild guild) {
-        Guilds.getInstance().getServer().getScheduler().runTaskAsynchronously(Guilds.getInstance(), new Runnable() {
-            public void run() {
-                Connection connection = DatabaseConnectionManager.getInstance().getConnection();
-                if (connection != null) {
-                    try {
-                        PreparedStatement statement = connection.prepareStatement(
-                                "UPDATE " + GuildsConfig.getGuildsTable() +
-                                        " SET allianceId = null " +
-                                        "where guildId = ? ");
-                        statement.setInt(1, guild.getId());
-                        statement.executeUpdate();
-                        statement.close();
-                        connection.close();
-                        BungeeConnection.forceGuildSync(guild.getId());
-                        BungeeConnection.forceAllianceSync(getId());
-
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        });
-    }
-
-
-    /**
-     * sends an invite to the given guild
-     *
-     * @param guild the guild the invite is sent to
-     */
-    public void sendAllianceInviteTo(Guild guild) {
-        new AllianceInvite(this, guild).save();
-    }
 
     /**
      * adds an invite to the list
@@ -367,5 +238,9 @@ public class Alliance implements Comparable<Alliance> {
             return 1;
         }
         return 0;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

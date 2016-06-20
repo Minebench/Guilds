@@ -1,11 +1,11 @@
 package io.github.apfelcreme.Guilds.Command;
 
 import io.github.apfelcreme.Guilds.Guilds;
-import org.bukkit.entity.Player;
+import org.bukkit.command.CommandExecutor;
 
 /**
  * Guilds
- * Copyright (C) 2015 Lord36 aka Apfelcreme
+ * Copyright 2016 Max Lee (https://github.com/Phoenix616/)
  * <p>
  * This program is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -19,27 +19,12 @@ import org.bukkit.entity.Player;
  * <p>
  * You should have received a copy of the GNU General Public License along with
  * this program; if not, see <http://www.gnu.org/licenses/>.
- *
- * @author Lord36 aka Apfelcreme on 10.05.2015.
  */
-public abstract class Request {
+public abstract class PluginCommandExecutor implements CommandExecutor {
 
-    protected Guilds plugin;
-    protected Player sender;
+    protected final Guilds plugin;
 
-    public Request(Guilds plugin, Player sender) {
+    public PluginCommandExecutor(Guilds plugin) {
         this.plugin = plugin;
-        this.sender = sender;
     }
-
-    public Player getSender() {
-        return sender;
-    }
-
-    /**
-     * executes the Request
-     */
-    public abstract void execute();
-
-
 }

@@ -45,109 +45,6 @@ public class Invite {
     }
 
     /**
-     * sets the invite status to 1 (=Accepted)
-     */
-    public void setAccepted() {
-        Guilds.getInstance().getServer().getScheduler().runTaskAsynchronously(Guilds.getInstance(), new Runnable() {
-            public void run() {
-                try {
-                    Connection connection = DatabaseConnectionManager.getInstance().getConnection();
-                    if (connection != null) {
-                        PreparedStatement statement;
-                        statement = connection.prepareStatement(
-                                "UPDATE " + GuildsConfig.getInvitesTable() + " SET status = 1 " +
-                                        "WHERE player = ? " +
-                                        "AND targetplayer = ? " +
-                                        "AND guildId = ?");
-                        statement.setString(1, sender.getUuid().toString());
-                        statement.setString(2, targetPlayer.toString());
-                        statement.setInt(3, guild.getId());
-                        statement.executeUpdate();
-                        statement.close();
-
-                        guild.addMember(targetPlayer);
-
-                        connection.close();
-                        BungeeConnection.forceGuildSync(guild.getId());
-                    }
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
-
-    /**
-     * sets the invite status to 2 (=Denied)
-     */
-    public void setDenied() {
-        Guilds.getInstance().getServer().getScheduler().runTaskAsynchronously(Guilds.getInstance(), new Runnable() {
-            public void run() {
-                try {
-                    Connection connection = DatabaseConnectionManager.getInstance().getConnection();
-                    if (connection != null) {
-                        PreparedStatement statement = connection.prepareStatement(
-                                "UPDATE " + GuildsConfig.getInvitesTable() + " SET status = 2 " +
-                                        "WHERE player = ? " +
-                                        "AND targetplayer = ? " +
-                                        "AND guildId = ?");
-                        statement.setString(1, sender.getUuid().toString());
-                        statement.setString(2, targetPlayer.toString());
-                        statement.setInt(3, guild.getId());
-                        statement.executeUpdate();
-                        statement.close();
-
-                        connection.close();
-                        BungeeConnection.forceGuildSync(guild.getId());
-                    }
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
-
-    /**
-     * creates a new invite
-     */
-    public void save() {
-        Guilds.getInstance().getServer().getScheduler().runTaskAsynchronously(Guilds.getInstance(), new Runnable() {
-            public void run() {
-                try {
-                    Connection connection = DatabaseConnectionManager.getInstance().getConnection();
-                    if (connection != null) {
-
-                        PreparedStatement statement;
-                        statement = connection.prepareStatement(
-                                "INSERT IGNORE INTO "
-                                        + GuildsConfig.getPlayerTable() + " (playerName, uuid) " +
-                                        "VALUES (?, ?) ");
-                        statement.setString(1, targetName);
-                        statement.setString(2, targetPlayer.toString());
-                        statement.executeUpdate();
-                        statement.close();
-
-                        statement = connection.prepareStatement(
-                                "INSERT INTO " + GuildsConfig.getInvitesTable() + " (player, targetPlayer, guildId) " +
-                                        "VALUES (?, ?, ?); ");
-                        statement.setString(1, sender.getUuid().toString());
-                        statement.setString(2, targetPlayer.toString());
-                        statement.setInt(3, getGuild().getId());
-                        statement.executeUpdate();
-                        statement.close();
-
-                        connection.close();
-                        BungeeConnection.forceGuildSync(getGuild().getId());
-
-                    }
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
-
-    /**
      * returns the guild
      *
      * @return the guild
@@ -166,12 +63,21 @@ public class Invite {
     }
 
     /**
-     * returns the player the invite was sent to
+     * returns the uuid of the player the invite was sent to
      *
-     * @return the player the invite was sent to
+     * @return the uuid of the player the invite was sent to
      */
     public UUID getTargetPlayer() {
         return targetPlayer;
+    }
+
+    /**
+     * returns the name of the player the invite was sent to
+     *
+     * @return the name of player the invite was sent to
+     */
+    public String getTargetName() {
+        return targetName;
     }
 
     /**

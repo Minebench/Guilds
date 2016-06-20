@@ -25,7 +25,11 @@ import org.bukkit.entity.Player;
  *
  * @author Lord36 aka Apfelcreme on 26.04.2015.
  */
-public class AdminConfigReloadCommand implements SubCommand {
+public class AdminConfigReloadCommand extends SubCommand {
+
+    public AdminConfigReloadCommand(Guilds plugin) {
+        super(plugin);
+    }
 
     /**
      * executes the command
@@ -36,12 +40,12 @@ public class AdminConfigReloadCommand implements SubCommand {
     public void execute(CommandSender commandSender, String[] strings) {
         Player sender = (Player) commandSender;
         if (sender.hasPermission("Guilds.reload")) {
-            Guilds.getInstance().reloadConfig();
-            GuildsConfig.reloadLanguageConfig();
-            Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+            plugin.reloadConfig();
+            plugin.getGuildsConfig().reloadLanguageConfig();
+            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                     .getText("info.guildadmin.reload.configReloaded"));
         } else {
-            Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.noPermission"));
+            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noPermission"));
         }
     }
 }

@@ -1,5 +1,6 @@
 package io.github.apfelcreme.Guilds.Command;
 
+import io.github.apfelcreme.Guilds.Guilds;
 import org.bukkit.command.CommandSender;
 
 /**
@@ -21,12 +22,18 @@ import org.bukkit.command.CommandSender;
  *
  * @author Lord36 aka Apfelcreme on 26.04.2015.
  */
-public interface SubCommand {
+public abstract class SubCommand {
+
+    protected Guilds plugin;
+
+    public SubCommand(Guilds plugin) {
+        this.plugin = plugin;
+    }
 
     /**
      * executes the command
      * @param commandSender the sender
      * @param strings the command args
      */
-    void execute(CommandSender commandSender, String[] strings);
+    public abstract void execute(CommandSender commandSender, String[] strings);
 }

@@ -33,35 +33,35 @@ public class AddToGuildRequest extends Request {
     private Guild guild;
     private UUID target;
 
-    public AddToGuildRequest(Player sender, UUID target, Guild guild) {
-        super(sender);
+    public AddToGuildRequest(Guilds plugin, Player sender, UUID target, Guild guild) {
+        super(plugin, sender);
         this.target = target;
         this.guild = guild;
     }
 
     @Override
     public void execute() {
-        guild.addMember(target);
-        Guilds.getInstance().getChat().sendMessage(sender,
-                GuildsConfig.getText("info.guildadmin.add.addedPlayer")
+        plugin.getGuildManager().addMember(guild, target);
+        plugin.getChat().sendMessage(sender,
+                plugin.getGuildsConfig().getText("info.guildadmin.add.addedPlayer")
                         .replace("{0}",
-                                Guilds.getInstance().getServer().getOfflinePlayer(target) != null ?
-                                        Guilds.getInstance().getServer().getOfflinePlayer(target).getName() :
-                                        GuildsConfig.getText("info.chat.playerGotAddedUnknownName"))
+                                plugin.getServer().getOfflinePlayer(target) != null ?
+                                        plugin.getServer().getOfflinePlayer(target).getName() :
+                                        plugin.getGuildsConfig().getText("info.chat.playerGotAddedUnknownName"))
                         .replace("{1}", guild.getName()));
-        Guilds.getInstance().getChat().sendGuildChannelBroadcast(
+        plugin.getChat().sendGuildChannelBroadcast(
                 guild,
-                GuildsConfig.getText("info.chat.playerGotAdded")
-                        .replace("{0}", Guilds.getInstance().getServer().getOfflinePlayer(target) != null ?
-                                Guilds.getInstance().getServer().getOfflinePlayer(target).getName() :
-                                GuildsConfig.getText("info.chat.playerGotAddedUnknownName")));
-        Player messageReceiver = Guilds.getInstance().getServer().getPlayer(target);
+                plugin.getGuildsConfig().getText("info.chat.playerGotAdded")
+                        .replace("{0}", plugin.getServer().getOfflinePlayer(target) != null ?
+                                plugin.getServer().getOfflinePlayer(target).getName() :
+                                plugin.getGuildsConfig().getText("info.chat.playerGotAddedUnknownName")));
+        Player messageReceiver = plugin.getServer().getPlayer(target);
         if (messageReceiver != null) {
-            Guilds.getInstance().getChat().sendMessage(messageReceiver,
-                    GuildsConfig.getText("info.guildadmin.add.youGotAdded")
+            plugin.getChat().sendMessage(messageReceiver,
+                    plugin.getGuildsConfig().getText("info.guildadmin.add.youGotAdded")
                             .replace("{0}", sender.getName())
                             .replace("{1}", guild.getName()));
         }
-        Guilds.getInstance().getLogger().info("Player '" + target + "' was added to '" + guild.getName() + "' by force!");
+        plugin.getLogger().info("Player '" + target + "' was added to '" + guild.getName() + "' by force!");
     }
 }

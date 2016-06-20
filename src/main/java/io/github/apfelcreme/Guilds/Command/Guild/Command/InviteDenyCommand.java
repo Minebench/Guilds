@@ -28,7 +28,11 @@ import org.bukkit.entity.Player;
  *
  * @author Lord36 aka Apfelcreme on 25.04.2015.
  */
-public class InviteDenyCommand implements SubCommand {
+public class InviteDenyCommand extends SubCommand {
+
+    public InviteDenyCommand(Guilds plugin) {
+        super(plugin);
+    }
 
     /**
      * executes the command
@@ -39,18 +43,18 @@ public class InviteDenyCommand implements SubCommand {
     public void execute(CommandSender commandSender, String[] strings) {
         Player sender = (Player) commandSender;
         if (sender.hasPermission("Guilds.denyGuildInvite")) {
-            Invite invite = Guilds.getInstance().getInvite(sender.getUniqueId());
+            Invite invite = plugin.getGuildManager().getInvite(sender.getUniqueId());
             if (invite != null) {
-                invite.setDenied();
-                Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("info.guild.invite.youDeniedInvite"));
-                Guilds.getInstance().getChat().sendGuildChannelBroadcast(
+                plugin.getGuildManager().denyInvite(invite);
+                plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("info.guild.invite.youDeniedInvite"));
+                plugin.getChat().sendGuildChannelBroadcast(
                         invite.getGuild(),
-                        GuildsConfig.getText("info.chat.playerDenied").replace("{0}", sender.getName()));
+                        plugin.getGuildsConfig().getText("info.chat.playerDenied").replace("{0}", sender.getName()));
             } else {
-                Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.noPendingInvites"));
+                plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noPendingInvites"));
             }
         } else {
-            Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.noPermission"));
+            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noPermission"));
         }
 
     }

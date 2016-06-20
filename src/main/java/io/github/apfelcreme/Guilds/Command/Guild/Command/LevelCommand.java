@@ -31,7 +31,11 @@ import java.util.Map;
  *
  * @author Lord36 aka Apfelcreme
  */
-public class LevelCommand implements SubCommand {
+public class LevelCommand extends SubCommand {
+
+    public LevelCommand(Guilds plugin) {
+        super(plugin);
+    }
 
     /**
      * executes the command
@@ -44,50 +48,50 @@ public class LevelCommand implements SubCommand {
         if (sender.hasPermission("Guilds.level")) {
             if (strings.length > 1) {
                 if (GuildsUtil.isNumeric(strings[1])) {
-                    GuildLevel level = GuildsConfig.getLevelData(Integer.parseInt(strings[1]));
+                    GuildLevel level = plugin.getGuildsConfig().getLevelData(Integer.parseInt(strings[1]));
                     if (level != null) {
-                        Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("info.guild.level.head")
+                        plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("info.guild.level.head")
                                 .replace("{0}", level.getName()));
-                        Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("info.guild.level.cost")
+                        plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("info.guild.level.cost")
                                 .replace("{0}", level.getCost().toString()));
-                        Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("info.guild.level.expCost")
+                        plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("info.guild.level.expCost")
                                 .replace("{0}", level.getExpCost().toString()));
                         for (Map.Entry<Material, Integer> entry : level.getMaterialRequirements().entrySet()) {
-                            Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("info.guild.level.materialElement")
+                            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("info.guild.level.materialElement")
                                     .replace("{0}", WordUtils.capitalize(entry.getKey().name().toLowerCase().replace("_", " ")))
                                     .replace("{1}", entry.getValue().toString()));
                         }
-                        Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("info.guild.level.head2"));
-                        Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("info.guild.level.playerLimit")
+                        plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("info.guild.level.head2"));
+                        plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("info.guild.level.playerLimit")
                                 .replace("{0}", level.getPlayerLimit().toString()));
-                        if (GuildsConfig.isEnchantmentBonusActivated()) {
-                            Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("info.guild.level.enchantmentCost")
+                        if (plugin.getGuildsConfig().isEnchantmentBonusActivated()) {
+                            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("info.guild.level.enchantmentCost")
                                     .replace("{0}", Double.toString(level.getEnchantmentCost() * 100)));
                         }
-                        if (GuildsConfig.isDoubleCraftingBonusActivated()) {
-                            Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("info.guild.level.doubleCraftProbability")
+                        if (plugin.getGuildsConfig().isDoubleCraftingBonusActivated()) {
+                            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("info.guild.level.doubleCraftProbability")
                                     .replace("{0}", Double.toString(level.getDoubleCraftProbability() * 100)));
                         }
-                        if (GuildsConfig.isSpecialDropBonusActivated()) {
-                            Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("info.guild.level.specialDropChance")
+                        if (plugin.getGuildsConfig().isSpecialDropBonusActivated()) {
+                            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("info.guild.level.specialDropChance")
                                     .replace("{0}", Double.toString(level.getSpecialDropChance() * 100)));
                         }
-                        if (GuildsConfig.isMoreFurnaceExpBonusActivated()) {
-                            Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("info.guild.level.furnaceExpGainRatio")
+                        if (plugin.getGuildsConfig().isMoreFurnaceExpBonusActivated()) {
+                            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("info.guild.level.furnaceExpGainRatio")
                                     .replace("{0}", Double.toString(Math.ceil((level.getFurnaceExpGainRatio() - 1) * 100))));
                         }
                     } else {
-                        Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.unknownLevel"));
+                        plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.unknownLevel"));
                     }
                 } else {
-                    Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.noNumber")
+                    plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noNumber")
                             .replace("{0}", strings[1]));
                 }
             } else {
-                Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.wrongUsage.level"));
+                plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.wrongUsage.level"));
             }
         } else {
-            Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.noPermission"));
+            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noPermission"));
         }
     }
 }

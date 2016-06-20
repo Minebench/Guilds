@@ -4,7 +4,6 @@ import io.github.apfelcreme.Guilds.Bungee.BungeeConnection;
 import io.github.apfelcreme.Guilds.Guilds;
 import io.github.apfelcreme.Guilds.GuildsConfig;
 import io.github.apfelcreme.Guilds.GuildsUtil;
-import io.github.apfelcreme.Guilds.Manager.DatabaseConnectionManager;
 import org.bukkit.OfflinePlayer;
 
 import java.sql.Connection;
@@ -42,19 +41,16 @@ public class GuildMember implements Comparable<GuildMember> {
 
     private Guild guild;
 
-    private OfflinePlayer player;
-
     private Boolean isOnline = false;
 
-    public GuildMember(UUID uuid, String name, Long lastSeen, Long joined, String prefix, Rank rank) {
+    public GuildMember(UUID uuid, String name, Long lastSeen, Long joined, String prefix, Rank rank, boolean isOnline) {
         this.uuid = uuid;
         this.name = name;
         this.lastSeen = lastSeen;
         this.joined = joined;
         this.prefix = prefix;
         this.rank = rank;
-        player = Guilds.getInstance().getServer().getOfflinePlayer(uuid);
-        this.isOnline = player.isOnline();
+        this.isOnline = isOnline;
     }
 
     public GuildMember(OfflinePlayer player) {
@@ -62,17 +58,7 @@ public class GuildMember implements Comparable<GuildMember> {
         this.name = player.getName();
         this.prefix = null;
         this.rank = null;
-        this.player = player.getPlayer();
         this.isOnline = player.isOnline();
-    }
-
-    /**
-     * sends a message to the guild member
-     *
-     * @param message the message
-     */
-    public void sendMessage(String message) {
-        Guilds.getInstance().getChat().sendMessage(this, message);
     }
 
     /**
@@ -130,15 +116,6 @@ public class GuildMember implements Comparable<GuildMember> {
     }
 
     /**
-     * returns a matching player Object
-     *
-     * @return the player
-     */
-    public OfflinePlayer getPlayer() {
-        return player;
-    }
-
-    /**
      * returns the guild
      *
      * @return the guild
@@ -172,38 +149,6 @@ public class GuildMember implements Comparable<GuildMember> {
      */
     public void setOnline(Boolean online) {
         isOnline = online;
-    }
-
-    /**
-     * sets a players prefix
-     *
-     * @param prefix the new prefix
-     */
-    public void setPrefix(final String prefix) {
-        Guilds.getInstance().getServer().getScheduler().runTaskAsynchronously(Guilds.getInstance(), new Runnable() {
-
-            public void run() {
-                Connection connection = DatabaseConnectionManager.getInstance().getConnection();
-                if (connection != null) {
-                    try {
-                        PreparedStatement statement = connection.prepareStatement(
-                                "UPDATE " + GuildsConfig.getPlayerTable() +
-                                        " SET prefix = ?" +
-                                        " WHERE uuid = ?");
-                        statement.setString(1, prefix);
-                        statement.setString(2, getUuid().toString());
-                        statement.executeUpdate();
-                        statement.close();
-
-                        BungeeConnection.forceGuildSync(Guilds.getInstance().getGuild(uuid).getId());
-
-                        connection.close();
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        });
     }
 
     /**

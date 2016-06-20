@@ -33,8 +33,8 @@ public class PromoteRequest extends Request {
     private Guild guild;
     private Rank rank;
 
-    public PromoteRequest(Player sender, GuildMember targetPlayer, Guild guild, Rank rank) {
-        super(sender);
+    public PromoteRequest(Guilds plugin, Player sender, GuildMember targetPlayer, Guild guild, Rank rank) {
+        super(plugin, sender);
         this.targetPlayer = targetPlayer;
         this.guild = guild;
         this.rank = rank;
@@ -42,22 +42,22 @@ public class PromoteRequest extends Request {
 
     @Override
     public void execute() {
-        guild.setPlayerRank(targetPlayer.getPlayer(), rank);
-        Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+        plugin.getGuildManager().setPlayerRank(guild, targetPlayer, rank);
+        plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                 .getColoredText("info.guild.promote.promotedPlayer", guild.getColor())
                 .replace("{0}", targetPlayer.getName())
                 .replace("{1}", rank.getName()));
-        Guilds.getInstance().getChat().sendGuildChannelBroadcast(
+        plugin.getChat().sendGuildChannelBroadcast(
                 guild,
-                GuildsConfig.getText("info.chat.playerPromoted")
+                plugin.getGuildsConfig().getText("info.chat.playerPromoted")
                         .replace("{0}", targetPlayer.getName())
                         .replace("{1}", rank.getName()));
         //send a message to the kicked player
-        Guilds.getInstance().getChat().sendBungeeMessage(targetPlayer.getUuid(), GuildsConfig
+        plugin.getChat().sendBungeeMessage(targetPlayer.getUuid(), plugin.getGuildsConfig()
                 .getColoredText("info.guild.promote.youGotPromoted", guild.getColor())
                 .replace("{0}", rank.getName()));
 
-        Guilds.getInstance().getLogger().info(sender.getName() + " has promoted " + targetPlayer.getName()
+        plugin.getLogger().info(sender.getName() + " has promoted " + targetPlayer.getName()
                 + " into rank '" + rank.getName() + "' in guild '" + guild.getName() + "'");
     }
 }

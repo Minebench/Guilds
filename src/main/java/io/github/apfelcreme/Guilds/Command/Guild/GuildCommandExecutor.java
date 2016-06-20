@@ -1,6 +1,7 @@
 package io.github.apfelcreme.Guilds.Command.Guild;
 
 import io.github.apfelcreme.Guilds.Command.Guild.Command.*;
+import io.github.apfelcreme.Guilds.Command.PluginCommandExecutor;
 import io.github.apfelcreme.Guilds.Command.SubCommand;
 import io.github.apfelcreme.Guilds.Guilds;
 import io.github.apfelcreme.Guilds.GuildsConfig;
@@ -28,7 +29,11 @@ import org.bukkit.entity.Player;
  *
  * @author Lord36 aka Apfelcreme on 23.04.2015.
  */
-public class GuildCommandExecutor implements CommandExecutor {
+public class GuildCommandExecutor extends PluginCommandExecutor {
+
+    public GuildCommandExecutor(Guilds plugin) {
+        super(plugin);
+    }
 
     /**
      * @param commandSender the sender
@@ -47,106 +52,106 @@ public class GuildCommandExecutor implements CommandExecutor {
                     if (guildOperation != null) {
                         switch (guildOperation) {
                             case ACCEPT:
-                                subCommand = new InviteAcceptCommand();
+                                subCommand = new InviteAcceptCommand(plugin);
                                 break;
                             case BB:
                             case BLACKBOARD:
-                                subCommand = new BlackboardCommand();
+                                subCommand = new BlackboardCommand(plugin);
                                 break;
                             case COLOR:
-                                subCommand = new ColorCommand();
+                                subCommand = new ColorCommand(plugin);
                                 break;
                             case CONFIRM:
-                                subCommand = new ConfirmRequestCommand();
+                                subCommand = new ConfirmRequestCommand(plugin);
                                 break;
                             case CREATE:
-                                subCommand = new CreateCommand();
+                                subCommand = new CreateCommand(plugin);
                                 break;
                             case CREATERANK:
-                                subCommand = new CreateRankCommand();
+                                subCommand = new CreateRankCommand(plugin);
                                 break;
                             case DELETEPREFIX:
-                                subCommand = new DeletePrefixCommand();
+                                subCommand = new DeletePrefixCommand(plugin);
                                 break;
                             case DELETERANK:
-                                subCommand = new DeleteRankCommand();
+                                subCommand = new DeleteRankCommand(plugin);
                                 break;
                             case DENY:
-                                subCommand = new InviteDenyCommand();
+                                subCommand = new InviteDenyCommand(plugin);
                                 break;
                             case DISBAND:
-                                subCommand = new DisbandCommand();
+                                subCommand = new DisbandCommand(plugin);
                                 break;
                             case EDITRANK:
-                                subCommand = new EditRankCommand();
+                                subCommand = new EditRankCommand(plugin);
                                 break;
                             case EXP:
-                                subCommand = new GiveExpCommand();
+                                subCommand = new GiveExpCommand(plugin);
                                 break;
                             case HOME:
-                                subCommand = new HomeCommand();
+                                subCommand = new HomeCommand(plugin);
                                 break;
                             case INFO:
-                                subCommand = new InfoCommand();
+                                subCommand = new InfoCommand(plugin);
                                 break;
                             case INVITE:
-                                subCommand = new InviteCommand();
+                                subCommand = new InviteCommand(plugin);
                                 break;
                             case KICK:
-                                subCommand = new KickCommand();
+                                subCommand = new KickCommand(plugin);
                                 break;
                             case LEAVE:
-                                subCommand = new LeaveCommand();
+                                subCommand = new LeaveCommand(plugin);
                                 break;
                             case LOOKUP:
-                                subCommand = new LookupCommand();
+                                subCommand = new LookupCommand(plugin);
                                 break;
                             case LEVEL:
-                                subCommand = new LevelCommand();
+                                subCommand = new LevelCommand(plugin);
                                 break;
                             case LEVELS:
-                                subCommand = new LevelsCommand();
+                                subCommand = new LevelsCommand(plugin);
                                 break;
                             case LIST:
-                                subCommand = new ListCommand();
+                                subCommand = new ListCommand(plugin);
                                 break;
                             case PAY:
-                                subCommand = new PayCommand();
+                                subCommand = new PayCommand(plugin);
                                 break;
                             case PREFIX:
-                                subCommand = new PrefixCommand();
+                                subCommand = new PrefixCommand(plugin);
                                 break;
                             case PROMOTE:
-                                subCommand = new PromoteCommand();
+                                subCommand = new PromoteCommand(plugin);
                                 break;
                             case RANK:
-                                subCommand = new RankInfoCommand();
+                                subCommand = new RankInfoCommand(plugin);
                                 break;
                             case RANKS:
-                                subCommand = new RankListCommand();
+                                subCommand = new RankListCommand(plugin);
                                 break;
                             case ROSTER:
-                                subCommand = new RosterCommand();
+                                subCommand = new RosterCommand(plugin);
                                 break;
                             case SETHOME:
-                                subCommand = new SetHomeCommand();
+                                subCommand = new SetHomeCommand(plugin);
                                 break;
                             case UPGRADE:
-                                subCommand = new UpgradeCommand();
+                                subCommand = new UpgradeCommand(plugin);
                                 break;
                             case WITHDRAW:
-                                subCommand = new WithdrawCommand();
+                                subCommand = new WithdrawCommand(plugin);
                                 break;
                         }
                     } else {
-                        subCommand = new MenuCommand();
+                        subCommand = new MenuCommand(plugin);
                     }
                 } else {
-                    subCommand = new MenuCommand();
+                    subCommand = new MenuCommand(plugin);
                 }
                 subCommand.execute(sender, strings);
             } else {
-                Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.noPermission"));
+                plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noPermission"));
             }
         }
         return false;

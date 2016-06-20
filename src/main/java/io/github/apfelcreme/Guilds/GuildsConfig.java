@@ -31,29 +31,27 @@ import java.util.*;
  */
 public class GuildsConfig {
 
-    private static File languageConfigFile;
-    private static YamlConfiguration languageConfig;
+    private File languageConfigFile;
+    private YamlConfiguration languageConfig;
+    private final Guilds plugin;
 
-    public static void init() {
-        Guilds plugin = Guilds.getInstance();
+    public GuildsConfig(Guilds plugin) {
+        this.plugin = plugin;
         if (!plugin.getDataFolder().exists()) {
             plugin.getDataFolder().mkdirs();
         }
         plugin.saveDefaultConfig();
         plugin.saveResource("lang.de.yml", false);
 
-
-        languageConfigFile = new File(plugin.getDataFolder() + "/lang.de.yml");
-        languageConfig = YamlConfiguration.loadConfiguration(languageConfigFile);
+        reloadLanguageConfig();
     }
 
     /**
      * reloads the language file
      */
-    public static void reloadLanguageConfig() {
-        languageConfigFile = new File(Guilds.getInstance().getDataFolder() + "/lang.de.yml");
-        languageConfig = YamlConfiguration
-                .loadConfiguration(languageConfigFile);
+    public void reloadLanguageConfig() {
+        languageConfigFile = new File(plugin.getDataFolder() + "/lang.de.yml");
+        languageConfig = YamlConfiguration.loadConfiguration(languageConfigFile);
     }
 
     /**
@@ -61,8 +59,8 @@ public class GuildsConfig {
      *
      * @return the table name of the player table
      */
-    public static String getPlayerTable() {
-        return Guilds.getInstance().getConfig().getString("mysql.tables.player");
+    public String getPlayerTable() {
+        return plugin.getConfig().getString("mysql.tables.player");
     }
 
     /**
@@ -70,8 +68,8 @@ public class GuildsConfig {
      *
      * @return the table name of the ranks table
      */
-    public static String getRanksTable() {
-        return Guilds.getInstance().getConfig().getString("mysql.tables.ranks");
+    public String getRanksTable() {
+        return plugin.getConfig().getString("mysql.tables.ranks");
     }
 
     /**
@@ -79,8 +77,8 @@ public class GuildsConfig {
      *
      * @return the table name of the ranks table
      */
-    public static String getInvitesTable() {
-        return Guilds.getInstance().getConfig().getString("mysql.tables.invites");
+    public String getInvitesTable() {
+        return plugin.getConfig().getString("mysql.tables.invites");
     }
 
     /**
@@ -88,8 +86,8 @@ public class GuildsConfig {
      *
      * @return the table name of the blackboard table
      */
-    public static String getBlackboardTable() {
-        return Guilds.getInstance().getConfig().getString("mysql.tables.blackboard");
+    public String getBlackboardTable() {
+        return plugin.getConfig().getString("mysql.tables.blackboard");
     }
 
     /**
@@ -97,8 +95,8 @@ public class GuildsConfig {
      *
      * @return the table name of the alliance table
      */
-    public static String getAllianceTable() {
-        return Guilds.getInstance().getConfig().getString("mysql.tables.alliance");
+    public String getAllianceTable() {
+        return plugin.getConfig().getString("mysql.tables.alliance");
     }
 
     /**
@@ -106,8 +104,8 @@ public class GuildsConfig {
      *
      * @return the table name of the alliance-Invite table
      */
-    public static String getAllianceInviteTable() {
-        return Guilds.getInstance().getConfig().getString("mysql.tables.allianceInvites");
+    public String getAllianceInviteTable() {
+        return plugin.getConfig().getString("mysql.tables.allianceInvites");
     }
 
     /**
@@ -115,8 +113,8 @@ public class GuildsConfig {
      *
      * @return the table name of the guild table
      */
-    public static String getGuildsTable() {
-        return Guilds.getInstance().getConfig().getString("mysql.tables.guilds");
+    public String getGuildsTable() {
+        return plugin.getConfig().getString("mysql.tables.guilds");
     }
 
     /**
@@ -124,8 +122,8 @@ public class GuildsConfig {
      *
      * @return the username of the mysql user
      */
-    public static String getMysqlUser() {
-        return Guilds.getInstance().getConfig().getString("mysql.user");
+    public String getMysqlUser() {
+        return plugin.getConfig().getString("mysql.user");
     }
 
     /**
@@ -133,8 +131,8 @@ public class GuildsConfig {
      *
      * @return the mysql password
      */
-    public static String getMysqlPassword() {
-        return Guilds.getInstance().getConfig().getString("mysql.password");
+    public String getMysqlPassword() {
+        return plugin.getConfig().getString("mysql.password");
     }
 
     /**
@@ -142,8 +140,8 @@ public class GuildsConfig {
      *
      * @return the database name
      */
-    public static String getMysqlDatabase() {
-        return Guilds.getInstance().getConfig().getString("mysql.database");
+    public String getMysqlDatabase() {
+        return plugin.getConfig().getString("mysql.database");
     }
 
     /**
@@ -151,8 +149,8 @@ public class GuildsConfig {
      *
      * @return the database url
      */
-    public static String getMysqlUrl() {
-        return Guilds.getInstance().getConfig().getString("mysql.url");
+    public String getMysqlUrl() {
+        return plugin.getConfig().getString("mysql.url");
     }
 
     /**
@@ -160,7 +158,7 @@ public class GuildsConfig {
      *
      * @return the default message prefix
      */
-    public static String getMessagePrefix() {
+    public String getMessagePrefix() {
         return getText("prefix.messages");
     }
 
@@ -169,8 +167,8 @@ public class GuildsConfig {
      *
      * @return the number of blackboardMessages that are loaded
      */
-    public static int getBlackboardMessageLimit() {
-        return Guilds.getInstance().getConfig().getInt("guilds.blackboard.limit", 5);
+    public int getBlackboardMessageLimit() {
+        return plugin.getConfig().getInt("guilds.blackboard.limit", 5);
     }
 
     /**
@@ -178,8 +176,8 @@ public class GuildsConfig {
      *
      * @return the number of elements that are printed per page in lists like '/guild roster'
      */
-    public static int getListsPageSize() {
-        return Guilds.getInstance().getConfig().getInt("guilds.lists.pageSize", 10);
+    public int getListsPageSize() {
+        return plugin.getConfig().getInt("guilds.lists.pageSize", 10);
     }
 
     /**
@@ -187,7 +185,7 @@ public class GuildsConfig {
      *
      * @return a List that contains all guild command strings
      */
-    public static List<String> getGuildCommandStrings(boolean hasGuild) {
+    public List<String> getGuildCommandStrings(boolean hasGuild) {
         List<String> ret = new ArrayList<String>();
         if (hasGuild) {
             for (Object o : languageConfig.getConfigurationSection("texts.help.guild.command.hasGuild").getValues(true).values()) {
@@ -210,7 +208,7 @@ public class GuildsConfig {
      *
      * @return a List that contains all alliance command strings
      */
-    public static List<String> getAllianceCommandStrings(boolean hasAlliance) {
+    public List<String> getAllianceCommandStrings(boolean hasAlliance) {
         List<String> ret = new ArrayList<String>();
         if (hasAlliance) {
             for (Object o : languageConfig.getConfigurationSection("texts.help.alliance.command.hasAlliance").getValues(true).values()) {
@@ -233,7 +231,7 @@ public class GuildsConfig {
      *
      * @return a List that contains all guildadmin command strings
      */
-    public static List<String> getGuildAdminCommandStrings() {
+    public List<String> getGuildAdminCommandStrings() {
         List<String> ret = new ArrayList<String>();
         for (Object o : languageConfig.getConfigurationSection("texts.help.guildadmin").getValues(true).values()) {
             ret.add(o.toString());
@@ -247,8 +245,8 @@ public class GuildsConfig {
      *
      * @return the maximum length of a guild name
      */
-    public static int getGuildNameLength() {
-        return Guilds.getInstance().getConfig().getInt("guilds.guildNameLength", 30);
+    public int getGuildNameLength() {
+        return plugin.getConfig().getInt("guilds.guildNameLength", 30);
     }
 
     /**
@@ -256,8 +254,8 @@ public class GuildsConfig {
      *
      * @return the maximum length of a guild tag
      */
-    public static int getGuildTagLength() {
-        return Guilds.getInstance().getConfig().getInt("guilds.guildTagLength", 4);
+    public int getGuildTagLength() {
+        return plugin.getConfig().getInt("guilds.guildTagLength", 4);
     }
 
     /**
@@ -265,8 +263,8 @@ public class GuildsConfig {
      *
      * @return the maximum length of a prefix
      */
-    public static int getPrefixLength() {
-        return Guilds.getInstance().getConfig().getInt("guilds.prefixLength", 25);
+    public int getPrefixLength() {
+        return plugin.getConfig().getInt("guilds.prefixLength", 25);
     }
 
     /**
@@ -274,8 +272,8 @@ public class GuildsConfig {
      *
      * @return true or false
      */
-    public static boolean isCrossServerTeleportAllowed() {
-        return Guilds.getInstance().getConfig().getBoolean("guilds.crossServerTeleport", false);
+    public boolean isCrossServerTeleportAllowed() {
+        return plugin.getConfig().getBoolean("guilds.crossServerTeleport", false);
     }
 
     /**
@@ -284,28 +282,28 @@ public class GuildsConfig {
      * @param level the guild level + 1
      * @return the materials that are needed for the upgrade
      */
-    public static GuildLevel getLevelData(Integer level) {
-        String name = Guilds.getInstance().getConfig()
+    public GuildLevel getLevelData(Integer level) {
+        String name = plugin.getConfig()
                 .getString("level." + level.toString() + ".name");
         if (name == null) {
             return null;
         }
-        Integer playerLimit = Guilds.getInstance().getConfig()
+        Integer playerLimit = plugin.getConfig()
                 .getInt("level." + level.toString() + ".limit");
-        Double enchantmentCost = Guilds.getInstance().getConfig()
+        Double enchantmentCost = plugin.getConfig()
                 .getDouble("level." + level.toString() + ".enchantmentCost");
-        Double doubleCraftProbability = Guilds.getInstance().getConfig()
+        Double doubleCraftProbability = plugin.getConfig()
                 .getDouble("level." + level.toString() + ".doubleCraftProbability");
-        Double specialDropChance = Guilds.getInstance().getConfig()
+        Double specialDropChance = plugin.getConfig()
                 .getDouble("level." + level.toString() + ".specialDropChance");
-        Double furnaceExpGainRatio = Guilds.getInstance().getConfig()
+        Double furnaceExpGainRatio = plugin.getConfig()
                 .getDouble("level." + level.toString() + ".furnaceExpGainRatio");
-        Double cost = Guilds.getInstance().getConfig()
+        Double cost = plugin.getConfig()
                 .getDouble("level." + level.toString() + ".upgradeCost");
-        Integer expCost = Guilds.getInstance().getConfig()
+        Integer expCost = plugin.getConfig()
                 .getInt("level." + level.toString() + ".upgradeExpCost");
         HashMap<Material, Integer> materialRequirements = new HashMap<Material, Integer>();
-        for (Map.Entry entry : Guilds.getInstance().getConfig()
+        for (Map.Entry entry : plugin.getConfig()
                 .getConfigurationSection("level." + level.toString() + ".upgradeMaterials").getValues(true).entrySet()) {
             materialRequirements.put(
                     Material.valueOf(entry.getKey().toString()), Integer.parseInt(entry.getValue().toString()));
@@ -319,8 +317,8 @@ public class GuildsConfig {
      *
      * @return a Material that will be dropped for the player in the BlockBreakEvent
      */
-    public static Material getNewRandomDrop() {
-        Map<String, Object> input = Guilds.getInstance().getConfig().getConfigurationSection("specialDrops").getValues(true);
+    public Material getNewRandomDrop() {
+        Map<String, Object> input = plugin.getConfig().getConfigurationSection("specialDrops").getValues(true);
         Double total = 0.0;
         Map<Material, Double> chances = new HashMap<Material, Double>();
         Map<Material, Double> cumulatedChances = new HashMap<Material, Double>();
@@ -344,7 +342,7 @@ public class GuildsConfig {
      * @param color the color string e.g. 'gelb'
      * @return the matching ChatColor e.g ChatColor.YELLOW
      */
-    public static ChatColor parseColor(String color) {
+    public ChatColor parseColor(String color) {
         if (color == null)
             return null;
         for (ChatColor a : ChatColor.values()) {
@@ -363,7 +361,7 @@ public class GuildsConfig {
      * @param key the config path
      * @return the text
      */
-    public static String getText(String key) {
+    public String getText(String key) {
         String ret = (String) languageConfig.get("texts." + key);
         if (ret != null && !ret.isEmpty()) {
             return GuildsUtil.replaceChatColors(ret);
@@ -379,7 +377,7 @@ public class GuildsConfig {
      * @param color the color
      * @return a nice String
      */
-    public static String getColoredText(String key, ChatColor color) {
+    public String getColoredText(String key, ChatColor color) {
         String ret = (String) languageConfig.get("texts." + key);
 
         if (ret != null && !ret.isEmpty()) {
@@ -396,8 +394,8 @@ public class GuildsConfig {
      *
      * @return true or false
      */
-    public static boolean isEnchantmentBonusActivated() {
-        return Guilds.getInstance().getConfig().getBoolean("bonus.cheaperEnchantment", false);
+    public boolean isEnchantmentBonusActivated() {
+        return plugin.getConfig().getBoolean("bonus.cheaperEnchantment", false);
     }
 
     /**
@@ -405,8 +403,8 @@ public class GuildsConfig {
      *
      * @return true or false
      */
-    public static boolean isMoreFurnaceExpBonusActivated() {
-        return Guilds.getInstance().getConfig().getBoolean("bonus.moreFurnaceExp", false);
+    public boolean isMoreFurnaceExpBonusActivated() {
+        return plugin.getConfig().getBoolean("bonus.moreFurnaceExp", false);
     }
 
     /**
@@ -414,8 +412,8 @@ public class GuildsConfig {
      *
      * @return true or false
      */
-    public static boolean isDoubleCraftingBonusActivated() {
-        return Guilds.getInstance().getConfig().getBoolean("bonus.doubleCrafting", false);
+    public boolean isDoubleCraftingBonusActivated() {
+        return plugin.getConfig().getBoolean("bonus.doubleCrafting", false);
     }
 
     /**
@@ -423,8 +421,8 @@ public class GuildsConfig {
      *
      * @return true or false
      */
-    public static boolean isSpecialDropBonusActivated() {
-        return Guilds.getInstance().getConfig().getBoolean("bonus.specialDrop", false);
+    public boolean isSpecialDropBonusActivated() {
+        return plugin.getConfig().getBoolean("bonus.specialDrop", false);
     }
 
     /**

@@ -28,7 +28,11 @@ import org.bukkit.entity.Player;
  *
  * @author Lord36 aka Apfelcreme on 27.04.2015.
  */
-public class LeaveCommand implements SubCommand {
+public class LeaveCommand extends SubCommand {
+
+    public LeaveCommand(Guilds plugin) {
+        super(plugin);
+    }
 
     /**
      * executes the command
@@ -39,20 +43,20 @@ public class LeaveCommand implements SubCommand {
     public void execute(CommandSender commandSender, String[] strings) {
         Player sender = (Player) commandSender;
         if (sender.hasPermission("Guilds.leaveGuild")) {
-            Guild guild = Guilds.getInstance().getGuild(sender);
+            Guild guild = plugin.getGuildManager().getGuild(sender);
             if (guild != null) {
                 if (!guild.getMember(sender.getUniqueId()).getRank().isLeader()) {
-                    RequestController.getInstance().addRequest(new LeaveRequest(sender, guild));
-                    Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                    plugin.getRequestController().addRequest(new LeaveRequest(plugin, sender, guild));
+                    plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                             .getColoredText("info.guild.confirm.confirm", guild.getColor()));
                 } else {
-                    Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.cannotLeaveLeader"));
+                    plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.cannotLeaveLeader"));
                 }
             } else {
-                Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.noCurrentGuild"));
+                plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noCurrentGuild"));
             }
         } else {
-            Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.noPermission"));
+            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noPermission"));
         }
     }
 }

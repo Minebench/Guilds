@@ -29,19 +29,19 @@ public class DisbandRequest extends Request {
 
     private Guild guild;
 
-    public DisbandRequest(Player sender, Guild guild) {
-        super(sender);
+    public DisbandRequest(Guilds plugin, Player sender, Guild guild) {
+        super(plugin, sender);
         this.guild = guild;
     }
 
     @Override
     public void execute() {
-        guild.delete();
-        Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+        plugin.getGuildManager().delete(guild);
+        plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                 .getColoredText("info.guild.disband.guildDisbanded", guild.getColor()));
-        Guilds.getInstance().getChat().sendGuildChannelBroadcast(guild, GuildsConfig
+        plugin.getChat().sendGuildChannelBroadcast(guild, plugin.getGuildsConfig()
                 .getText("info.chat.guildDisbanded").replace("{0}", sender.getName()));
-        Guilds.getInstance().getLogger().info(sender.getName() + " has disbanded guild '"
+        plugin.getLogger().info(sender.getName() + " has disbanded guild '"
                 + guild.getName()
                 + "' Left in Guild Bank: " + guild.getExp() + " Exp and " + guild.getBalance() + " Money.");
     }

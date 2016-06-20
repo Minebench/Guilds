@@ -2,9 +2,7 @@ package io.github.apfelcreme.Guilds.Listener;
 
 import io.github.apfelcreme.Guilds.Guild.Guild;
 import io.github.apfelcreme.Guilds.Guilds;
-import io.github.apfelcreme.Guilds.GuildsConfig;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -30,13 +28,19 @@ import org.bukkit.inventory.ItemStack;
  */
 public class BlockBreakListener implements Listener {
 
+    private Guilds plugin;
+
+    public BlockBreakListener(Guilds plugin) {
+        this.plugin = plugin;
+    }
+
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
-        Guild guild = Guilds.getInstance().getGuild(event.getPlayer().getUniqueId());
+        Guild guild = plugin.getGuildManager().getGuild(event.getPlayer().getUniqueId());
         if (guild != null) {
             Double random = Math.random();
             if (random < guild.getCurrentLevel().getSpecialDropChance()) {
-                Material drop = GuildsConfig.getNewRandomDrop();
+                Material drop = plugin.getGuildsConfig().getNewRandomDrop();
                 if (drop != null) {
                     event.getPlayer().getWorld().dropItem(event.getBlock().getLocation(), new ItemStack(drop, 1));
                 }

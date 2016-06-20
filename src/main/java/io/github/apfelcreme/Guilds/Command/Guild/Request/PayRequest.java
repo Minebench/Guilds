@@ -31,25 +31,25 @@ public class PayRequest extends Request {
     private Guild guild;
     private Double amount;
 
-    public PayRequest(Player sender, Guild guild, Double amount) {
-        super(sender);
+    public PayRequest(Guilds plugin, Player sender, Guild guild, Double amount) {
+        super(plugin, sender);
         this.guild = guild;
         this.amount = amount;
     }
 
     @Override
     public void execute() {
-        EconomyResponse economyResponse = Guilds.getInstance().getEconomy().withdrawPlayer(sender.getPlayer(), amount);
+        EconomyResponse economyResponse = plugin.getEconomy().withdrawPlayer(sender.getPlayer(), amount);
         if (economyResponse.transactionSuccess()) {
-            guild.setBalance(guild.getBalance() + amount);
-            Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+            plugin.getGuildManager().setBalance(guild, guild.getBalance() + amount);
+            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                     .getColoredText("info.guild.pay.paidMoney", guild.getColor())
                     .replace("{0}", amount.toString()));
-            Guilds.getInstance().getChat().sendGuildChannelBroadcast(guild,
-                    GuildsConfig.getText("info.chat.playerPaid")
+            plugin.getChat().sendGuildChannelBroadcast(guild,
+                    plugin.getGuildsConfig().getText("info.chat.playerPaid")
                             .replace("{0}", sender.getName())
                             .replace("{1}", amount.toString()));
-            Guilds.getInstance().getLogger().info(sender.getName() + " has payed " + amount.toString() + " to guild '"
+            plugin.getLogger().info(sender.getName() + " has payed " + amount.toString() + " to guild '"
                     + guild.getName() + "'");
         }
     }

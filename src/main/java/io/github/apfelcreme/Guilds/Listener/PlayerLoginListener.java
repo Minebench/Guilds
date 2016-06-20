@@ -1,13 +1,10 @@
 package io.github.apfelcreme.Guilds.Listener;
 
-import io.github.apfelcreme.Guilds.Alliance.Alliance;
 import io.github.apfelcreme.Guilds.Alliance.AllianceInvite;
 import io.github.apfelcreme.Guilds.Guild.BlackboardMessage;
 import io.github.apfelcreme.Guilds.Guild.Guild;
 import io.github.apfelcreme.Guilds.Guild.Invite;
 import io.github.apfelcreme.Guilds.Guilds;
-import io.github.apfelcreme.Guilds.GuildsConfig;
-import io.github.apfelcreme.Guilds.Manager.DatabaseConnectionManager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerLoginEvent;
@@ -38,48 +35,56 @@ import java.util.Date;
  */
 public class PlayerLoginListener implements Listener {
 
+    private Guilds plugin;
+
+    public PlayerLoginListener(Guilds plugin) {
+        this.plugin = plugin;
+    }
+
     @EventHandler
     public void onPlayerLogin(final PlayerLoginEvent e) {
-        Guilds.getInstance().getServer().getScheduler().runTaskLaterAsynchronously(Guilds.getInstance(),
+        plugin.getServer().getScheduler().runTaskLaterAsynchronously(plugin,
                 new Runnable() {
                     public void run() {
                         // check for invites
-                        Invite invite = Guilds.getInstance().getInvite(e.getPlayer().getUniqueId());
+                        Invite invite = plugin.getGuildManager().getInvite(e.getPlayer().getUniqueId());
                         if (invite != null) {
-                            Guilds.getInstance().getChat().sendMessage(e.getPlayer(), GuildsConfig
-                                    .getColoredText("info.guild.invite.youGotInvited", invite.getGuild().getColor())
-                                    .replace("{0}", invite.getGuild().getName()));
-                            Guilds.getInstance().getChat().sendMessage(e.getPlayer(), GuildsConfig
-                                    .getColoredText("info.guild.invite.accept", invite.getGuild().getColor()));
+                            plugin.getChat().sendMessage(e.getPlayer(),
+                                    plugin.getGuildsConfig().getColoredText(
+                                            "info.guild.invite.youGotInvited", invite.getGuild().getColor()
+                                    ).replace("{0}", invite.getGuild().getName()));
+                            plugin.getChat().sendMessage(e.getPlayer(),
+                                    plugin.getGuildsConfig().getColoredText(
+                                            "info.guild.invite.accept", invite.getGuild().getColor()));
                         }
                         //check for blackboard messages & alliance invites
-                        Guild guild = Guilds.getInstance().getGuild(e.getPlayer());
+                        Guild guild = plugin.getGuildManager().getGuild(e.getPlayer());
                         if (guild != null) {
-                            AllianceInvite allianceInvite = Guilds.getInstance().getAllianceInvite(guild);
+                            AllianceInvite allianceInvite = plugin.getAllianceManager().getInvite(guild);
                             if (allianceInvite != null) {
                                 if (guild.getMember(e.getPlayer().getUniqueId()) != null
                                         && guild.getMember(e.getPlayer().getUniqueId()).getRank().canDoDiplomacy()) {
-                                    Guilds.getInstance().getChat().sendMessage(e.getPlayer(), GuildsConfig
-                                            .getText("info.chat.allianceGotInvited")
+                                    plugin.getChat().sendMessage(e.getPlayer(),
+                                            plugin.getGuildsConfig().getText("info.chat.allianceGotInvited")
                                             .replace("{0}", allianceInvite.getAlliance().getName()));
-                                    Guilds.getInstance().getChat().sendMessage(e.getPlayer(), GuildsConfig
-                                            .getText("info.chat.allianceAccept"));
+                                    plugin.getChat().sendMessage(e.getPlayer(),
+                                            plugin.getGuildsConfig().getText("info.chat.allianceAccept"));
                                 }
                             }
 
-                            Guilds.getInstance().getChat().sendMessage(e.getPlayer(), GuildsConfig
-                                    .getColoredText("info.guild.blackboard.head", guild.getColor()));
+                            plugin.getChat().sendMessage(e.getPlayer(),
+                                    plugin.getGuildsConfig().getColoredText("info.guild.blackboard.head", guild.getColor()));
                             for (BlackboardMessage message : guild.getBlackboardMessages()) {
-                                Guilds.getInstance().getChat().sendMessage(e.getPlayer(), message.toMessage());
+                                plugin.getChat().sendMessage(e.getPlayer(), plugin.getGuildManager().formatMessage(guild, message));
                             }
                         }
 
                         //add the user if he wasn't there yet
                         try {
-                            Connection connection = DatabaseConnectionManager.getInstance().getConnection();
+                            Connection connection = plugin.getDatabaseConnection();
 
                             PreparedStatement statement = connection.prepareStatement("INSERT INTO "
-                                    + GuildsConfig.getPlayerTable() + " (playerName, uuid, joined, lastSeen) " +
+                                    + plugin.getGuildsConfig().getPlayerTable() + " (playerName, uuid, joined, lastSeen) " +
                                     "VALUES (?, ?, ?, ?) " +
                                     "ON DUPLICATE KEY UPDATE playerName = ?, lastSeen = ?;");
                             statement.setString(1, e.getPlayer().getName());

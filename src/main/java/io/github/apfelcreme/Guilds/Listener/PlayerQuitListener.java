@@ -1,8 +1,6 @@
 package io.github.apfelcreme.Guilds.Listener;
 
 import io.github.apfelcreme.Guilds.Guilds;
-import io.github.apfelcreme.Guilds.GuildsConfig;
-import io.github.apfelcreme.Guilds.Manager.DatabaseConnectionManager;
 import io.github.apfelcreme.Guilds.Manager.RequestController;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -34,18 +32,24 @@ import java.util.Date;
  */
 public class PlayerQuitListener implements Listener {
 
+    private Guilds plugin;
+
+    public PlayerQuitListener(Guilds plugin) {
+        this.plugin = plugin;
+    }
+
     @EventHandler
     public void onPlayerQuit(final PlayerQuitEvent e) {
-        RequestController.getInstance().removeRequest(e.getPlayer());
-        Guilds.getInstance().getServer().getScheduler().runTaskAsynchronously(Guilds.getInstance(), new Runnable() {
+        plugin.getRequestController().removeRequest(e.getPlayer());
+        plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
 
             public void run() {
 
                 try {
-                    Connection connection = DatabaseConnectionManager.getInstance().getConnection();
+                    Connection connection = plugin.getDatabaseConnection();
 
                     PreparedStatement statement = connection.prepareStatement("UPDATE " +
-                            GuildsConfig.getPlayerTable() + " SET lastseen = ? where uuid = ?");
+                            plugin.getGuildsConfig().getPlayerTable() + " SET lastseen = ? where uuid = ?");
                     statement.setLong(1, new Date().getTime());
                     statement.setString(2, e.getPlayer().getUniqueId().toString());
                     statement.executeUpdate();

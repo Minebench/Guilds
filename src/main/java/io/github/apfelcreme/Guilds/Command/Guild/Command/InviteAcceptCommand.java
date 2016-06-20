@@ -28,7 +28,11 @@ import org.bukkit.entity.Player;
  *
  * @author Lord36 aka Apfelcreme on 25.04.2015.
  */
-public class InviteAcceptCommand implements SubCommand {
+public class InviteAcceptCommand extends SubCommand {
+
+    public InviteAcceptCommand(Guilds plugin) {
+        super(plugin);
+    }
 
     /**
      * executes the command
@@ -39,19 +43,19 @@ public class InviteAcceptCommand implements SubCommand {
     public void execute(CommandSender commandSender, String[] strings) {
         Player sender = (Player) commandSender;
         if (sender.hasPermission("Guilds.acceptGuildInvite")) {
-            Invite invite = Guilds.getInstance().getInvite(sender.getUniqueId());
+            Invite invite = plugin.getGuildManager().getInvite(sender.getUniqueId());
             if (invite != null) {
-                invite.setAccepted();
-                Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                plugin.getGuildManager().acceptInvite(invite);
+                plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                         .getColoredText("info.guild.invite.youAcceptedInvite", invite.getGuild().getColor()));
-                Guilds.getInstance().getChat().sendGuildChannelBroadcast(
+                plugin.getChat().sendGuildChannelBroadcast(
                         invite.getGuild(),
-                        GuildsConfig.getText("info.chat.playerJoined").replace("{0}", sender.getName()));
+                        plugin.getGuildsConfig().getText("info.chat.playerJoined").replace("{0}", sender.getName()));
             } else {
-                Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.noPendingInvites"));
+                plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noPendingInvites"));
             }
         } else {
-            Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.noPermission"));
+            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noPermission"));
         }
 
     }

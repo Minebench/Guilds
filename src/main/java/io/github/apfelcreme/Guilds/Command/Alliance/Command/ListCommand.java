@@ -31,7 +31,11 @@ import java.util.List;
  *
  * @author Lord36 aka Apfelcreme on 18.06.2015.
  */
-public class ListCommand implements SubCommand {
+public class ListCommand extends SubCommand {
+
+    public ListCommand(Guilds plugin) {
+        super(plugin);
+    }
 
     /**
      * executes the command
@@ -49,20 +53,20 @@ public class ListCommand implements SubCommand {
         }
         if (sender.hasPermission("Guilds.allianceList")) {
             if (page >= 0) {
-                List<Alliance> alliances = new ArrayList<Alliance>(Guilds.getInstance().getAlliances());
+                List<Alliance> alliances = new ArrayList<Alliance>(plugin.getAllianceManager().getAlliances());
                 Collections.sort(alliances);
-                Integer pageSize = GuildsConfig.getListsPageSize();
+                Integer pageSize = plugin.getGuildsConfig().getListsPageSize();
                 Integer maxPages = (int) Math.ceil((float) alliances.size() / pageSize);
                 if (page >= maxPages - 1) {
                     page = maxPages - 1;
                 }
-                Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("info.alliance.list.head")
+                plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("info.alliance.list.head")
                         .replace("{0}", Integer.toString(page + 1))
                         .replace("{1}", maxPages.toString()));
                 if (alliances.size() > 0) {
                     for (int i = page * pageSize; i < (page * pageSize) + pageSize; i++) {
                         if (i < alliances.size()) {
-                            Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                     .getColoredText("info.alliance.list.element", alliances.get(i).getColor())
                                     .replace("{0}", alliances.get(i).getTag())
                                     .replace("{1}", alliances.get(i).getName())
@@ -71,12 +75,12 @@ public class ListCommand implements SubCommand {
                     }
                 }
                 if (alliances.size() > pageSize) {
-                    Guilds.getInstance().getChat().sendMessage(sender,
-                            GuildsConfig.getText("info.alliance.list.bottom"));
+                    plugin.getChat().sendMessage(sender,
+                            plugin.getGuildsConfig().getText("info.alliance.list.bottom"));
                 }
             }
         } else {
-            Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.noPermission"));
+            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noPermission"));
         }
     }
 }

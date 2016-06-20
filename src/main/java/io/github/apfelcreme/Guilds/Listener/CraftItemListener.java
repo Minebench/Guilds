@@ -2,7 +2,6 @@ package io.github.apfelcreme.Guilds.Listener;
 
 import io.github.apfelcreme.Guilds.Guild.Guild;
 import io.github.apfelcreme.Guilds.Guilds;
-import io.github.apfelcreme.Guilds.GuildsConfig;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -30,17 +29,23 @@ import org.bukkit.inventory.ItemStack;
  */
 public class CraftItemListener implements Listener {
 
+    private Guilds plugin;
+
+    public CraftItemListener(Guilds plugin) {
+        this.plugin = plugin;
+    }
+
     @EventHandler
     public void onItemCraftEvent(CraftItemEvent e) {
-        Guild guild = Guilds.getInstance().getGuild(e.getWhoClicked().getUniqueId());
+        Guild guild = plugin.getGuildManager().getGuild(e.getWhoClicked().getUniqueId());
         if (guild != null) {
             double probability = Math.random();
             if (probability <= guild.getCurrentLevel().getDoubleCraftProbability()) {
                 ItemStack doubledItem = e.getCurrentItem();
                 e.getWhoClicked().getInventory().addItem(doubledItem);
 
-                Guilds.getInstance().getChat().sendMessage((Player) e.getWhoClicked(),
-                        GuildsConfig.getColoredText("info.guild.craftItemDoubled", guild.getColor()));
+                plugin.getChat().sendMessage((Player) e.getWhoClicked(),
+                        plugin.getGuildsConfig().getColoredText("info.guild.craftItemDoubled", guild.getColor()));
             }
         }
     }

@@ -53,25 +53,6 @@ public class GuildLevel {
     }
 
     /**
-     * returns a level object of the next higher level
-     *
-     * @return a level object of the next higher level
-     */
-    public GuildLevel nextLevel() {
-        return GuildsConfig.getLevelData(level + 1);
-    }
-
-    /**
-     * is there a level after the current level?
-     *
-     * @return true or false
-     */
-    public boolean hasNextLevel() {
-        return Guilds.getInstance().getConfig()
-                .getConfigurationSection("level." + (level + 1)) != null;
-    }
-
-    /**
      * returns the level
      *
      * @return the level

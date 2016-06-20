@@ -1,14 +1,12 @@
 package io.github.apfelcreme.Guilds.Command.Chat;
 
 import io.github.apfelcreme.Guilds.Alliance.Alliance;
-import io.github.apfelcreme.Guilds.Guild.Guild;
+import io.github.apfelcreme.Guilds.Command.PluginCommandExecutor;
 import io.github.apfelcreme.Guilds.Guild.GuildMember;
 import io.github.apfelcreme.Guilds.Guilds;
 import io.github.apfelcreme.Guilds.GuildsConfig;
-import io.github.apfelcreme.Guilds.GuildsUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -31,7 +29,11 @@ import org.bukkit.entity.Player;
  *
  * @author Lord36 aka Apfelcreme on 30.05.2015.
  */
-public class AllianceChatCommandExecutor implements CommandExecutor {
+public class AllianceChatCommandExecutor extends PluginCommandExecutor {
+
+    public AllianceChatCommandExecutor(Guilds plugin) {
+        super(plugin);
+    }
 
     /**
      * @param commandSender the sender
@@ -43,7 +45,7 @@ public class AllianceChatCommandExecutor implements CommandExecutor {
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
         if (commandSender instanceof Player) {
             Player sender = (Player) commandSender;
-            Alliance alliance = Guilds.getInstance().getAlliance(sender);
+            Alliance alliance = plugin.getAllianceManager().getAlliance(sender);
             if (alliance != null) {
                 GuildMember member = alliance.getMember(sender.getUniqueId());
                 String message = "";
@@ -51,14 +53,14 @@ public class AllianceChatCommandExecutor implements CommandExecutor {
                     message += ChatColor.GRAY + string + " ";
                 }
                 message = message.trim();
-                Guilds.getInstance().getChat().sendAllianceChannelBroadcast(alliance,
-                        GuildsConfig.getText("prefix.chat").replace("{0}", member.getGuild().getColor() + member.getGuild().getTag()) +
+                plugin.getChat().sendAllianceChannelBroadcast(alliance,
+                        plugin.getGuildsConfig().getText("prefix.chat").replace("{0}", member.getGuild().getColor() + member.getGuild().getTag()) +
                                 (member.getPrefix() != null ? " " + member.getPrefix() : "") +
                                 " " + ChatColor.WHITE + sender.getName()
                                 + ": " + message);
 
             } else {
-                Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                         .getText("error.noCurrentAlliance"));
             }
         }

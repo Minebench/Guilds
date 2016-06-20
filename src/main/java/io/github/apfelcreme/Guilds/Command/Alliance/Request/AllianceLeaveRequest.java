@@ -4,7 +4,6 @@ import io.github.apfelcreme.Guilds.Alliance.Alliance;
 import io.github.apfelcreme.Guilds.Command.Request;
 import io.github.apfelcreme.Guilds.Guild.Guild;
 import io.github.apfelcreme.Guilds.Guilds;
-import io.github.apfelcreme.Guilds.GuildsConfig;
 import org.bukkit.entity.Player;
 
 /**
@@ -31,8 +30,8 @@ public class AllianceLeaveRequest extends Request {
     private final Guild guild;
     private final Alliance alliance;
 
-    public AllianceLeaveRequest(Player sender, Guild guild, Alliance alliance) {
-        super(sender);
+    public AllianceLeaveRequest(Guilds plugin, Player sender, Guild guild, Alliance alliance) {
+        super(plugin, sender);
         this.guild = guild;
         this.alliance = alliance;
     }
@@ -42,21 +41,21 @@ public class AllianceLeaveRequest extends Request {
      */
     public void execute() {
         if (alliance.getGuilds().size() > 1) {
-            alliance.removeMember(guild);
-            Guilds.getInstance().getLogger().info(guild.getName() + " has left alliance '"
+            plugin.getAllianceManager().removeMember(alliance, guild);
+            plugin.getLogger().info(guild.getName() + " has left alliance '"
                     + guild.getName() + "'");
         } else {
             alliance.delete();
-            Guilds.getInstance().getLogger().info(guild.getName() + " has left alliance '"
+            plugin.getLogger().info(guild.getName() + " has left alliance '"
                     + guild.getName() + "'. The alliance was disbanded as they were the last members!");
         }
-        Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+        plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                 .getColoredText("info.alliance.invite.youAcceptedInvite", alliance.getColor())
                 .replace("{0}", alliance.getName()));
-        Guilds.getInstance().getChat().sendAllianceChannelBroadcast(alliance,
-                GuildsConfig.getText("info.chat.guildLeftAlliance").replace("{0}", guild.getName()));
-        Guilds.getInstance().getChat().sendGuildChannelBroadcast(
+        plugin.getChat().sendAllianceChannelBroadcast(alliance,
+                plugin.getGuildsConfig().getText("info.chat.guildLeftAlliance").replace("{0}", guild.getName()));
+        plugin.getChat().sendGuildChannelBroadcast(
                 guild,
-                GuildsConfig.getText("info.chat.youLeftAlliance").replace("{0}", guild.getName()));
+                plugin.getGuildsConfig().getText("info.chat.youLeftAlliance").replace("{0}", guild.getName()));
     }
 }

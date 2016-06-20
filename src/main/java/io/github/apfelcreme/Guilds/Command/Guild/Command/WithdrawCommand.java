@@ -29,7 +29,11 @@ import org.bukkit.entity.Player;
  *
  * @author Lord36 aka Apfelcreme on 13.05.2015.
  */
-public class WithdrawCommand implements SubCommand {
+public class WithdrawCommand extends SubCommand {
+
+    public WithdrawCommand(Guilds plugin) {
+        super(plugin);
+    }
 
     /**
      * executes the command
@@ -39,36 +43,36 @@ public class WithdrawCommand implements SubCommand {
      */
     public void execute(CommandSender commandSender, String[] strings) {
         Player sender = (Player) commandSender;
-        if (Guilds.getInstance().hasVault()) {
+        if (plugin.hasVault()) {
             if (sender.hasPermission("Guilds.withdrawFromGuild")) {
                 if (strings.length >= 2) {
                     if (NumberUtils.isNumber(strings[1])) {
                         Double amount = Double.parseDouble(strings[1]);
-                        Guild guild = Guilds.getInstance().getGuild(sender);
+                        Guild guild = plugin.getGuildManager().getGuild(sender);
                         if (guild != null) {
                             if (guild.getMember(sender.getUniqueId()).getRank().canWithdrawMoney()) {
-                                RequestController.getInstance().addRequest(new WithdrawRequest(sender, guild, amount));
-                                Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                                plugin.getRequestController().addRequest(new WithdrawRequest(plugin, sender, guild, amount));
+                                plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                         .getColoredText("info.guild.confirm.confirm", guild.getColor()));
                             } else {
-                                Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
-                                        .getText("error.rank.noPermission").replace("{0}", GuildsConfig.getText("info.guild.rank.info.withdrawMoney")));
+                                plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
+                                        .getText("error.rank.noPermission").replace("{0}", plugin.getGuildsConfig().getText("info.guild.rank.info.withdrawMoney")));
                             }
                         } else {
-                            Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.noCurrentGuild"));
+                            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noCurrentGuild"));
                         }
                     } else {
-                        Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.noNumber")
+                        plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noNumber")
                                 .replace("{0}", strings[1]));
                     }
                 } else {
-                    Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.wrongUsage.withdrawMoney"));
+                    plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.wrongUsage.withdrawMoney"));
                 }
             } else {
-                Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.noPermission"));
+                plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noPermission"));
             }
         } else {
-            Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.noVault"));
+            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noVault"));
         }
     }
 }

@@ -27,7 +27,11 @@ import org.bukkit.entity.Player;
  *
  * @author Lord36 aka Apfelcreme on 10.05.2015.
  */
-public class ConfirmRequestCommand implements SubCommand {
+public class ConfirmRequestCommand extends SubCommand {
+
+    public ConfirmRequestCommand(Guilds plugin) {
+        super(plugin);
+    }
 
     /**
      * executes the command
@@ -38,15 +42,15 @@ public class ConfirmRequestCommand implements SubCommand {
     public void execute(CommandSender commandSender, String[] strings) {
         Player sender = (Player) commandSender;
         if (sender.hasPermission("Guilds.confirm")) {
-            Request request = RequestController.getInstance().getRequest(sender);
+            Request request = plugin.getRequestController().getRequest(sender);
             if (request != null) {
                 request.execute();
-                RequestController.getInstance().removeRequest(sender);
+                plugin.getRequestController().removeRequest(sender);
             } else {
-                Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.noRequest"));
+                plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noRequest"));
             }
         } else {
-            Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.noPermission"));
+            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noPermission"));
         }
     }
 }

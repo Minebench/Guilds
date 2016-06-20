@@ -4,7 +4,6 @@ import io.github.apfelcreme.Guilds.Command.SubCommand;
 import io.github.apfelcreme.Guilds.Guild.BlackboardMessage;
 import io.github.apfelcreme.Guilds.Guild.Guild;
 import io.github.apfelcreme.Guilds.Guilds;
-import io.github.apfelcreme.Guilds.GuildsConfig;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -30,7 +29,11 @@ import java.util.Date;
  *
  * @author Lord36 aka Apfelcreme on 14.05.2015.
  */
-public class BlackboardCommand implements SubCommand {
+public class BlackboardCommand extends SubCommand {
+
+    public BlackboardCommand(Guilds plugin) {
+        super(plugin);
+    }
 
     /**
      * executes the command
@@ -41,41 +44,41 @@ public class BlackboardCommand implements SubCommand {
     public void execute(CommandSender commandSender, String[] strings) {
         Player sender = (Player) commandSender;
         if (sender.hasPermission("Guilds.guildBlackboard")) {
-            Guild guild = Guilds.getInstance().getGuild(sender);
+            Guild guild = plugin.getGuildManager().getGuild(sender);
             if (guild != null) {
                 if (strings.length >= 2) {
                     // /guild bb [message]
                     if (guild.getMember(sender.getUniqueId()).getRank().canUseBlackboard()) {
                         if ((strings.length == 2) && strings[1].equalsIgnoreCase("clear")) {
-                            guild.clearMessages();
-                            Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                            plugin.getGuildManager().clearMessages(guild);
+                            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                     .getColoredText("info.guild.blackboard.cleared", guild.getColor()));
                         } else {
                             BlackboardMessage message = new BlackboardMessage(null,
                                     sender.getUniqueId(),
                                     new Timestamp(new Date().getTime()),
                                     concatMessageString(strings), guild);
-                            message.save();
-                            Guilds.getInstance().getChat().sendGuildChannelBroadcast(guild, message.toMessage());
+                            plugin.getGuildManager().addBlackboardMessage(guild, message);
+                            plugin.getChat().sendGuildChannelBroadcast(guild, plugin.getGuildManager().formatMessage(guild, message));
                         }
                     } else {
-                        Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                        plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                 .getText("error.rank.noPermission")
-                                .replace("{0}", GuildsConfig.getText("info.guild.rank.info.useBlackboard")));
+                                .replace("{0}", plugin.getGuildsConfig().getText("info.guild.rank.info.useBlackboard")));
                     }
                 } else {
                     // only /guild bb
-                    Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                    plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                             .getColoredText("info.guild.blackboard.head", guild.getColor()));
                     for (BlackboardMessage message : guild.getBlackboardMessages()) {
-                        Guilds.getInstance().getChat().sendMessage(sender, message.toMessage());
+                        plugin.getChat().sendMessage(sender, plugin.getGuildManager().formatMessage(guild, message));
                     }
                 }
             } else {
-                Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.noCurrentGuild"));
+                plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noCurrentGuild"));
             }
         } else {
-            Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.noPermission"));
+            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noPermission"));
         }
     }
 

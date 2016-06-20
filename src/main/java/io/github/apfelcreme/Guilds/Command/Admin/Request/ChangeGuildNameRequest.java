@@ -30,8 +30,8 @@ public class ChangeGuildNameRequest extends Request {
     private Guild guild;
     private String newName;
 
-    public ChangeGuildNameRequest(Player sender, Guild guild, String newName) {
-        super(sender);
+    public ChangeGuildNameRequest(Guilds plugin, Player sender, Guild guild, String newName) {
+        super(plugin, sender);
         this.guild = guild;
         this.newName = newName;
     }
@@ -41,11 +41,11 @@ public class ChangeGuildNameRequest extends Request {
      */
     @Override
     public void execute() {
-        guild.setName(newName);
-        Guilds.getInstance().getLogger().info(guild.getName() + "'s name was changed to '"
+        plugin.getGuildManager().setName(guild, newName);
+        plugin.getLogger().info(guild.getName() + "'s name was changed to '"
                 + newName + "' by '" + sender.getName() + "'");
-        Guilds.getInstance().getChat().sendMessage(sender,
-                GuildsConfig.getText("info.guildadmin.changeName.changedName")
+        plugin.getChat().sendMessage(sender,
+                plugin.getGuildsConfig().getText("info.guildadmin.changeName.changedName")
                         .replace("{0}", guild.getName())
                         .replace("{1}", GuildsUtil.replaceChatColors(newName)));
 

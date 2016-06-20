@@ -31,22 +31,22 @@ public class WithdrawRequest extends Request {
     private Guild guild;
     private Double amount;
 
-    public WithdrawRequest(Player sender, Guild guild, Double amount) {
-        super(sender);
+    public WithdrawRequest(Guilds plugin, Player sender, Guild guild, Double amount) {
+        super(plugin, sender);
         this.guild = guild;
         this.amount = amount;
     }
 
     @Override
     public void execute() {
-        EconomyResponse economyResponse = Guilds.getInstance().getEconomy().depositPlayer(sender.getPlayer(), amount);
+        EconomyResponse economyResponse = plugin.getEconomy().depositPlayer(sender.getPlayer(), amount);
         if (economyResponse.transactionSuccess()) {
-            guild.setBalance(guild.getBalance() - amount);
-            Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+            plugin.getGuildManager().setBalance(guild, guild.getBalance() - amount);
+            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                     .getColoredText("info.guild.withdrawMoney.withdrewMoney", guild.getColor())
                     .replace("{0}", amount.toString()));
 
-            Guilds.getInstance().getLogger().info(sender.getName() + " has withdrew " + amount.toString() + " from" +
+            plugin.getLogger().info(sender.getName() + " has withdrew " + amount.toString() + " from" +
                     " guild '" + guild.getName() + "'");
         }
     }

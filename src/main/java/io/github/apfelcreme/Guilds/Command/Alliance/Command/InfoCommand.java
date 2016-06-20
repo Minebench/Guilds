@@ -27,7 +27,11 @@ import org.bukkit.entity.Player;
  *
  * @author Lord36 aka Apfelcreme on 18.06.2015.
  */
-public class InfoCommand implements SubCommand {
+public class InfoCommand extends SubCommand {
+
+    public InfoCommand(Guilds plugin) {
+        super(plugin);
+    }
 
     /**
      * executes the command
@@ -40,27 +44,27 @@ public class InfoCommand implements SubCommand {
         if (sender.hasPermission("Guilds.allianceInfo")) {
             Alliance alliance;
             if (strings.length > 1) {
-                alliance = Guilds.getInstance().getAlliance(strings[1]);
+                alliance = plugin.getAllianceManager().getAlliance(strings[1]);
             } else {
-                alliance = Guilds.getInstance().getAlliance(sender);
+                alliance = plugin.getAllianceManager().getAlliance(sender);
             }
             if (alliance != null) {
-                Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                         .getColoredText("info.alliance.info.head", alliance.getColor())
                         .replace("{0}", alliance.getName()));
                 for (Guild guild : alliance.getGuilds()) {
-                    Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                    plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                             .getColoredText("info.alliance.info.element", guild.getColor())
                             .replace("{0}", guild.getTag())
                             .replace("{1}", guild.getName()));
                 }
 
             } else {
-                Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.allianceDoesntExist"));
+                plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.allianceDoesntExist"));
             }
 
         } else {
-            Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.noPermission"));
+            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noPermission"));
         }
     }
 }

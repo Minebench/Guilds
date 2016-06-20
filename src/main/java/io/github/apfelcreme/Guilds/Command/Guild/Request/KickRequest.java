@@ -31,28 +31,28 @@ public class KickRequest extends Request {
     private GuildMember targetPlayer;
     private Guild guild;
 
-    public KickRequest(Player sender, GuildMember targetPlayer, Guild guild) {
-        super(sender);
+    public KickRequest(Guilds plugin, Player sender, GuildMember targetPlayer, Guild guild) {
+        super(plugin, sender);
         this.targetPlayer = targetPlayer;
         this.guild = guild;
     }
 
     @Override
     public void execute() {
-        guild.removeMember(targetPlayer);
-        Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+        plugin.getGuildManager().removeMember(guild, targetPlayer);
+        plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                 .getColoredText("info.guild.kick.kickedPlayer", guild.getColor())
                 .replace("{0}", targetPlayer.getName()));
-        Guilds.getInstance().getChat().sendGuildChannelBroadcast(
-                guild, GuildsConfig
+        plugin.getChat().sendGuildChannelBroadcast(
+                guild, plugin.getGuildsConfig()
                         .getColoredText("info.chat.playerKicked", guild.getColor())
                         .replace("{0}", targetPlayer.getName()));
         //send a message to the kicked player
-        Guilds.getInstance().getChat().sendBungeeMessage(targetPlayer.getUuid(), GuildsConfig
+        plugin.getChat().sendBungeeMessage(targetPlayer.getUuid(), plugin.getGuildsConfig()
                         .getColoredText("info.guild.kick.youGotKicked", guild.getColor())
                         .replace("{0}", sender.getName()));
 
-        Guilds.getInstance().getLogger().info(sender.getName() + " has kicked " + targetPlayer.getName()
+        plugin.getLogger().info(sender.getName() + " has kicked " + targetPlayer.getName()
                 + " from guild '" + guild.getName() + "'");
     }
 }

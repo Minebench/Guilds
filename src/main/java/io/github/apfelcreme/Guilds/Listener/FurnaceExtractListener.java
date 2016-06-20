@@ -2,7 +2,6 @@ package io.github.apfelcreme.Guilds.Listener;
 
 import io.github.apfelcreme.Guilds.Guild.Guild;
 import io.github.apfelcreme.Guilds.Guilds;
-import io.github.apfelcreme.Guilds.GuildsConfig;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.FurnaceExtractEvent;
@@ -28,15 +27,21 @@ import org.bukkit.event.inventory.FurnaceExtractEvent;
  */
 public class FurnaceExtractListener implements Listener {
 
+    private Guilds plugin;
+
+    public FurnaceExtractListener(Guilds plugin) {
+        this.plugin = plugin;
+    }
+
     @EventHandler
     public void onFurnaceExtract(FurnaceExtractEvent e) {
-        Guild guild = Guilds.getInstance().getGuild(e.getPlayer());
+        Guild guild = plugin.getGuildManager().getGuild(e.getPlayer());
         if (guild != null) {
             int oldGain = e.getExpToDrop();
             int newGain = (int) (oldGain * guild.getCurrentLevel().getFurnaceExpGainRatio());
             e.setExpToDrop(newGain);
-            Guilds.getInstance().getChat().sendMessage(e.getPlayer(),
-                    GuildsConfig.getColoredText("info.guild.furnaceExtract", guild.getColor())
+            plugin.getChat().sendMessage(e.getPlayer(),
+                    plugin.getGuildsConfig().getColoredText("info.guild.furnaceExtract", guild.getColor())
                             .replace("{0}", Double.toString(Math.ceil((guild.getCurrentLevel().getFurnaceExpGainRatio() - 1) * 100))));
 
         }

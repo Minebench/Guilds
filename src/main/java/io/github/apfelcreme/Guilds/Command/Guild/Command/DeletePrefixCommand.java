@@ -28,7 +28,11 @@ import java.util.UUID;
  *
  * @author Lord36 aka Apfelcreme on 21.05.2015.
  */
-public class DeletePrefixCommand implements SubCommand {
+public class DeletePrefixCommand extends SubCommand {
+
+    public DeletePrefixCommand(Guilds plugin) {
+        super(plugin);
+    }
 
     /**
      * executes the command
@@ -40,38 +44,38 @@ public class DeletePrefixCommand implements SubCommand {
         Player sender = (Player) commandSender;
         if (sender.hasPermission("Guilds.deletePrefix")) {
             if (strings.length >= 2) {
-                UUID uuid = Guilds.getUUID(strings[1]);
-                Guild guild = Guilds.getInstance().getGuild(sender);
-                Guild targetGuild = Guilds.getInstance().getGuild(uuid);
+                UUID uuid = plugin.getUUID(strings[1]);
+                Guild guild = plugin.getGuildManager().getGuild(sender);
+                Guild targetGuild = plugin.getGuildManager().getGuild(uuid);
                 if (uuid != null) {
                     if (guild != null) {
                         if (targetGuild != null && guild.equals(targetGuild)) {
                             if (guild.getMember(sender.getUniqueId()).getRank().canPromote()) {
-                                guild.getMember(uuid).setPrefix(null);
-                                Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                                plugin.getGuildManager().setMemberPrefix(guild.getMember(uuid), null);
+                                plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                         .getColoredText("info.guild.deletePrefix.prefixDeleted", guild.getColor())
                                         .replace("{0}", strings[1]));
                             } else {
-                                Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                                plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                         .getText("error.rank.noPermission")
-                                        .replace("{0}", GuildsConfig.getText("info.guild.rank.info.promote")));
+                                        .replace("{0}", plugin.getGuildsConfig().getText("info.guild.rank.info.promote")));
                             }
                         } else {
-                            Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.notInThisGuild")
+                            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.notInThisGuild")
                                     .replace("{0}", strings[1]).replace("{1}", guild.getName()));
                         }
                     } else {
-                        Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.noCurrentGuild"));
+                        plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noCurrentGuild"));
                     }
                 } else {
-                    Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.playerDoesntExist")
+                    plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.playerDoesntExist")
                             .replace("{0}", strings[1]));
                 }
             } else {
-                Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.wrongUsage.deletePrefix"));
+                plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.wrongUsage.deletePrefix"));
             }
         } else {
-            Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.noPermission"));
+            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noPermission"));
         }
     }
 

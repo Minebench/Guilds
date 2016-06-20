@@ -30,7 +30,11 @@ import org.bukkit.entity.Player;
  *
  * @author Lord36 aka Apfelcreme on 03.05.2015.
  */
-public class EditRankCommand implements SubCommand {
+public class EditRankCommand extends SubCommand {
+
+    public EditRankCommand(Guilds plugin) {
+        super(plugin);
+    }
 
     /**
      * executes the command
@@ -42,7 +46,7 @@ public class EditRankCommand implements SubCommand {
         Player sender = (Player) commandSender;
         if (sender.hasPermission("Guilds.editRank")) {
             if (strings.length >= 2) {
-                Guild guild = Guilds.getInstance().getGuild(sender);
+                Guild guild = plugin.getGuildManager().getGuild(sender);
                 if (guild != null) {
                     if (guild.getMember(sender.getUniqueId()).getRank().canPromote()) {
                         EditRankSession editRankSession = SessionController.getInstance().getEditRankSession(
@@ -53,24 +57,24 @@ public class EditRankCommand implements SubCommand {
                                 editRankSession = new EditRankSession(rank);
                                 SessionController.getInstance().addEditRankSession(
                                         guild.getMember(sender.getUniqueId()), editRankSession);
-                                Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                                plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                         .getColoredText("info.guild.editRank.name", guild.getColor())
                                         .replace("{0}", rank.getName()));
                             } else {
-                                Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.unknownRank"));
+                                plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.unknownRank"));
                             }
                         } else {
                             if (strings[1].equalsIgnoreCase("cancel")) {
                                 SessionController.getInstance().removeEditRankSession(
                                         guild.getMember(sender.getUniqueId()));
-                                Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                                plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                         .getColoredText("info.guild.editRank.cancelled", guild.getColor()));
                                 return;
                             }
                             switch (editRankSession.getCurrentState()) {
                                 case ENTERNAME:
                                     editRankSession.setName(strings[1]);
-                                    Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                                    plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                             .getColoredText("info.guild.editRank.invite", guild.getColor())
                                             .replace("{0}", editRankSession.getRank().canInvite() ?
                                                     ChatColor.GREEN + "ja" : ChatColor.RED + "nein"));
@@ -78,7 +82,7 @@ public class EditRankCommand implements SubCommand {
                                     break;
                                 case ENTERCANINVITE:
                                     editRankSession.setCanInvite(strings[1].equalsIgnoreCase("ja"));
-                                    Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                                    plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                             .getColoredText("info.guild.editRank.kick", guild.getColor())
                                             .replace("{0}", editRankSession.getRank().canKick() ?
                                                     ChatColor.GREEN + "ja" : ChatColor.RED + "nein"));
@@ -86,7 +90,7 @@ public class EditRankCommand implements SubCommand {
                                     break;
                                 case ENTERCANKICK:
                                     editRankSession.setCanKick(strings[1].equalsIgnoreCase("ja"));
-                                    Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                                    plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                             .getColoredText("info.guild.editRank.promote", guild.getColor())
                                             .replace("{0}", editRankSession.getRank().canPromote() ?
                                                     ChatColor.GREEN + "ja" : ChatColor.RED + "nein"));
@@ -94,7 +98,7 @@ public class EditRankCommand implements SubCommand {
                                     break;
                                 case ENTERCANPROMOTE:
                                     editRankSession.setCanPromote(strings[1].equalsIgnoreCase("ja"));
-                                    Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                                    plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                             .getColoredText("info.guild.editRank.disband", guild.getColor())
                                             .replace("{0}", editRankSession.getRank().canDisband() ?
                                                     ChatColor.GREEN + "ja" : ChatColor.RED + "nein"));
@@ -102,7 +106,7 @@ public class EditRankCommand implements SubCommand {
                                     break;
                                 case ENTERCANDISBAND:
                                     editRankSession.setCanDisband(strings[1].equalsIgnoreCase("ja"));
-                                    Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                                    plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                             .getColoredText("info.guild.editRank.upgrade", guild.getColor())
                                             .replace("{0}", editRankSession.getRank().canUpgrade() ?
                                                     ChatColor.GREEN + "ja" : ChatColor.RED + "nein"));
@@ -110,7 +114,7 @@ public class EditRankCommand implements SubCommand {
                                     break;
                                 case ENTERCANUPGRADE:
                                     editRankSession.setCanUpgrade(strings[1].equalsIgnoreCase("ja"));
-                                    Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                                    plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                             .getColoredText("info.guild.editRank.withdrawMoney", guild.getColor())
                                             .replace("{0}", editRankSession.getRank().canWithdrawMoney() ?
                                                     ChatColor.GREEN + "ja" : ChatColor.RED + "nein"));
@@ -118,7 +122,7 @@ public class EditRankCommand implements SubCommand {
                                     break;
                                 case ENTERCANWITHDRAWMONEY:
                                     editRankSession.setCanWithdrawMoney(strings[1].equalsIgnoreCase("ja"));
-                                    Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                                    plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                             .getColoredText("info.guild.editRank.useBlackboard", guild.getColor())
                                             .replace("{0}", editRankSession.getRank().canUseBlackboard() ?
                                                     ChatColor.GREEN + "ja" : ChatColor.RED + "nein"));
@@ -126,7 +130,7 @@ public class EditRankCommand implements SubCommand {
                                     break;
                                 case ENTERCANUSEBLACKBOARD:
                                     editRankSession.setCanUseBlackboard(strings[1].equalsIgnoreCase("ja"));
-                                    Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                                    plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                             .getColoredText("info.guild.editRank.doDiplomacy", guild.getColor())
                                             .replace("{0}", editRankSession.getRank().canDoDiplomacy() ?
                                                     ChatColor.GREEN + "ja" : ChatColor.RED + "nein"));
@@ -134,7 +138,7 @@ public class EditRankCommand implements SubCommand {
                                     break;
                                 case ENTERCANDODIPLOMACY:
                                     editRankSession.setCanDoDiplomacy(strings[1].equalsIgnoreCase("ja"));
-                                    Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                                    plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                             .getColoredText("info.guild.editRank.baseRank", guild.getColor())
                                             .replace("{0}", editRankSession.getRank().isBaseRank() ?
                                                     ChatColor.GREEN + "ja" : ChatColor.RED + "nein"));
@@ -142,26 +146,13 @@ public class EditRankCommand implements SubCommand {
                                     break;
                                 case ENTERISBASERANK:
                                     editRankSession.setIsBaseRank(strings[1].equalsIgnoreCase("ja"));
-                                    Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                                    plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                             .getColoredText("info.guild.editRank.finish", guild.getColor()));
                                     editRankSession.nextStep();
                                     break;
                                 case FINISH:
-                                    editRankSession.getRank().editRank(
-                                            editRankSession.getRank(),
-                                            guild,
-                                            editRankSession.getName(),
-                                            editRankSession.isCanInvite(),
-                                            editRankSession.isCanKick(),
-                                            editRankSession.isCanPromote(),
-                                            editRankSession.isCanDisband(),
-                                            editRankSession.isCanUpgrade(),
-                                            editRankSession.isCanWithdrawMoney(),
-                                            editRankSession.isCanUseBlackboard(),
-                                            editRankSession.isCanDoDiplomacy(),
-                                            editRankSession.isBaseRank()
-                                    );
-                                    Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                                    plugin.getGuildManager().saveEditedRank(editRankSession);
+                                    plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                             .getColoredText("info.guild.editRank.rankEdited", guild.getColor())
                                             .replace("{0}", editRankSession.getRank().getName()));
                                     SessionController.getInstance().removeEditRankSession(
@@ -170,17 +161,17 @@ public class EditRankCommand implements SubCommand {
                             }
                         }
                     } else {
-                        Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
-                                .getText("error.rank.noPermission").replace("{0}", GuildsConfig.getText("info.guild.rank.info.promote")));
+                        plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
+                                .getText("error.rank.noPermission").replace("{0}", plugin.getGuildsConfig().getText("info.guild.rank.info.promote")));
                     }
                 } else {
-                    Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.noCurrentGuild"));
+                    plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noCurrentGuild"));
                 }
             } else {
-                Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.wrongUsage.editRank"));
+                plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.wrongUsage.editRank"));
             }
         } else {
-            Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.noPermission"));
+            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noPermission"));
         }
     }
 }

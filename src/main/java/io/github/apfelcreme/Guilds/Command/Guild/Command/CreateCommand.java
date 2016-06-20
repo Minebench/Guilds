@@ -2,7 +2,6 @@ package io.github.apfelcreme.Guilds.Command.Guild.Command;
 
 import io.github.apfelcreme.Guilds.Command.Guild.Request.CreateRequest;
 import io.github.apfelcreme.Guilds.Command.SubCommand;
-import io.github.apfelcreme.Guilds.Guild.Guild;
 import io.github.apfelcreme.Guilds.Guilds;
 import io.github.apfelcreme.Guilds.GuildsConfig;
 import io.github.apfelcreme.Guilds.GuildsUtil;
@@ -33,7 +32,11 @@ import java.text.DecimalFormat;
  *
  * @author Lord36 aka Apfelcreme on 25.04.2015.
  */
-public class CreateCommand implements SubCommand {
+public class CreateCommand extends SubCommand {
+
+    public CreateCommand(Guilds plugin) {
+        super(plugin);
+    }
 
     /**
      * executes the command
@@ -43,66 +46,66 @@ public class CreateCommand implements SubCommand {
      */
     public void execute(final CommandSender commandSender, final String[] strings) {
         Player sender = (Player) commandSender;
-        if (Guilds.getInstance().hasVault()) {
+        if (plugin.hasVault()) {
             if (sender.hasPermission("Guilds.createGuild")) {
                 if (strings.length >= 4) {
                     String name = strings[1];
                     String tag = strings[2];
-                    ChatColor color = GuildsConfig.parseColor(strings[3]);
-                    if (GuildsUtil.strip(name).length() <= GuildsConfig.getGuildNameLength()) {
-                        if (GuildsUtil.strip(tag).length() <= GuildsConfig.getGuildTagLength()) {
+                    ChatColor color = plugin.getGuildsConfig().parseColor(strings[3]);
+                    if (GuildsUtil.strip(name).length() <= plugin.getGuildsConfig().getGuildNameLength()) {
+                        if (GuildsUtil.strip(tag).length() <= plugin.getGuildsConfig().getGuildTagLength()) {
                             if (color != null) {
-                                if (Guilds.getInstance().getGuild(sender) == null) {
-                                    if (Guilds.getInstance().getGuild(name) == null) {
-                                        if (Guilds.getInstance().getEconomy().has(sender, GuildsConfig.getLevelData(1).getCost())) {
-                                            RequestController.getInstance().addRequest(
-                                                    new CreateRequest(sender, name, tag, color));
-                                            Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                                if (plugin.getGuildManager().getGuild(sender) == null) {
+                                    if (plugin.getGuildManager().getGuild(name) == null) {
+                                        if (plugin.getEconomy().has(sender, plugin.getGuildsConfig().getLevelData(1).getCost())) {
+                                            plugin.getRequestController().addRequest(
+                                                    new CreateRequest(plugin, sender, name, tag, color));
+                                            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                                     .getColoredText("info.guild.create.name", color)
                                                     .replace("{0}", GuildsUtil.replaceChatColors(name)));
-                                            Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                                            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                                     .getColoredText("info.guild.create.tag", color)
                                                     .replace("{0}", GuildsUtil.replaceChatColors(tag)));
-                                            Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                                            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                                     .getColoredText("info.guild.create.color", color)
                                                     .replace("{0}", WordUtils.capitalize(color.name()
                                                             .replace("_", " ").toLowerCase())));
-                                            Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                                            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                                     .getColoredText("info.guild.create.price", color)
                                                     .replace("{0}", new DecimalFormat("#.##").format(
-                                                            GuildsConfig.getLevelData(1).getCost())));
-                                            Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                                                            plugin.getGuildsConfig().getLevelData(1).getCost())));
+                                            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                                     .getColoredText("info.guild.confirm.confirm", color));
                                         } else {
-                                            Guilds.getInstance().getChat().sendMessage(sender,
-                                                    GuildsConfig.getText("error.notEnoughMoneyFounding")
-                                                            .replace("{0}", GuildsConfig.getLevelData(1).getCost().toString()));
+                                            plugin.getChat().sendMessage(sender,
+                                                    plugin.getGuildsConfig().getText("error.notEnoughMoneyFounding")
+                                                            .replace("{0}", plugin.getGuildsConfig().getLevelData(1).getCost().toString()));
                                         }
                                     } else {
-                                        Guilds.getInstance().getChat().sendMessage(sender,
-                                                GuildsConfig.getText("error.guildAlreadyExists"));
+                                        plugin.getChat().sendMessage(sender,
+                                                plugin.getGuildsConfig().getText("error.guildAlreadyExists"));
                                     }
                                 } else {
-                                    Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.stillInGuild"));
+                                    plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.stillInGuild"));
                                 }
                             } else {
-                                Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.noValidColor")
+                                plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noValidColor")
                                         .replace("{0}", strings[3]));
                             }
                         } else {
-                            Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.tagTooLong"));
+                            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.tagTooLong"));
                         }
                     } else {
-                        Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.nameTooLong"));
+                        plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.nameTooLong"));
                     }
                 } else {
-                    Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.wrongUsage.create"));
+                    plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.wrongUsage.create"));
                 }
             } else {
-                Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.noPermission"));
+                plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noPermission"));
             }
         } else {
-            Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.noVault"));
+            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noVault"));
         }
     }
 

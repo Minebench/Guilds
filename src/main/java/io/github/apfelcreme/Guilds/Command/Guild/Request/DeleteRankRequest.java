@@ -31,19 +31,18 @@ public class DeleteRankRequest extends Request {
     private Rank rank;
     private Guild guild;
 
-    public DeleteRankRequest(Player sender, Rank rank, Guild guild) {
-        super(sender);
+    public DeleteRankRequest(Guilds plugin, Player sender, Rank rank, Guild guild) {
+        super(plugin, sender);
         this.rank = rank;
         this.guild = guild;
     }
 
     @Override
     public void execute() {
-
-        rank.delete(guild);
-        Guilds.getInstance().getChat().sendMessage(sender,
-                GuildsConfig.getColoredText("info.guild.deleteRank.rankDeleted", guild.getColor()));
-        Guilds.getInstance().getLogger().info(sender.getName() + " has deleted rank '" + rank.getName() + "' in guild '"
+        plugin.getGuildManager().deleteRank(rank);
+        plugin.getChat().sendMessage(sender,
+                plugin.getGuildsConfig().getColoredText("info.guild.deleteRank.rankDeleted", guild.getColor()));
+        plugin.getLogger().info(sender.getName() + " has deleted rank '" + rank.getName() + "' in guild '"
                 + guild.getName() + "'");
     }
 }

@@ -27,7 +27,11 @@ import org.bukkit.entity.Player;
  *
  * @author Lord36 aka Apfelcreme on 11.08.2015.
  */
-public class HomeCommand implements SubCommand {
+public class HomeCommand extends SubCommand {
+
+    public HomeCommand(Guilds plugin) {
+        super(plugin);
+    }
 
     /**
      * executes the command
@@ -39,18 +43,18 @@ public class HomeCommand implements SubCommand {
 
         final Player sender = (Player) commandSender;
         if (sender.hasPermission("Guilds.guildHome")) {
-            final Guild guild = Guilds.getInstance().getGuild(sender);
+            final Guild guild = plugin.getGuildManager().getGuild(sender);
             if (guild != null) {
                 if (guild.getGuildHomeServer() != null) {
-                    BungeeConnection.sendPlayerToGuildHome(sender, guild);
+                    plugin.getBungeeConnection().sendPlayerToGuildHome(sender, guild);
                 } else{
-                    Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.noHome"));
+                    plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noHome"));
                 }
             } else {
-                Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.noCurrentGuild"));
+                plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noCurrentGuild"));
             }
         } else {
-            Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.noPermission"));
+            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noPermission"));
         }
 
     }

@@ -1,6 +1,5 @@
 package io.github.apfelcreme.Guilds.Command.Guild;
 
-import io.github.apfelcreme.Guilds.Command.Guild.GuildCommandExecutor;
 import io.github.apfelcreme.Guilds.Guild.Guild;
 import io.github.apfelcreme.Guilds.Guild.GuildMember;
 import io.github.apfelcreme.Guilds.Guild.Rank;
@@ -34,10 +33,16 @@ import java.util.List;
  */
 public class GuildTabCompleter implements TabCompleter {
 
+    private final Guilds plugin;
+
+    public GuildTabCompleter(Guilds plugin) {
+        this.plugin = plugin;
+    }
+
     public List<String> onTabComplete(CommandSender commandSender, Command command, String s, String[] strings) {
         ArrayList<String> list = new ArrayList<String>();
         if (strings.length >= 1) {
-            Guild guild = Guilds.getInstance().getGuild((Player) commandSender);
+            Guild guild = plugin.getGuildManager().getGuild((Player) commandSender);
             GuildCommandExecutor.GuildOperation guildOperation = GuildCommandExecutor.GuildOperation.getOperation(strings[0]);
             if (guildOperation != null) {
                 switch (guildOperation) {
@@ -81,12 +86,12 @@ public class GuildTabCompleter implements TabCompleter {
                     case EXP:
                         break;
                     case INFO:
-                        for (Guild guild1 : Guilds.getInstance().getGuilds()) {
+                        for (Guild guild1 : plugin.getGuildManager().getGuilds()) {
                             list.add(guild1.getName());
                         }
                         break;
                     case INVITE:
-                        for (Player player : Guilds.getInstance().getServer().getOnlinePlayers()) {
+                        for (Player player : plugin.getServer().getOnlinePlayers()) {
                             list.add(player.getName());
                         }
                         break;
@@ -102,7 +107,7 @@ public class GuildTabCompleter implements TabCompleter {
                     case LIST:
                         break;
                     case LOOKUP:
-                        for (Player player : Guilds.getInstance().getServer().getOnlinePlayers()) {
+                        for (Player player : plugin.getServer().getOnlinePlayers()) {
                             list.add(player.getName());
                         }
                         break;
@@ -141,7 +146,7 @@ public class GuildTabCompleter implements TabCompleter {
                     case RANKS:
                         break;
                     case ROSTER:
-                        for (Guild guild1 : Guilds.getInstance().getGuilds()) {
+                        for (Guild guild1 : plugin.getGuildManager().getGuilds()) {
                             list.add(guild1.getName());
                         }
                         break;

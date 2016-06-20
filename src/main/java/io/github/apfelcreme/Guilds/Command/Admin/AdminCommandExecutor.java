@@ -2,6 +2,7 @@ package io.github.apfelcreme.Guilds.Command.Admin;
 
 import io.github.apfelcreme.Guilds.Command.Admin.Command.*;
 import io.github.apfelcreme.Guilds.Command.Guild.Command.ConfirmRequestCommand;
+import io.github.apfelcreme.Guilds.Command.PluginCommandExecutor;
 import io.github.apfelcreme.Guilds.Command.SubCommand;
 import io.github.apfelcreme.Guilds.Guilds;
 import io.github.apfelcreme.Guilds.GuildsConfig;
@@ -29,7 +30,11 @@ import org.bukkit.entity.Player;
  *
  * @author Lord36 aka Apfelcreme on 30.05.2015.
  */
-public class AdminCommandExecutor implements CommandExecutor {
+public class AdminCommandExecutor extends PluginCommandExecutor {
+
+    public AdminCommandExecutor(Guilds plugin) {
+        super(plugin);
+    }
 
     /**
      * @param commandSender the sender
@@ -48,36 +53,36 @@ public class AdminCommandExecutor implements CommandExecutor {
                     if (operation != null) {
                         switch (operation) {
                             case ADD:
-                                subCommand = new AdminAddCommand();
+                                subCommand = new AdminAddCommand(plugin);
                                 break;
                             case CHANGENAME:
-                                subCommand = new AdminChangeGuildNameCommand();
+                                subCommand = new AdminChangeGuildNameCommand(plugin);
                                 break;
                             case CHANGETAG:
-                                subCommand = new AdminChangeGuildTagCommand();
+                                subCommand = new AdminChangeGuildTagCommand(plugin);
                                 break;
                             case CONFIRM:
-                                subCommand = new ConfirmRequestCommand();
+                                subCommand = new ConfirmRequestCommand(plugin);
                                 break;
                             case KICKGUILD:
-                                subCommand = new AdminKickFromAllianceCommand();
+                                subCommand = new AdminKickFromAllianceCommand(plugin);
                                 break;
                             case RELOAD:
-                                subCommand = new AdminConfigReloadCommand();
+                                subCommand = new AdminConfigReloadCommand(plugin);
                                 break;
                             case SYNC:
-                                subCommand = new AdminSyncCommand();
+                                subCommand = new AdminSyncCommand(plugin);
                                 break;
                         }
                     } else {
-                        subCommand = new AdminMenuCommand();
+                        subCommand = new AdminMenuCommand(plugin);
                     }
                 } else {
-                    subCommand = new AdminMenuCommand();
+                    subCommand = new AdminMenuCommand(plugin);
                 }
                 subCommand.execute(sender, strings);
             } else {
-                Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.noPermission"));
+                plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noPermission"));
             }
         }
         return false;

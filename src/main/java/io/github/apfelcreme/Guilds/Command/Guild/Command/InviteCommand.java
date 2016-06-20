@@ -2,6 +2,7 @@ package io.github.apfelcreme.Guilds.Command.Guild.Command;
 
 import io.github.apfelcreme.Guilds.Command.SubCommand;
 import io.github.apfelcreme.Guilds.Guild.Guild;
+import io.github.apfelcreme.Guilds.Guild.Invite;
 import io.github.apfelcreme.Guilds.Guilds;
 import io.github.apfelcreme.Guilds.GuildsConfig;
 import org.bukkit.command.CommandSender;
@@ -28,7 +29,11 @@ import java.util.UUID;
  *
  * @author Lord36 aka Apfelcreme on 25.04.2015.
  */
-public class InviteCommand implements SubCommand {
+public class InviteCommand extends SubCommand {
+
+    public InviteCommand(Guilds plugin) {
+        super(plugin);
+    }
 
     /**
      * executes the command
@@ -40,67 +45,72 @@ public class InviteCommand implements SubCommand {
         Player sender = (Player) commandSender;
         if (sender.hasPermission("Guilds.guildInvite")) {
             if (strings.length >= 2) {
-                UUID uuid = Guilds.getUUID(strings[1]);
+                UUID uuid = plugin.getUUID(strings[1]);
                 if (uuid != null) {
                     if (!uuid.equals(sender.getUniqueId())) {
-                        Guild guild = Guilds.getInstance().getGuild(sender);
-                        Guild targetGuild = Guilds.getInstance().getGuild(uuid);
+                        Guild guild = plugin.getGuildManager().getGuild(sender);
+                        Guild targetGuild = plugin.getGuildManager().getGuild(uuid);
                         if (guild != null) {
                             if (!guild.getPendingInvites().containsKey(uuid)) {
                                 if (guild.getMember(sender.getUniqueId()).getRank().canInvite()) {
                                     if (guild.getMembers().size() < guild.getCurrentLevel().getPlayerLimit()) {
                                         if (targetGuild == null) {
-                                            guild.sendInviteTo(guild.getMember(sender.getUniqueId()), uuid, strings[1]);
-                                            Guilds.getInstance().getChat().sendMessage(sender,
-                                                    GuildsConfig.getColoredText("info.guild.invite.invitedPlayer",
+                                            plugin.getGuildManager().addInvite(new Invite(
+                                                            guild,
+                                                            uuid,
+                                                            guild.getMember(sender.getPlayer().getUniqueId()),
+                                                            strings[1]
+                                            ));
+                                            plugin.getChat().sendMessage(sender,
+                                                    plugin.getGuildsConfig().getColoredText("info.guild.invite.invitedPlayer",
                                                             guild.getColor()).replace("{0}", strings[1]));
-                                            Guilds.getInstance().getChat().sendBungeeMessage(
-                                                    uuid, GuildsConfig.getColoredText("info.guild.invite.youGotInvited",
+                                            plugin.getChat().sendBungeeMessage(
+                                                    uuid, plugin.getGuildsConfig().getColoredText("info.guild.invite.youGotInvited",
                                                             guild.getColor()).replace("{0}", guild.getName()));
-                                            Guilds.getInstance().getChat().sendBungeeMessage(
-                                                    uuid, GuildsConfig.getColoredText("info.guild.invite.accept",
+                                            plugin.getChat().sendBungeeMessage(
+                                                    uuid, plugin.getGuildsConfig().getColoredText("info.guild.invite.accept",
                                                             guild.getColor()));
                                         } else {
                                             if (targetGuild.equals(guild)) {
-                                                Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                                                plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                                         .getText("error.isInThisGuildAlready")
                                                         .replace("{0}", strings[1])
                                                         .replace("{1}", guild.getName()));
                                             } else {
-                                                Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                                                plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                                         .getText("error.isInAGuildAlready")
                                                         .replace("{0}", strings[1]));
                                             }
                                         }
                                     } else {
-                                        Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                                        plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                                 .getText("error.guildFull"));
                                     }
                                 } else {
-                                    Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                                    plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                             .getText("error.rank.noPermission")
-                                            .replace("{0}", GuildsConfig.getText("info.guild.rank.info.invite")));
+                                            .replace("{0}", plugin.getGuildsConfig().getText("info.guild.rank.info.invite")));
 
                                 }
                             } else {
-                                Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.hasPendingInvite")
+                                plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.hasPendingInvite")
                                         .replace("{0}", strings[1]));
                             }
                         } else {
-                            Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.noCurrentGuild"));
+                            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noCurrentGuild"));
                         }
                     } else {
-                        Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.noSelfInvite"));
+                        plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noSelfInvite"));
                     }
                 } else {
-                    Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.playerDoesntExist")
+                    plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.playerDoesntExist")
                             .replace("{0}", strings[1]));
                 }
             } else {
-                Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.wrongUsage.invite"));
+                plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.wrongUsage.invite"));
             }
         } else {
-            Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.noPermission"));
+            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noPermission"));
         }
 
     }

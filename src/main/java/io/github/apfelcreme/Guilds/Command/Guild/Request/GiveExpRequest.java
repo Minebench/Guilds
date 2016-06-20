@@ -32,8 +32,8 @@ public class GiveExpRequest extends Request {
     private Guild guild;
     private Integer exp;
 
-    public GiveExpRequest(Player sender, Guild guild, Integer exp) {
-        super(sender);
+    public GiveExpRequest(Guilds plugin, Player sender, Guild guild, Integer exp) {
+        super(plugin, sender);
         this.guild = guild;
         this.exp = exp;
     }
@@ -43,22 +43,22 @@ public class GiveExpRequest extends Request {
      */
     @Override
     public void execute() {
-        guild.setExp(guild.getExp() + exp);
+        plugin.getGuildManager().setExp(guild, guild.getExp() + exp);
         int total = sender.getTotalExperience();
         sender.setTotalExperience(0);
         sender.setLevel(0);
         sender.setExp(0.0f);
         sender.giveExp(total - exp);
         sender.getWorld().playSound(sender.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 3.0f, 5.0f);
-        Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+        plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                 .getColoredText("info.guild.exp.paidExp", guild.getColor())
                 .replace("{0}", exp.toString()));
-        Guilds.getInstance().getChat().sendGuildChannelBroadcast(guild,
-                GuildsConfig.getText("info.chat.playerPaidExp")
+        plugin.getChat().sendGuildChannelBroadcast(guild,
+                plugin.getGuildsConfig().getText("info.chat.playerPaidExp")
                         .replace("{0}", sender.getName())
                         .replace("{1}", exp.toString())
         );
-        Guilds.getInstance().getLogger().info(sender.getName() + " has payed " + exp.toString() + " exp to guild '"
+        plugin.getLogger().info(sender.getName() + " has payed " + exp.toString() + " exp to guild '"
                 + guild.getName() + "'");
     }
 }

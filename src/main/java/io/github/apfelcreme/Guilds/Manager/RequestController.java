@@ -40,8 +40,8 @@ public class RequestController {
 
     private Map<Player, Request> requests;
 
-    private RequestController() {
-        this.plugin = Guilds.getInstance();
+    public RequestController(Guilds plugin) {
+        this.plugin = plugin;
         requests = new HashMap<Player, Request>();
     }
 
@@ -71,18 +71,6 @@ public class RequestController {
      */
     public void removeRequest(Player requestor) {
         requests.remove(requestor);
-    }
-
-    /**
-     * returns the RequestController instance
-     *
-     * @return the RequestController instance
-     */
-    public static RequestController getInstance() {
-        if (instance == null) {
-            instance = new RequestController();
-        }
-        return instance;
     }
 
     @Override

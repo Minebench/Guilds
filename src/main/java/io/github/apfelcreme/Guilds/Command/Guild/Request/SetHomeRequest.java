@@ -32,8 +32,8 @@ public class SetHomeRequest extends Request {
     private Guild guild;
     private Location location;
 
-    public SetHomeRequest(Player sender, Guild guild, Location location) {
-        super(sender);
+    public SetHomeRequest(Guilds plugin, Player sender, Guild guild, Location location) {
+        super(plugin, sender);
         this.guild = guild;
         this.location = location;
     }
@@ -44,13 +44,13 @@ public class SetHomeRequest extends Request {
     @Override
     public void execute() {
         if (location != null) {
-            guild.setHome(location);
-            Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+            plugin.getGuildManager().setHome(guild, location);
+            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                     .getColoredText("info.guild.setHome.guildHomeSet", guild.getColor()));
-            Guilds.getInstance().getLogger().info("Player " + sender.getName() + " set the guild home of "
+            plugin.getLogger().info("Player " + sender.getName() + " set the guild home of "
                     + guild.getName() + " to Location (" + location.getX() + "/" + location.getY() + "/"
                     + location.getZ() + ") in World " + location.getWorld().getName() + " on server "
-                    + Guilds.getInstance().getServer().getName());
+                    + plugin.getServer().getName());
         }
     }
 }

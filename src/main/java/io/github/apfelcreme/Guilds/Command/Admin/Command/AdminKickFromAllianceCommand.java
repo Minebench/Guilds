@@ -1,7 +1,6 @@
 package io.github.apfelcreme.Guilds.Command.Admin.Command;
 
 import io.github.apfelcreme.Guilds.Alliance.Alliance;
-import io.github.apfelcreme.Guilds.Command.Admin.Request.AddToGuildRequest;
 import io.github.apfelcreme.Guilds.Command.Admin.Request.KickFromAllianceRequest;
 import io.github.apfelcreme.Guilds.Command.SubCommand;
 import io.github.apfelcreme.Guilds.Guild.Guild;
@@ -10,8 +9,6 @@ import io.github.apfelcreme.Guilds.GuildsConfig;
 import io.github.apfelcreme.Guilds.Manager.RequestController;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
-import java.util.UUID;
 
 /**
  * Copyright (C) 2016 Lord36 aka Apfelcreme
@@ -31,7 +28,11 @@ import java.util.UUID;
  *
  * @author Lord36 aka Apfelcreme
  */
-public class AdminKickFromAllianceCommand implements SubCommand {
+public class AdminKickFromAllianceCommand extends SubCommand {
+
+    public AdminKickFromAllianceCommand(Guilds plugin) {
+        super(plugin);
+    }
 
     /**
      * executes the command
@@ -43,28 +44,28 @@ public class AdminKickFromAllianceCommand implements SubCommand {
         Player sender = (Player) commandSender;
         if (sender.hasPermission("Guilds.kickFromAlliance")) {
             if (strings.length >= 2) {
-                Guild guild = Guilds.getInstance().getGuild(strings[1]);
+                Guild guild = plugin.getGuildManager().getGuild(strings[1]);
                 if (guild != null) {
-                    Alliance alliance = Guilds.getInstance().getAlliance(strings[2]);
+                    Alliance alliance = plugin.getAllianceManager().getAlliance(strings[2]);
                     if (alliance != null) {
                         if (alliance.containsGuild(guild)) {
-                            RequestController.getInstance().addRequest(new KickFromAllianceRequest(sender, guild, alliance));
-                            Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                            plugin.getRequestController().addRequest(new KickFromAllianceRequest(plugin, sender, guild, alliance));
+                            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                     .getText("info.guildadmin.confirm.confirm"));
                         } else {
-                            Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.guildIsNotPartOfAlliance"));
+                            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.guildIsNotPartOfAlliance"));
                         }
                     } else {
-                        Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.allianceDoesntExist"));
+                        plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.allianceDoesntExist"));
                     }
                 } else {
-                    Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.guildDoesntExist"));
+                    plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.guildDoesntExist"));
                 }
             } else {
-                Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.wrongUsage.kickFromAllianceAdmin"));
+                plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.wrongUsage.kickFromAllianceAdmin"));
             }
         } else {
-            Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.noPermission"));
+            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noPermission"));
         }
 
     }

@@ -28,7 +28,11 @@ import org.bukkit.entity.Player;
  *
  * @author Lord36 aka Apfelcreme on 09.05.2015.
  */
-public class DisbandCommand implements SubCommand {
+public class DisbandCommand extends SubCommand {
+
+    public DisbandCommand(Guilds plugin) {
+        super(plugin);
+    }
 
     /**
      * executes the command
@@ -39,27 +43,27 @@ public class DisbandCommand implements SubCommand {
     public void execute(CommandSender commandSender, String[] strings) {
         Player sender = (Player) commandSender;
         if (sender.hasPermission("Guilds.disbandGuild")) {
-            Guild guild = Guilds.getInstance().getGuild(sender);
+            Guild guild = plugin.getGuildManager().getGuild(sender);
             if (guild != null) {
                 if (guild.getMember(sender.getUniqueId()).getRank().canDisband()) {
-                    RequestController.getInstance().addRequest(new DisbandRequest(sender, guild));
+                    plugin.getRequestController().addRequest(new DisbandRequest(plugin, sender, guild));
                     if (guild.getBalance() > 0) {
-                        Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                        plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                 .getText("info.guild.stillMoneyInGuildBank")
                                 .replace("{0}", guild.getBalance().toString()));
                     }
-                    Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                    plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                             .getColoredText("info.guild.confirm.confirm", guild.getColor()));
                 } else {
-                    Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                    plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                             .getText("error.rank.noPermission")
-                            .replace("{0}", GuildsConfig.getText("info.guild.rank.info.disband")));
+                            .replace("{0}", plugin.getGuildsConfig().getText("info.guild.rank.info.disband")));
                 }
             } else {
-                Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.noCurrentGuild"));
+                plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noCurrentGuild"));
             }
         } else {
-            Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.noPermission"));
+            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noPermission"));
         }
 
     }

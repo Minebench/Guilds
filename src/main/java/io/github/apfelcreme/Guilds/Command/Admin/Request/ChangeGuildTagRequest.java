@@ -30,8 +30,8 @@ public class ChangeGuildTagRequest extends Request {
     private Guild guild;
     private String newTag;
 
-    public ChangeGuildTagRequest(Player sender, Guild guild, String newTag) {
-        super(sender);
+    public ChangeGuildTagRequest(Guilds plugin, Player sender, Guild guild, String newTag) {
+        super(plugin, sender);
         this.guild = guild;
         this.newTag = newTag;
     }
@@ -41,11 +41,11 @@ public class ChangeGuildTagRequest extends Request {
      */
     @Override
     public void execute() {
-        guild.setTag(newTag);
-        Guilds.getInstance().getLogger().info(guild.getName() + "'s tag was changed to '"
+        plugin.getGuildManager().setTag(guild, newTag);
+        plugin.getLogger().info(guild.getName() + "'s tag was changed to '"
                 + newTag + "' by '" + sender.getName() + "'");
-        Guilds.getInstance().getChat().sendMessage(sender,
-                GuildsConfig.getText("info.guildadmin.changeTag.changedTag")
+        plugin.getChat().sendMessage(sender,
+                plugin.getGuildsConfig().getText("info.guildadmin.changeTag.changedTag")
                         .replace("{0}", guild.getName())
                         .replace("{1}", GuildsUtil.replaceChatColors(newTag)));
 

@@ -28,7 +28,11 @@ import org.bukkit.entity.Player;
  *
  * @author Lord36 aka Apfelcreme
  */
-public class AdminChangeGuildNameCommand implements SubCommand {
+public class AdminChangeGuildNameCommand extends SubCommand {
+
+    public AdminChangeGuildNameCommand(Guilds plugin) {
+        super(plugin);
+    }
 
     /**
      * executes the command
@@ -40,28 +44,28 @@ public class AdminChangeGuildNameCommand implements SubCommand {
         Player sender = (Player) commandSender;
         if (sender.hasPermission("Guilds.changeName")) {
             if (strings.length >= 2) {
-                Guild guild = Guilds.getInstance().getGuild(strings[1]);
+                Guild guild = plugin.getGuildManager().getGuild(strings[1]);
                 if (guild != null) {
                     String newName = strings[2];
-                    if (GuildsUtil.strip(newName).length() <= GuildsConfig.getGuildNameLength()) {
-                        if (Guilds.getInstance().getGuild(newName) == null) {
-                            RequestController.getInstance().addRequest(new ChangeGuildNameRequest(sender, guild, newName));
-                            Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                    if (GuildsUtil.strip(newName).length() <= plugin.getGuildsConfig().getGuildNameLength()) {
+                        if (plugin.getGuildManager().getGuild(newName) == null) {
+                            plugin.getRequestController().addRequest(new ChangeGuildNameRequest(plugin, sender, guild, newName));
+                            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                     .getText("info.guildadmin.confirm.confirm"));
                         } else {
-                            Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.guildAlreadyExists"));
+                            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.guildAlreadyExists"));
                         }
                     } else {
-                        Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.tagTooLong"));
+                        plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.tagTooLong"));
                     }
                 } else {
-                    Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.guildDoesntExist"));
+                    plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.guildDoesntExist"));
                 }
             } else {
-                Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.wrongUsage.changeTagAdmin"));
+                plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.wrongUsage.changeTagAdmin"));
             }
         } else {
-            Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.noPermission"));
+            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noPermission"));
         }
     }
 }

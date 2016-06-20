@@ -4,8 +4,6 @@ import io.github.apfelcreme.Guilds.Alliance.Alliance;
 import io.github.apfelcreme.Guilds.Command.Request;
 import io.github.apfelcreme.Guilds.Guild.Guild;
 import io.github.apfelcreme.Guilds.Guilds;
-import io.github.apfelcreme.Guilds.GuildsConfig;
-import io.github.apfelcreme.Guilds.GuildsUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -37,8 +35,8 @@ public class CreateRequest extends Request {
     private String tag;
     private ChatColor color;
 
-    public CreateRequest(Guild guild, Player sender, String name, String tag, ChatColor color) {
-        super(sender);
+    public CreateRequest(Guilds plugin, Guild guild, Player sender, String name, String tag, ChatColor color) {
+        super(plugin, sender);
         this.guild = guild;
         this.name = name;
         this.tag = tag;
@@ -48,15 +46,15 @@ public class CreateRequest extends Request {
     @Override
     public void execute() {
         Alliance alliance = new Alliance(name, tag, color, new Date().getTime(), guild);
-        alliance.create();
-        Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+        plugin.getAllianceManager().create(alliance);
+        plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                 .getColoredText("info.alliance.create.allianceCreated", color)
                 .replace("{0}", alliance.getName()));
-        Guilds.getInstance().getChat().sendAllianceChannelBroadcast(alliance,
-                GuildsConfig.getColoredText("info.chat.allianceCreated", alliance.getColor())
+        plugin.getChat().sendAllianceChannelBroadcast(alliance,
+                plugin.getGuildsConfig().getColoredText("info.chat.allianceCreated", alliance.getColor())
                         .replace("{0}", guild.getName())
                         .replace("{1}", alliance.getName()));
-        Guilds.getInstance().getLogger().info(guild.getName() + " has created alliance '"
+        plugin.getLogger().info(guild.getName() + " has created alliance '"
                 + alliance.getName() + "'");
     }
 }

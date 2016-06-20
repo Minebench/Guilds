@@ -33,8 +33,8 @@ public class CreateRequest extends Request {
     private String tag;
     private ChatColor color;
 
-    public CreateRequest(Player sender, String name, String tag, ChatColor color) {
-        super(sender);
+    public CreateRequest(Guilds plugin, Player sender, String name, String tag, ChatColor color) {
+        super(plugin, sender);
         this.name = name;
         this.tag = tag;
         this.color = color;
@@ -43,12 +43,12 @@ public class CreateRequest extends Request {
     @Override
     public void execute() {
         Guild guild = new Guild(null, name, tag, color, 0.0);
-        guild.create(sender);
-        Guilds.getInstance().getEconomy().withdrawPlayer(sender, GuildsConfig.getLevelData(1).getCost());
-        Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+        plugin.getGuildManager().create(guild, sender);
+        plugin.getEconomy().withdrawPlayer(sender, plugin.getGuildsConfig().getLevelData(1).getCost());
+        plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                 .getColoredText("info.guild.create.guildCreated", guild.getColor())
                 .replace("{0}", guild.getName()));
-        Guilds.getInstance().getLogger().info(sender.getName() + " has created guild '"
+        plugin.getLogger().info(sender.getName() + " has created guild '"
                 + guild.getName() + "'");
     }
 }

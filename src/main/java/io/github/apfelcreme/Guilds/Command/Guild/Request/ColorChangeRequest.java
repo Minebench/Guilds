@@ -32,8 +32,8 @@ public class ColorChangeRequest extends Request {
     private final Guild guild;
     private final ChatColor color;
 
-    public ColorChangeRequest(Player sender, Guild guild, ChatColor color) {
-        super(sender);
+    public ColorChangeRequest(Guilds plugin, Player sender, Guild guild, ChatColor color) {
+        super(plugin, sender);
         this.guild = guild;
         this.color = color;
     }
@@ -43,8 +43,8 @@ public class ColorChangeRequest extends Request {
      */
     @Override
     public void execute() {
-        guild.setColor(color);
-        Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+        plugin.getGuildManager().setColor(guild, color);
+        plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                 .getColoredText("info.guild.color.colorSet", color)
                 .replace("{0}", WordUtils.capitalize(color.name().replace("_", " ").toLowerCase())));
     }

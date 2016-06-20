@@ -30,7 +30,11 @@ import java.util.List;
  *
  * @author Lord36 aka Apfelcreme on 01.05.2015.
  */
-public class RankListCommand implements SubCommand {
+public class RankListCommand extends SubCommand {
+
+    public RankListCommand(Guilds plugin) {
+        super(plugin);
+    }
 
     /**
      * executes the command
@@ -41,24 +45,24 @@ public class RankListCommand implements SubCommand {
     public void execute(CommandSender commandSender, String[] strings) {
         Player sender = (Player) commandSender;
         if (sender.hasPermission("Guilds.rankList")) {
-            Guild guild = Guilds.getInstance().getGuild(sender);
+            Guild guild = plugin.getGuildManager().getGuild(sender);
             if (guild != null) {
-                Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                         .getColoredText("info.guild.ranks.head", guild.getColor()));
-                Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                         .getColoredText("info.guild.ranks.head2", guild.getColor()));
                 List<Rank> ranks = guild.getRanks();
                 Collections.sort(ranks, Collections.<Rank>reverseOrder());
                 for (Rank rank : ranks) {
-                    Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                    plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                             .getColoredText("info.guild.ranks.simpleElement", guild.getColor())
                             .replace("{0}", rank.getName()));
                 }
             } else {
-                Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.noCurrentGuild"));
+                plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noCurrentGuild"));
             }
         } else {
-            Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.noPermission"));
+            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noPermission"));
         }
 
     }

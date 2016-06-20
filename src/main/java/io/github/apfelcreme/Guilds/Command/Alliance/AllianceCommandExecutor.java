@@ -2,11 +2,11 @@ package io.github.apfelcreme.Guilds.Command.Alliance;
 
 import io.github.apfelcreme.Guilds.Command.Alliance.Command.*;
 import io.github.apfelcreme.Guilds.Command.Guild.Command.ConfirmRequestCommand;
+import io.github.apfelcreme.Guilds.Command.PluginCommandExecutor;
 import io.github.apfelcreme.Guilds.Command.SubCommand;
 import io.github.apfelcreme.Guilds.Guilds;
 import io.github.apfelcreme.Guilds.GuildsConfig;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -29,12 +29,10 @@ import org.bukkit.entity.Player;
  *
  * @author Lord36 aka Apfelcreme on 30.05.2015.
  */
-public class AllianceCommandExecutor implements CommandExecutor {
-
-    private Guilds plugin;
+public class AllianceCommandExecutor extends PluginCommandExecutor {
 
     public AllianceCommandExecutor(Guilds plugin) {
-        this.plugin = plugin;
+        super(plugin);
     }
 
     /**
@@ -54,39 +52,39 @@ public class AllianceCommandExecutor implements CommandExecutor {
                     if (operation != null) {
                         switch (operation) {
                             case ACCEPT:
-                                subCommand = new InviteAcceptCommand();
+                                subCommand = new InviteAcceptCommand(plugin);
                                 break;
                             case CONFIRM:
-                                subCommand = new ConfirmRequestCommand();
+                                subCommand = new ConfirmRequestCommand(plugin);
                                 break;
                             case CREATE:
-                                subCommand = new CreateCommand();
+                                subCommand = new CreateCommand(plugin);
                                 break;
                             case DENY:
-                                subCommand = new InviteDenyCommand();
+                                subCommand = new InviteDenyCommand(plugin);
                                 break;
                             case INVITE:
-                                subCommand = new InviteCommand();
+                                subCommand = new InviteCommand(plugin);
                                 break;
                             case LEAVE:
-                                subCommand = new LeaveCommand();
+                                subCommand = new LeaveCommand(plugin);
                                 break;
                             case LIST:
-                                subCommand = new ListCommand();
+                                subCommand = new ListCommand(plugin);
                                 break;
                             case INFO:
-                                subCommand = new InfoCommand();
+                                subCommand = new InfoCommand(plugin);
                                 break;
                         }
                     } else {
-                        subCommand = new MenuCommand();
+                        subCommand = new MenuCommand(plugin);
                     }
                 } else {
-                    subCommand = new MenuCommand();
+                    subCommand = new MenuCommand(plugin);
                 }
                 subCommand.execute(sender, strings);
             } else {
-                Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.noPermission"));
+                plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noPermission"));
             }
         }
         return false;

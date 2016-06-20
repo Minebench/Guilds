@@ -29,20 +29,20 @@ public class LeaveRequest extends Request {
 
     private Guild guild;
 
-    public LeaveRequest(Player sender, Guild guild) {
-        super(sender);
+    public LeaveRequest(Guilds plugin, Player sender, Guild guild) {
+        super(plugin, sender);
         this.guild = guild;
     }
 
     @Override
     public void execute() {
-        guild.removeMember(guild.getMember(sender.getUniqueId()));
-        Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+        plugin.getGuildManager().removeMember(guild, guild.getMember(sender.getUniqueId()));
+        plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                 .getColoredText("info.guild.leave.youLeft", guild.getColor()));
-        Guilds.getInstance().getChat().sendGuildChannelBroadcast(guild,
-                GuildsConfig.getText("info.chat.playerLeft")
+        plugin.getChat().sendGuildChannelBroadcast(guild,
+                plugin.getGuildsConfig().getText("info.chat.playerLeft")
                         .replace("{0}", sender.getName()));
 
-        Guilds.getInstance().getLogger().info(sender.getName() + " has left guild '" + guild.getName() + "'");
+        plugin.getLogger().info(sender.getName() + " has left guild '" + guild.getName() + "'");
     }
 }

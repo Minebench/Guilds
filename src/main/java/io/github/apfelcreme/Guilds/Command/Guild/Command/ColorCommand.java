@@ -29,7 +29,11 @@ import org.bukkit.entity.Player;
  *
  * @author Lord36 aka Apfelcreme on 16.07.2015.
  */
-public class ColorCommand implements SubCommand {
+public class ColorCommand extends SubCommand {
+
+    public ColorCommand(Guilds plugin) {
+        super(plugin);
+    }
 
     /**
      * executes the command
@@ -41,30 +45,30 @@ public class ColorCommand implements SubCommand {
         Player sender = (Player) commandSender;
         if (sender.hasPermission("Guilds.color")) {
             if (strings.length >= 2) {
-                Guild guild = Guilds.getInstance().getGuild(sender.getUniqueId());
+                Guild guild = plugin.getGuildManager().getGuild(sender.getUniqueId());
                 if (guild != null) {
                     if (guild.getMember(sender.getUniqueId()).getRank().isLeader()) {
-                        ChatColor color = GuildsConfig.parseColor(strings[1]);
+                        ChatColor color = plugin.getGuildsConfig().parseColor(strings[1]);
                         if (color != null) {
-                            RequestController.getInstance().addRequest(new ColorChangeRequest(sender, guild, color));
-                            Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                            plugin.getRequestController().addRequest(new ColorChangeRequest(plugin, sender, guild, color));
+                            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                     .getColoredText("info.guild.confirm.confirm", guild.getColor()));
                         } else {
-                            Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.noValidColor")
+                            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noValidColor")
                                     .replace("{0}", strings[1]));
                         }
                     } else {
-                        Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
-                                .getText("error.rank.noPermission").replace("{0}", GuildsConfig.getText("info.guild.rank.info.leader")));
+                        plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
+                                .getText("error.rank.noPermission").replace("{0}", plugin.getGuildsConfig().getText("info.guild.rank.info.leader")));
                     }
                 } else {
-                    Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.noCurrentGuild"));
+                    plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noCurrentGuild"));
                 }
             } else {
-                Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.wrongUsage.color"));
+                plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.wrongUsage.color"));
             }
         } else {
-            Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.noPermission"));
+            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noPermission"));
         }
     }
 }

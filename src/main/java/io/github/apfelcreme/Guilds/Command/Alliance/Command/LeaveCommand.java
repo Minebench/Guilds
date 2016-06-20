@@ -29,7 +29,11 @@ import org.bukkit.entity.Player;
  *
  * @author Lord36 aka Apfelcreme on 18.06.2015.
  */
-public class LeaveCommand implements SubCommand {
+public class LeaveCommand extends SubCommand {
+
+    public LeaveCommand(Guilds plugin) {
+        super(plugin);
+    }
 
     /**
      * executes the command
@@ -40,27 +44,27 @@ public class LeaveCommand implements SubCommand {
     public void execute(CommandSender commandSender, String[] strings) {
         Player sender = (Player) commandSender;
         if (sender.hasPermission("Guilds.leaveAlliance")) {
-            Guild guild = Guilds.getInstance().getGuild(sender);
+            Guild guild = plugin.getGuildManager().getGuild(sender);
             if (guild != null) {
-                Alliance alliance = Guilds.getInstance().getAlliance(guild);
+                Alliance alliance = plugin.getAllianceManager().getAlliance(guild);
                 if (alliance != null) {
                     if (guild.getMember(sender.getUniqueId()).getRank().canDoDiplomacy()) {
-                        RequestController.getInstance().addRequest(
-                                new AllianceLeaveRequest(sender, guild, alliance));
-                        Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+                        plugin.getRequestController().addRequest(
+                                new AllianceLeaveRequest(plugin, sender, guild, alliance));
+                        plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                 .getColoredText("info.alliance.confirm.confirm", alliance.getColor()));
                     } else {
-                        Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
-                                .getText("error.rank.noPermission").replace("{0}", GuildsConfig.getText("info.guild.rank.info.doDiplomacy")));
+                        plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
+                                .getText("error.rank.noPermission").replace("{0}", plugin.getGuildsConfig().getText("info.guild.rank.info.doDiplomacy")));
                     }
                 } else {
-                    Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.noCurrentAlliance"));
+                    plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noCurrentAlliance"));
                 }
             } else {
-                Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.noCurrentGuild"));
+                plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noCurrentGuild"));
             }
         } else {
-            Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig.getText("error.noPermission"));
+            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noPermission"));
         }
     }
 }

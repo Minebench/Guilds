@@ -4,12 +4,10 @@ import io.github.apfelcreme.Guilds.Command.Request;
 import io.github.apfelcreme.Guilds.Guild.Guild;
 import io.github.apfelcreme.Guilds.Guild.GuildLevel;
 import io.github.apfelcreme.Guilds.Guilds;
-import io.github.apfelcreme.Guilds.GuildsConfig;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -35,28 +33,30 @@ public class UpgradeRequest extends Request {
 
     private Guild guild;
 
-    public UpgradeRequest(Player sender, Guild guild) {
-        super(sender);
+    public UpgradeRequest(Guilds plugin, Player sender, Guild guild) {
+        super(plugin, sender);
         this.guild = guild;
     }
 
     @Override
     public void execute() {
-        GuildLevel level = guild.getCurrentLevel();
-        guild.upgrade();
-        Guilds.getInstance().getChat().sendMessage(sender, GuildsConfig
+        plugin.getGuildManager().upgrade(guild);
+        plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                 .getColoredText("info.guild.upgrade.upgradedGuild", guild.getColor()));
-        Guilds.getInstance().getChat().sendGuildChannelBroadcast(
+        plugin.getChat().sendGuildChannelBroadcast(
                 guild,
-                GuildsConfig.getText("info.chat.guildUpgraded")
+                plugin.getGuildsConfig().getText("info.chat.guildUpgraded")
                         .replace("{0}", sender.getName())
-                        .replace("{1}", guild.getCurrentLevel().nextLevel().getName()));
+                        .replace("{1}", plugin.getGuildManager().getNextLevel(guild).getName()));
 
-        for (Map.Entry<Material, Integer> entry : level.nextLevel().getMaterialRequirements().entrySet()) {
-            sender.getInventory().removeItem(new ItemStack(entry.getKey(), entry.getValue()));
+        GuildLevel nextLevel = plugin.getGuildManager().getNextLevel(guild);
+        if (nextLevel != null) {
+            for (Map.Entry<Material, Integer> entry : nextLevel.getMaterialRequirements().entrySet()) {
+                sender.getInventory().removeItem(new ItemStack(entry.getKey(), entry.getValue()));
+            }
         }
 
-        Guilds.getInstance().getLogger().info(sender.getName() + " has upgraded guild '" + guild.getName() + "'" +
-                " to level "+Integer.toString(guild.getCurrentLevel().nextLevel().getLevel()));
+        plugin.getLogger().info(sender.getName() + " has upgraded guild '" + guild.getName() + "'" +
+                " to level "+(nextLevel != null ? Integer.toString(nextLevel.getLevel()) : "no next level?"));
     }
 }
