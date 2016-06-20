@@ -1,6 +1,8 @@
 name: Guilds
 version: '${minecraft.plugin.version}'
 main: io.github.apfelcreme.Guilds.Guilds
+depend: [Vault]
+softdepend: [UUIDDB]
 commands:
    guild:
       aliases: [clan, gilde]

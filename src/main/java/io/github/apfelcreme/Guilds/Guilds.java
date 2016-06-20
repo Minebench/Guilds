@@ -14,6 +14,7 @@ import io.github.apfelcreme.Guilds.Guild.*;
 import io.github.apfelcreme.Guilds.Listener.*;
 import io.github.apfelcreme.Guilds.Manager.*;
 import net.milkbowl.vault.economy.Economy;
+import net.zaiyers.UUIDDB.bukkit.UUIDDB;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
@@ -61,6 +62,8 @@ public class Guilds extends JavaPlugin {
      */
     private Map<Integer, Alliance> alliances;
 
+    private static UUIDDB uuiddb;
+
     /**
      * do stuff on enable
      */
@@ -95,6 +98,10 @@ public class Guilds extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new PlayerLoginListener(), this);
         Bukkit.getPluginManager().registerEvents(new PlayerQuitListener(), this);
 
+        if (getServer().getPluginManager().isPluginEnabled("UUIDDB")) {
+            uuiddb = UUIDDB.getInstance();
+        }
+
         GuildsConfig.init();
 
         GuildsConfig.getNewRandomDrop();
@@ -120,7 +127,7 @@ public class Guilds extends JavaPlugin {
      * @return true or false
      */
     public boolean hasVault() {
-        return Bukkit.getPluginManager().getPlugin("Vault") != null;
+        return Bukkit.getPluginManager().isPluginEnabled("Vault");
     }
 
     /**
@@ -132,14 +139,20 @@ public class Guilds extends JavaPlugin {
     @Deprecated
     public static UUID getUUID(String playerName) {
         Player onlinePlayer = Guilds.getInstance().getServer().getPlayerExact(playerName);
-        OfflinePlayer offlinePlayer = Guilds.getInstance().getServer().getOfflinePlayer(playerName);
 
         if (onlinePlayer != null) {
             return onlinePlayer.getUniqueId();
         } else {
+            if (uuiddb != null) {
+                String uuid = uuiddb.getStorage().getUUIDByName(playerName);
+                if (uuid != null) {
+                    return UUID.fromString(uuid);
+                }
+            }
             try {
                 return UUIDFetcher.getUUIDOf(playerName);
             } catch (Exception ex) {
+                OfflinePlayer offlinePlayer = Guilds.getInstance().getServer().getOfflinePlayer(playerName);
                 if (offlinePlayer != null) {
                     return offlinePlayer.getUniqueId();
                 } else {
