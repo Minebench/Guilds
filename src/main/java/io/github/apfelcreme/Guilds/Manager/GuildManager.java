@@ -13,8 +13,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -65,7 +65,7 @@ public class GuildManager {
      * loads the list of all guilds
      */
     public void loadGuilds() {
-        new BukkitRunnable() {
+        plugin.runAsync(new Runnable() {
             public void run() {
                 Connection connection = plugin.getDatabaseConnection();
                 if (connection != null) {
@@ -85,7 +85,7 @@ public class GuildManager {
                     }
                 }
             }
-        }.runTaskAsynchronously(plugin);
+        });
     }
 
 
@@ -95,7 +95,7 @@ public class GuildManager {
      * @param guildId the id of the guild to be reloaded
      */
     public void reloadGuild(final Integer guildId) {
-        new BukkitRunnable() {
+        plugin.runAsync(new Runnable() {
             public void run() {
 
                 Connection connection = plugin.getDatabaseConnection();
@@ -270,7 +270,7 @@ public class GuildManager {
                     }
                 }
             }
-        }.runTaskAsynchronously(plugin);
+        });
     }
 
     /**
@@ -389,7 +389,7 @@ public class GuildManager {
      * sets the invite status to 1 (=Accepted)
      */
     public void acceptInvite(final Invite invite) {
-        new BukkitRunnable() {
+        plugin.runAsync(new Runnable() {
             public void run() {
                 try {
                     Connection connection = plugin.getDatabaseConnection();
@@ -415,14 +415,14 @@ public class GuildManager {
                     e.printStackTrace();
                 }
             }
-        }.runTaskAsynchronously(plugin);
+        });
     }
 
     /**
      * sets the invite status to 2 (=Denied)
      */
     public void denyInvite(final Invite invite) {
-        new BukkitRunnable() {
+        plugin.runAsync(new Runnable() {
             public void run() {
                 try {
                     Connection connection = plugin.getDatabaseConnection();
@@ -445,14 +445,14 @@ public class GuildManager {
                     e.printStackTrace();
                 }
             }
-        }.runTaskAsynchronously(plugin);
+        });
     }
 
     /**
      * creates a new invite
      */
     public void addInvite(final Invite invite) {
-        new BukkitRunnable() {
+        plugin.runAsync(new Runnable() {
             public void run() {
                 try {
                     Connection connection = plugin.getDatabaseConnection();
@@ -485,7 +485,7 @@ public class GuildManager {
                     e.printStackTrace();
                 }
             }
-        }.runTaskAsynchronously(plugin);
+        });
     }
 
     /**
@@ -494,7 +494,7 @@ public class GuildManager {
      * @param founder the creator of the guild
      */
     public void create(final Guild guild, final OfflinePlayer founder) {
-        new BukkitRunnable() {
+        plugin.runAsync(new Runnable() {
             public void run() {
                 Connection connection = plugin.getDatabaseConnection();
                 if (connection != null) {
@@ -600,7 +600,7 @@ public class GuildManager {
                     }
                 }
             }
-        }.runTaskAsynchronously(plugin);
+        });
     }
 
     /**
@@ -609,7 +609,7 @@ public class GuildManager {
      * @param rank        the new rank
      */
     public void setPlayerRank(final Guild guild, final GuildMember guildMember, final Rank rank) {
-        new BukkitRunnable() {
+        plugin.runAsync(new Runnable() {
             public void run() {
                 Connection connection = plugin.getDatabaseConnection();
                 if (connection != null) {
@@ -630,7 +630,7 @@ public class GuildManager {
                     }
                 }
             }
-        }.runTaskAsynchronously(plugin);
+        });
     }
 
     /**
@@ -639,7 +639,7 @@ public class GuildManager {
      * @param guildMember the members targetPlayer
      */
     private void setLeader(final Guild guild, final OfflinePlayer guildMember) {
-        new BukkitRunnable() {
+        plugin.runAsync(new Runnable() {
             public void run() {
                 try {
                     Connection connection = plugin.getDatabaseConnection();
@@ -663,14 +663,14 @@ public class GuildManager {
                     e.printStackTrace();
                 }
             }
-        }.runTaskAsynchronously(plugin);
+        });
     }
 
     /**
      * deletes the guild
      */
     public void delete(final Guild guild) {
-        new BukkitRunnable() {
+        plugin.runAsync(new Runnable() {
             public void run() {
                 Connection connection = plugin.getDatabaseConnection();
                 if (connection != null) {
@@ -723,7 +723,7 @@ public class GuildManager {
                     }
                 }
             }
-        }.runTaskAsynchronously(plugin);
+        });
     }
 
     /**
@@ -732,7 +732,7 @@ public class GuildManager {
      * @param targetPlayer the target uuid
      */
     public void addMember(final Guild guild, final UUID targetPlayer) {
-         new BukkitRunnable() {
+         plugin.runAsync(new Runnable() {
              public void run() {
                  try {
                      Connection connection = plugin.getDatabaseConnection();
@@ -762,7 +762,7 @@ public class GuildManager {
                      e.printStackTrace();
                  }
              }
-         }.runTaskAsynchronously(plugin);
+         });
     }
 
     /**
@@ -771,7 +771,7 @@ public class GuildManager {
      * @param guildMember the player uuid that shall be removed
      */
     public void removeMember(final Guild guild, final GuildMember guildMember) {
-        new BukkitRunnable() {
+        plugin.runAsync(new Runnable() {
             public void run() {
                 try {
                     Connection connection = plugin.getDatabaseConnection();
@@ -799,7 +799,7 @@ public class GuildManager {
                     e.printStackTrace();
                 }
             }
-        }.runTaskAsynchronously(plugin);
+        });
     }
 
     /**
@@ -809,7 +809,7 @@ public class GuildManager {
      */
     public void setBalance(final Guild guild, final double balance) {
         guild.setBalance(balance);
-        new BukkitRunnable() {
+        plugin.runAsync(new Runnable() {
             public void run() {
                 Connection connection = plugin.getDatabaseConnection();
                 if (connection != null) {
@@ -830,7 +830,7 @@ public class GuildManager {
                     }
                 }
             }
-        }.runTaskAsynchronously(plugin);
+        });
     }
 
     /**
@@ -839,7 +839,7 @@ public class GuildManager {
      * @param color the new color
      */
     public void setColor(final Guild guild, final ChatColor color) {
-        new BukkitRunnable() {
+        plugin.runAsync(new Runnable() {
             public void run() {
                 Connection connection = plugin.getDatabaseConnection();
                 if (connection != null) {
@@ -859,7 +859,7 @@ public class GuildManager {
                     }
                 }
             }
-        }.runTaskAsynchronously(plugin);
+        });
     }
 
     /**
@@ -868,7 +868,7 @@ public class GuildManager {
      * @param newName the new name
      */
     public void setName(final Guild guild, final String newName) {
-        new BukkitRunnable() {
+        plugin.runAsync(new Runnable() {
             public void run() {
                 Connection connection = plugin.getDatabaseConnection();
                 if (connection != null) {
@@ -888,7 +888,7 @@ public class GuildManager {
                     }
                 }
             }
-        }.runTaskAsynchronously(plugin);
+        });
     }
 
     /**
@@ -897,7 +897,7 @@ public class GuildManager {
      * @param newTag the new name
      */
     public void setTag(final Guild guild, final String newTag) {
-        new BukkitRunnable() {
+        plugin.runAsync(new Runnable() {
             public void run() {
                 Connection connection = plugin.getDatabaseConnection();
                 if (connection != null) {
@@ -917,7 +917,7 @@ public class GuildManager {
                     }
                 }
             }
-        }.runTaskAsynchronously(plugin);
+        });
     }
 
     /**
@@ -926,7 +926,7 @@ public class GuildManager {
      * @param exp the new exp
      */
     public void setExp(final Guild guild, final int exp) {
-        new BukkitRunnable() {
+        plugin.runAsync(new Runnable() {
             public void run() {
                 Connection connection = plugin.getDatabaseConnection();
                 if (connection != null) {
@@ -947,14 +947,14 @@ public class GuildManager {
                     }
                 }
             }
-        }.runTaskAsynchronously(plugin);
+        });
     }
 
     /**
      * increases the guild level by 1
      */
     public void upgrade(final Guild guild) {
-        new BukkitRunnable() {
+        plugin.runAsync(new Runnable() {
             public void run() {
                 Connection connection = plugin.getDatabaseConnection();
                 if (connection != null) {
@@ -978,7 +978,7 @@ public class GuildManager {
                     }
                 }
             }
-        }.runTaskAsynchronously(plugin);
+        });
     }
 
     /**
@@ -987,7 +987,7 @@ public class GuildManager {
      * @param location the location
      */
     public void setHome(final Guild guild, final Location location) {
-        new BukkitRunnable() {
+        plugin.runAsync(new Runnable() {
             public void run() {
                 Connection connection = plugin.getDatabaseConnection();
                 if (connection != null) {
@@ -1018,14 +1018,14 @@ public class GuildManager {
                     }
                 }
             }
-        }.runTaskAsynchronously(plugin);
+        });
     }
 
     /**
      * sets the message status to cleared, so it wont be shown again
      */
     public void clearMessages(final Guild guild) {
-        new BukkitRunnable() {
+        plugin.runAsync(new Runnable() {
             public void run() {
                 try {
                     Connection connection = plugin.getDatabaseConnection();
@@ -1046,11 +1046,11 @@ public class GuildManager {
                     e.printStackTrace();
                 }
             }
-        }.runTaskAsynchronously(plugin);
+        });
     }
 
     public void setMemberPrefix(final GuildMember member, final String prefix) {
-        new BukkitRunnable() {
+        plugin.runAsync(new Runnable() {
             public void run() {
 
                 Connection connection = plugin.getDatabaseConnection();
@@ -1073,11 +1073,11 @@ public class GuildManager {
                     }
                 }
             }
-        }.runTaskAsynchronously(plugin);
+        });
     }
 
     public void addBlackboardMessage(final Guild guild, final BlackboardMessage message) {
-        new BukkitRunnable() {
+        plugin.runAsync(new Runnable() {
             public void run() {
 
                 try {
@@ -1104,7 +1104,7 @@ public class GuildManager {
                     e.printStackTrace();
                 }
             }
-        }.runTaskAsynchronously(plugin);
+        });
     }
 
     /**
@@ -1174,7 +1174,7 @@ public class GuildManager {
      * adds a new rank and stores it into the db
      */
     public void addRank(final Rank rank) {
-        new BukkitRunnable() {
+        plugin.runAsync(new Runnable() {
             public void run() {
                 Connection connection = plugin.getDatabaseConnection();
                 if (connection != null) {
@@ -1215,14 +1215,14 @@ public class GuildManager {
                     }
                 }
             }
-        }.runTaskAsynchronously(plugin);
+        });
     }
 
     /**
      * remove a rank from the db
      */
     public void deleteRank(final Rank rank) {
-        new BukkitRunnable() {
+        plugin.runAsync(new Runnable() {
             public void run() {
                 Connection connection = plugin.getDatabaseConnection();
                 if (connection != null) {
@@ -1254,7 +1254,7 @@ public class GuildManager {
                     }
                 }
             }
-        }.runTaskAsynchronously(plugin);
+        });
     }
 
     /**
@@ -1262,7 +1262,7 @@ public class GuildManager {
      * @param session The session to save
      */
     public void saveEditedRank(final EditRankSession session) {
-        new BukkitRunnable() {
+        plugin.runAsync(new Runnable() {
             public void run() {
                 Connection connection = plugin.getDatabaseConnection();
                 if (connection != null) {
@@ -1305,7 +1305,7 @@ public class GuildManager {
                     }
                 }
             }
-        }.runTaskAsynchronously(plugin);
+        });
     }
 
     /**
@@ -1314,12 +1314,12 @@ public class GuildManager {
      * @return the guild home location
      */
     public Location getHome(Guild guild) {
-        if (guild.getHomeX() != null && guild.getHomeY() != null && guild.getHomeZ() != null
-                && guild.getHomeWorld() != null && guild.getHomeServer() != null) {
-            return new Location(plugin.getServer().getWorld(guild.getHomeWorld()),
-                    guild.getHomeX(), guild.getHomeY(), guild.getHomeZ());
-        } else {
-            return null;
+        if (guild.getHomeWorld() != null && guild.getHomeServer() != null) {
+            World world = plugin.getServer().getWorld(guild.getHomeWorld());
+            if(world != null) {
+                return new Location(world, guild.getHomeX(), guild.getHomeY(), guild.getHomeZ());
+            }
         }
+        return null;
     }
 }

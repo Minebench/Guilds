@@ -41,7 +41,7 @@ public class PlayerQuitListener implements Listener {
     @EventHandler
     public void onPlayerQuit(final PlayerQuitEvent e) {
         plugin.getRequestController().removeRequest(e.getPlayer());
-        plugin.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
+        plugin.runAsync(new Runnable() {
 
             public void run() {
 

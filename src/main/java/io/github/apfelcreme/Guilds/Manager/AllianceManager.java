@@ -7,7 +7,6 @@ import io.github.apfelcreme.Guilds.Guilds;
 import io.github.apfelcreme.Guilds.GuildsUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -55,7 +54,7 @@ public class AllianceManager {
      * loads the list of all guilds
      */
     public void loadAlliances() {
-        new BukkitRunnable() {
+        plugin.runAsync(new Runnable() {
             public void run() {
                 Connection connection = plugin.getDatabaseConnection();
                 if (connection != null) {
@@ -76,7 +75,7 @@ public class AllianceManager {
                     }
                 }
             }
-        }.runTaskAsynchronously(plugin);
+        });
     }
 
     /**
@@ -85,7 +84,7 @@ public class AllianceManager {
      * @param allianceId the id of the alliance
      */
     public void reload(final Integer allianceId) {
-        new BukkitRunnable() {
+        plugin.runAsync(new Runnable() {
             public void run() {
 
                 Connection connection = plugin.getDatabaseConnection();
@@ -148,7 +147,7 @@ public class AllianceManager {
                     }
                 }
             }
-        }.runTaskAsynchronously(plugin);
+        });
     }
 
     public void checkForReload(int allianceId) {
@@ -238,7 +237,7 @@ public class AllianceManager {
      * sets the invite status to 1 (=Accepted)
      */
     public void acceptInvite(final AllianceInvite invite) {
-        new BukkitRunnable() {
+        plugin.runAsync(new Runnable() {
             public void run() {
                 try {
                     Connection connection = plugin.getDatabaseConnection();
@@ -269,14 +268,14 @@ public class AllianceManager {
                     e.printStackTrace();
                 }
             }
-        }.runTaskAsynchronously(plugin);
+        });
     }
 
     /**
      * sets the invite status to 2 (=Denied)
      */
     public void denyInvite(final AllianceInvite invite) {
-        new BukkitRunnable() {
+        plugin.runAsync(new Runnable() {
             public void run() {
                 try {
                     Connection connection = plugin.getDatabaseConnection();
@@ -298,11 +297,11 @@ public class AllianceManager {
                     e.printStackTrace();
                 }
             }
-        }.runTaskAsynchronously(plugin);
+        });
     }
 
     public void addInvite(final AllianceInvite invite) {
-        new BukkitRunnable() {
+        plugin.runAsync(new Runnable() {
             public void run() {
                 try {
                     Connection connection = plugin.getDatabaseConnection();
@@ -324,7 +323,7 @@ public class AllianceManager {
                     e.printStackTrace();
                 }
             }
-        }.runTaskAsynchronously(plugin);
+        });
     }
 
     /**
@@ -332,7 +331,7 @@ public class AllianceManager {
      * @param alliance The Alliance to add
      */
     public void create(final Alliance alliance) {
-        new BukkitRunnable() {
+        plugin.runAsync(new Runnable() {
             public void run() {
                 Connection connection = plugin.getDatabaseConnection();
                 if (connection != null) {
@@ -369,7 +368,7 @@ public class AllianceManager {
                     }
                 }
             }
-        }.runTaskAsynchronously(plugin);
+        });
     }
 
     /**
@@ -377,7 +376,7 @@ public class AllianceManager {
      * @param alliance The Alliance to remove
      */
     public void delete(final Alliance alliance) {
-        new BukkitRunnable() {
+        plugin.runAsync(new Runnable() {
             public void run() {
                 Connection connection = plugin.getDatabaseConnection();
                 if (connection != null) {
@@ -407,12 +406,12 @@ public class AllianceManager {
                     }
                 }
             }
-        }.runTaskAsynchronously(plugin);
+        });
     }
 
     public void setColor(final Alliance alliance, final ChatColor color) {
         alliance.setColor(color);
-        new BukkitRunnable() {
+        plugin.runAsync(new Runnable() {
             public void run() {
                 Connection connection = plugin.getDatabaseConnection();
                 if (connection != null) {
@@ -433,11 +432,11 @@ public class AllianceManager {
                     }
                 }
             }
-        }.runTaskAsynchronously(plugin);
+        });
     }
 
     public void removeMember(final Alliance alliance, final Guild guild) {
-        new BukkitRunnable() {
+        plugin.runAsync(new Runnable() {
             public void run() {
                 Connection connection = plugin.getDatabaseConnection();
                 if (connection != null) {
@@ -458,6 +457,6 @@ public class AllianceManager {
                     }
                 }
             }
-        }.runTaskAsynchronously(plugin);
+        });
     }
 }

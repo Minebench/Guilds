@@ -290,4 +290,31 @@ public class Guilds extends JavaPlugin {
         return requestController;
     }
 
+    /**
+     * Run something async, if the current thread is already asnyc it wont create a new one!
+     * @param runnable The runnable to run
+     * @return The task id; -1 if no new one was created
+     */
+    public int runAsync(Runnable runnable) {
+        if(getServer().isPrimaryThread()) {
+            return getServer().getScheduler().runTaskAsynchronously(this, runnable).getTaskId();
+        } else {
+            runnable.run();
+            return -1;
+        }
+    }
+
+    /**
+     * Run something sync, if the current thread is already snyc it wont create a new one!
+     * @param runnable The runnable to run
+     * @return The task id; -1 if no new one was created
+     */
+    public int runSync(Runnable runnable) {
+        if(getServer().isPrimaryThread()) {
+            runnable.run();
+            return -1;
+        } else {
+            return getServer().getScheduler().runTask(this, runnable).getTaskId();
+        }
+    }
 }
