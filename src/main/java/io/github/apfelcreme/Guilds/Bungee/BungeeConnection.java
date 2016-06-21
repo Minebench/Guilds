@@ -39,6 +39,9 @@ public class BungeeConnection {
      * sends a request to the bungee to sync the list of guilds on all servers
      */
     public void forceGuildsSync() {
+        if (!plugin.getGuildsConfig().useBungeeCord()) {
+            return;
+        }
         ByteArrayOutputStream b = new ByteArrayOutputStream();
         DataOutputStream out = new DataOutputStream(b);
 
@@ -57,6 +60,9 @@ public class BungeeConnection {
      * sends a request to the bungee to sync a single guild on all servers
      */
     public void forceGuildSync(Integer guildId) {
+        if (!plugin.getGuildsConfig().useBungeeCord()) {
+            return;
+        }
         ByteArrayOutputStream b = new ByteArrayOutputStream();
         DataOutputStream out = new DataOutputStream(b);
 
@@ -76,6 +82,9 @@ public class BungeeConnection {
      * sends a request to the bungee to sync the list of alliances on all servers
      */
     public void forceAlliancesSync() {
+        if (!plugin.getGuildsConfig().useBungeeCord()) {
+            return;
+        }
         ByteArrayOutputStream b = new ByteArrayOutputStream();
         DataOutputStream out = new DataOutputStream(b);
 
@@ -94,6 +103,9 @@ public class BungeeConnection {
      * sends a request to the bungee to sync a single alliance on all servers
      */
     public void forceAllianceSync(Integer allianceId) {
+        if (!plugin.getGuildsConfig().useBungeeCord()) {
+            return;
+        }
         ByteArrayOutputStream b = new ByteArrayOutputStream();
         DataOutputStream out = new DataOutputStream(b);
 
@@ -117,7 +129,7 @@ public class BungeeConnection {
      */
     public void sendPlayerToGuildHome(Player player, Guild guild) {
 
-        if (plugin.getGuildsConfig().isCrossServerTeleportAllowed()) {
+        if (plugin.getGuildsConfig().useBungeeCord() && plugin.getGuildsConfig().isCrossServerTeleportAllowed()) {
             ByteArrayOutputStream b = new ByteArrayOutputStream();
             DataOutputStream out = new DataOutputStream(b);
 

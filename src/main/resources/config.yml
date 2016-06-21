@@ -1,3 +1,4 @@
+bungeecord: true
 mysql:
   user: ####
   password: ####

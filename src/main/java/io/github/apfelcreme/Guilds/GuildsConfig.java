@@ -426,6 +426,14 @@ public class GuildsConfig {
     }
 
     /**
+     * Whether or not this plugin should use bungeecord features like syncing
+     * @return
+     */
+    public boolean useBungeeCord() {
+        return plugin.getConfig().getBoolean("bungeecord", true);
+    }
+
+    /**
      * returns a matching accent color the given color
      *
      * @param color the original color
