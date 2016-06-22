@@ -319,24 +319,16 @@ public class Guild implements Comparable<Guild> {
      * @return 1, 0 or -1
      */
     public int compareTo(Guild that) {
-        if (this.currentLevel.getLevel().compareTo(that.getCurrentLevel().getLevel()) < 0) {
-            return -1;
-        } else if (this.currentLevel.getLevel().compareTo(that.getCurrentLevel().getLevel()) > 0) {
-            return 1;
+        if (this.currentLevel.getLevel() != that.getCurrentLevel().getLevel()) {
+            return Integer.compare(this.currentLevel.getLevel(), that.getCurrentLevel().getLevel());
         }
 
-        if (GuildsUtil.strip(this.tag).compareTo(GuildsUtil.strip(that.tag)) < 0) {
-            return 1;
-        } else if (GuildsUtil.strip(this.tag).compareTo(GuildsUtil.strip(that.tag)) > 0) {
-            return -1;
+        int tagComp = GuildsUtil.strip(this.tag).compareTo(GuildsUtil.strip(that.tag));
+        if (tagComp != 0) {
+            return tagComp;
         }
 
-        if (this.name.compareTo(that.getName()) < 0) {
-            return 1;
-        } else if (this.name.compareTo(that.getName()) > 0) {
-            return -1;
-        }
-        return 0;
+        return this.name.compareTo(that.getName()) * -1;
     }
 
     public void setId(int id) {
