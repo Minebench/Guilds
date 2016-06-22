@@ -83,7 +83,7 @@ public class AllianceManager {
      *
      * @param allianceId the id of the alliance
      */
-    public void reload(final Integer allianceId) {
+    public void reload(final int allianceId) {
         plugin.runAsync(new Runnable() {
             public void run() {
 
@@ -100,7 +100,7 @@ public class AllianceManager {
                         ResultSet resultSet = statement.executeQuery();
                         List<Guild> allianceMembers = new ArrayList<Guild>();
                         if (resultSet.next()) {
-                            Integer allianceId = resultSet.getInt("allianceId");
+                            int allianceId = resultSet.getInt("allianceId");
                             String tag = resultSet.getString("allianceTag");
                             resultSet.beforeFirst();
                             while (resultSet.next()) {

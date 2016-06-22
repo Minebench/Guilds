@@ -94,7 +94,7 @@ public class GuildManager {
      *
      * @param guildId the id of the guild to be reloaded
      */
-    public void reloadGuild(final Integer guildId) {
+    public void reloadGuild(final int guildId) {
         plugin.runAsync(new Runnable() {
             public void run() {
 
@@ -117,8 +117,8 @@ public class GuildManager {
                         ResultSet resultSet = statement.executeQuery();
 
                         if (resultSet.first()) {
-                            Integer guildId = resultSet.getInt("guildId");
-                            Integer allianceId = resultSet.getInt("allianceId");
+                            int guildId = resultSet.getInt("guildId");
+                            int allianceId = resultSet.getInt("allianceId");
                             String name = resultSet.getString("guild");
                             String tag = resultSet.getString("tag");
                             double balance = resultSet.getDouble("balance");
@@ -229,7 +229,7 @@ public class GuildManager {
                             resultSet = statement.executeQuery();
                             resultSet.beforeFirst();
                             while (resultSet.next()) {
-                                Integer messageId = resultSet.getInt("messageId");
+                                int messageId = resultSet.getInt("messageId");
                                 UUID sender = UUID.fromString(resultSet.getString("player"));
                                 String message = resultSet.getString("message");
                                 Timestamp timestamp = resultSet.getTimestamp("timestamp");
