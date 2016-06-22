@@ -50,7 +50,7 @@ public class EnchantmentListener implements Listener {
                         player.giveExp(enchantmentRefund);
                         plugin.getChat().sendMessage(player,
                                 plugin.getGuildsConfig().getColoredText("info.guild.enchantmentGotCheaper", guild.getColor())
-                                        .replace("{0}", Double.toString(guild.getCurrentLevel().getEnchantmentCost() * 100)));
+                                        .replace("{0}", Integer.toString(enchantmentRefund)));
                     }
                 }
             }.runTaskLater(plugin, 1);
