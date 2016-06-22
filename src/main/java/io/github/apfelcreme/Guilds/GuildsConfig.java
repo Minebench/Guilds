@@ -288,19 +288,19 @@ public class GuildsConfig {
         if (name == null) {
             return null;
         }
-        Integer playerLimit = plugin.getConfig()
+        int playerLimit = plugin.getConfig()
                 .getInt("level." + level.toString() + ".limit");
-        Double enchantmentCost = plugin.getConfig()
+        double enchantmentCost = plugin.getConfig()
                 .getDouble("level." + level.toString() + ".enchantmentCost");
-        Double doubleCraftProbability = plugin.getConfig()
+        double doubleCraftProbability = plugin.getConfig()
                 .getDouble("level." + level.toString() + ".doubleCraftProbability");
-        Double specialDropChance = plugin.getConfig()
+        double specialDropChance = plugin.getConfig()
                 .getDouble("level." + level.toString() + ".specialDropChance");
-        Double furnaceExpGainRatio = plugin.getConfig()
+        double furnaceExpGainRatio = plugin.getConfig()
                 .getDouble("level." + level.toString() + ".furnaceExpGainRatio");
-        Double cost = plugin.getConfig()
+        double cost = plugin.getConfig()
                 .getDouble("level." + level.toString() + ".upgradeCost");
-        Integer expCost = plugin.getConfig()
+        int expCost = plugin.getConfig()
                 .getInt("level." + level.toString() + ".upgradeExpCost");
         HashMap<Material, Integer> materialRequirements = new HashMap<Material, Integer>();
         for (Map.Entry entry : plugin.getConfig()
