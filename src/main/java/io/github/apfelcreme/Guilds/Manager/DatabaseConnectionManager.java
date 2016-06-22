@@ -43,7 +43,7 @@ public class DatabaseConnectionManager {
     private Connection initConnection() {
         Connection connection;
         try {
-            if (plugin.getGuildsConfig().getMysqlDatabase().isEmpty() || plugin.getGuildsConfig().getMysqlDatabase() == null) {
+            if (plugin.getGuildsConfig().getMysqlDatabase() == null || plugin.getGuildsConfig().getMysqlDatabase().isEmpty()) {
                 return null;
             } else {
                 Class.forName("com.mysql.jdbc.Driver");

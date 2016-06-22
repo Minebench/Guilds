@@ -100,6 +100,8 @@ public class Guilds extends JavaPlugin {
             return;
         }
 
+        guildsConfig = new GuildsConfig(this);
+
         requestController = new RequestController(this);
 
         bungeeConnection = new BungeeConnection(this);
@@ -108,8 +110,6 @@ public class Guilds extends JavaPlugin {
         allianceManager = new AllianceManager(this);
 
         dbConnMan = new DatabaseConnectionManager(this);
-
-        guildsConfig = new GuildsConfig(this);
 
         if (getServer().getPluginManager().isPluginEnabled("UUIDDB")) {
             uuiddb = UUIDDB.getInstance();
