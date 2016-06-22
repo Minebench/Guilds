@@ -40,6 +40,7 @@ public class BungeeConnection {
      */
     public void forceGuildsSync() {
         if (!plugin.getGuildsConfig().useBungeeCord()) {
+            plugin.getGuildManager().loadGuilds();
             return;
         }
         ByteArrayOutputStream b = new ByteArrayOutputStream();
@@ -59,8 +60,9 @@ public class BungeeConnection {
     /**
      * sends a request to the bungee to sync a single guild on all servers
      */
-    public void forceGuildSync(Integer guildId) {
+    public void forceGuildSync(int guildId) {
         if (!plugin.getGuildsConfig().useBungeeCord()) {
+            plugin.getGuildManager().reloadGuild(guildId);
             return;
         }
         ByteArrayOutputStream b = new ByteArrayOutputStream();
@@ -83,6 +85,7 @@ public class BungeeConnection {
      */
     public void forceAlliancesSync() {
         if (!plugin.getGuildsConfig().useBungeeCord()) {
+            plugin.getAllianceManager().loadAlliances();
             return;
         }
         ByteArrayOutputStream b = new ByteArrayOutputStream();
@@ -102,8 +105,9 @@ public class BungeeConnection {
     /**
      * sends a request to the bungee to sync a single alliance on all servers
      */
-    public void forceAllianceSync(Integer allianceId) {
+    public void forceAllianceSync(int allianceId) {
         if (!plugin.getGuildsConfig().useBungeeCord()) {
+            plugin.getAllianceManager().reload(allianceId);
             return;
         }
         ByteArrayOutputStream b = new ByteArrayOutputStream();
