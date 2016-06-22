@@ -69,12 +69,12 @@ public class InfoCommand extends SubCommand {
                         .getColoredText("info.guild.info.currentBalance", guild.getColor())
                         .replace("{0}", Double.toString(guild.getBalance()))
                         .replace("{1}", plugin.getGuildManager().hasNextLevel(guild) ?
-                                plugin.getGuildManager().getNextLevel(guild).getCost().toString() : "X"));
+                                Double.toString(plugin.getGuildManager().getNextLevel(guild).getCost()) : "X"));
                 plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                         .getColoredText("info.guild.info.currentExpBalance", guild.getColor())
                         .replace("{0}", Integer.toString(guild.getExp()))
                         .replace("{1}", plugin.getGuildManager().hasNextLevel(guild) ?
-                                plugin.getGuildManager().getNextLevel(guild).getExpCost().toString() : "X"));
+                                Integer.toString(plugin.getGuildManager().getNextLevel(guild).getExpCost()) : "X"));
                 plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                         .getColoredText("info.guild.info.currentLevel", guild.getColor())
                         .replace("{0}", guild.getCurrentLevel().getName()));
