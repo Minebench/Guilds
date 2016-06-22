@@ -26,19 +26,19 @@ import java.util.HashMap;
  */
 public class GuildLevel {
 
-    private Integer level;
+    private int level;
     private String name;
-    private Integer playerLimit;
-    private Double enchantmentCost;
-    private Double doubleCraftProbability;
-    private Double specialDropChance;
-    private Double furnaceExpGainRatio;
-    private Double cost;
-    private Integer expCost;
+    private int playerLimit;
+    private double enchantmentCost;
+    private double doubleCraftProbability;
+    private double specialDropChance;
+    private double furnaceExpGainRatio;
+    private double cost;
+    private int expCost;
     private HashMap<Material, Integer> materialRequirements;
 
-    public GuildLevel(Integer level, String name, Integer playerLimit, Double enchantmentCost,
-                      Double doubleCraftProbability, Double specialDropChance, Double furnaceExpGainRatio, Double cost, Integer expCost,
+    public GuildLevel(Integer level, String name, int playerLimit, double enchantmentCost,
+                      double doubleCraftProbability, double specialDropChance, double furnaceExpGainRatio, double cost, int expCost,
                       HashMap<Material, Integer> materialRequirements) {
         this.level = level;
         this.name = name;
@@ -57,7 +57,7 @@ public class GuildLevel {
      *
      * @return the level
      */
-    public Integer getLevel() {
+    public int getLevel() {
         return level;
     }
 
@@ -75,7 +75,7 @@ public class GuildLevel {
      *
      * @return the player limit
      */
-    public Integer getPlayerLimit() {
+    public int getPlayerLimit() {
         return playerLimit;
     }
 
@@ -84,7 +84,7 @@ public class GuildLevel {
      *
      * @return the enchantment cost modifier
      */
-    public Double getEnchantmentCost() {
+    public double getEnchantmentCost() {
         return enchantmentCost;
     }
 
@@ -93,7 +93,7 @@ public class GuildLevel {
      *
      * @return the chance for double drops
      */
-    public Double getDoubleCraftProbability() {
+    public double getDoubleCraftProbability() {
         return doubleCraftProbability;
     }
 
@@ -102,7 +102,7 @@ public class GuildLevel {
      *
      * @return the chance for special drops
      */
-    public Double getSpecialDropChance() {
+    public double getSpecialDropChance() {
         return specialDropChance;
     }
 
@@ -111,7 +111,7 @@ public class GuildLevel {
      *
      * @return the furnace exp modifier
      */
-    public Double getFurnaceExpGainRatio() {
+    public double getFurnaceExpGainRatio() {
         return furnaceExpGainRatio;
     }
 
@@ -120,7 +120,7 @@ public class GuildLevel {
      *
      * @return the upgrade money cost
      */
-    public Double getCost() {
+    public double getCost() {
         return cost;
     }
 
@@ -129,7 +129,7 @@ public class GuildLevel {
      *
      * @return the upgrade exp cost
      */
-    public Integer getExpCost() {
+    public int getExpCost() {
         return expCost;
     }
 
