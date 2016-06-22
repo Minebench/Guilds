@@ -79,7 +79,7 @@ public class CreateCommand extends SubCommand {
                                         } else {
                                             plugin.getChat().sendMessage(sender,
                                                     plugin.getGuildsConfig().getText("error.notEnoughMoneyFounding")
-                                                            .replace("{0}", plugin.getGuildsConfig().getLevelData(1).getCost().toString()));
+                                                            .replace("{0}", Double.toString(plugin.getGuildsConfig().getLevelData(1).getCost())));
                                         }
                                     } else {
                                         plugin.getChat().sendMessage(sender,

@@ -53,9 +53,9 @@ public class LevelCommand extends SubCommand {
                         plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("info.guild.level.head")
                                 .replace("{0}", level.getName()));
                         plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("info.guild.level.cost")
-                                .replace("{0}", level.getCost().toString()));
+                                .replace("{0}", Double.toString(level.getCost())));
                         plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("info.guild.level.expCost")
-                                .replace("{0}", level.getExpCost().toString()));
+                                .replace("{0}", Integer.toString(level.getExpCost())));
                         for (Map.Entry<Material, Integer> entry : level.getMaterialRequirements().entrySet()) {
                             plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("info.guild.level.materialElement")
                                     .replace("{0}", WordUtils.capitalize(entry.getKey().name().toLowerCase().replace("_", " ")))
@@ -63,7 +63,7 @@ public class LevelCommand extends SubCommand {
                         }
                         plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("info.guild.level.head2"));
                         plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("info.guild.level.playerLimit")
-                                .replace("{0}", level.getPlayerLimit().toString()));
+                                .replace("{0}", Integer.toString(level.getPlayerLimit())));
                         if (plugin.getGuildsConfig().isEnchantmentBonusActivated()) {
                             plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("info.guild.level.enchantmentCost")
                                     .replace("{0}", Double.toString(level.getEnchantmentCost() * 100)));
