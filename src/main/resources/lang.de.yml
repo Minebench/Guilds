@@ -273,7 +273,7 @@ texts:
         notEnoughMaterialElement: '&mainColor {0}: &c{1}&7/&c{2}&mainColor: &cnicht erfüllt'
       withdrawMoney:
         withdrewMoney: '&mainColor Du hast &accent{0}&mainColor Bench aus der Gildenkasse genommen!'
-      enchantmentGotCheaper: '&mainColor Durch dein Gildenlevel hast du &accent{0}%&mainColor Erfahrung gespart!'
+      enchantmentGotCheaper: '&mainColor Durch dein Gildenlevel hast du &accent{0}&mainColor Erfahrung gespart!'
       craftItemDoubled: '&mainColor Durch dein Gildenlevel hat sich der Ertrag verdoppelt!'
       furnaceExtract: '&mainColor Durch dein Gildenlevel erhälst du &accent{0}%&mainColor mehr Erfahrung!'
       stillMoneyInGuildBank: '&c Es befinden sich noch {0} Bench in der Gildenkasse!'
