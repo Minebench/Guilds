@@ -39,14 +39,16 @@ public class EnchantmentListener implements Listener {
     public void onEnchantment(EnchantItemEvent event) {
         final Guild guild = plugin.getGuildManager().getGuild(event.getEnchanter());
         if (guild != null) {
-            System.out.println(event.getExpLevelCost());
+            event.setExpLevelCost((int) Math.round(event.getExpLevelCost() * guild.getCurrentLevel().getEnchantmentCost()));
+            // This is number of levels a player needs to at least have for this enchantment to be available
+            // It is displayed on the right of the enchantment entry
 
             final Player player = event.getEnchanter();
-            final int enchantmentRefund = (int) (event.getExpLevelCost() * (1 - guild.getCurrentLevel().getEnchantmentCost()));
-            System.out.println(enchantmentRefund);
+            final int currentExp = player.getTotalExperience();
             new BukkitRunnable() {
                 public void run() {
                     if (player.isOnline()) {
+                        int enchantmentRefund = (int) Math.round((currentExp - player.getTotalExperience()) * guild.getCurrentLevel().getEnchantmentCost());
                         player.giveExp(enchantmentRefund);
                         plugin.getChat().sendMessage(player,
                                 plugin.getGuildsConfig().getColoredText("info.guild.enchantmentGotCheaper", guild.getColor())
