@@ -42,7 +42,7 @@ public class CreateRequest extends Request {
 
     @Override
     public void execute() {
-        Guild guild = new Guild(null, name, tag, color, 0.0);
+        Guild guild = new Guild(-1, name, tag, color, 0.0);
         plugin.getGuildManager().create(guild, sender);
         plugin.getEconomy().withdrawPlayer(sender, plugin.getGuildsConfig().getLevelData(1).getCost());
         plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()

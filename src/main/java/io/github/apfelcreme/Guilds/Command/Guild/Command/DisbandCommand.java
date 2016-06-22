@@ -50,7 +50,7 @@ public class DisbandCommand extends SubCommand {
                     if (guild.getBalance() > 0) {
                         plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                 .getText("info.guild.stillMoneyInGuildBank")
-                                .replace("{0}", guild.getBalance().toString()));
+                                .replace("{0}", Double.toString(guild.getBalance())));
                     }
                     plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                             .getColoredText("info.guild.confirm.confirm", guild.getColor()));
