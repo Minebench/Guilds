@@ -4,6 +4,7 @@ import io.github.apfelcreme.Guilds.Command.Request;
 import io.github.apfelcreme.Guilds.Guild.Guild;
 import io.github.apfelcreme.Guilds.Guilds;
 import io.github.apfelcreme.Guilds.GuildsConfig;
+import io.github.apfelcreme.Guilds.GuildsUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -44,7 +45,7 @@ public class GiveExpRequest extends Request {
     @Override
     public void execute() {
         plugin.getGuildManager().setExp(guild, guild.getExp() + exp);
-        int total = sender.getTotalExperience();
+        int total = GuildsUtil.getTotalExperience(sender);
         sender.setTotalExperience(0);
         sender.setLevel(0);
         sender.setExp(0.0f);

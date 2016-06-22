@@ -52,7 +52,7 @@ public class GiveExpCommand extends SubCommand {
                         Integer exp = Integer.parseInt(strings[1]);
                         Guild guild = plugin.getGuildManager().getGuild(sender);
                         if (guild != null) {
-                            if (sender.getTotalExperience() >= exp) {
+                            if (GuildsUtil.getTotalExperience(sender) >= exp) {
                                 plugin.getRequestController().addRequest(new GiveExpRequest(plugin, sender, guild, exp));
                                 plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                         .getColoredText("info.guild.confirm.confirm", guild.getColor()));

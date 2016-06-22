@@ -2,6 +2,7 @@ package io.github.apfelcreme.Guilds;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
@@ -127,5 +128,50 @@ public class GuildsUtil {
             }
         }
         return amount;
+    }
+
+    /**
+     * Get the exp you need for a certain level. Uses the 1.8 exp math
+     *
+     * Function from Essentials
+     *
+     * @param level The level
+     * @return The exp
+     */
+    public static int getExpAtLevel(final int level) {
+        if (level <= 15) {
+            return (2 * level) + 7;
+        }
+        if ((level >= 16) && (level <= 30)) {
+            return (5 * level) - 38;
+        }
+        return (9 * level) - 158;
+
+    }
+
+    /**
+     * Get the total exp a player has
+     *
+     * This method is required because the Bukkit Player.getTotalExperience() method shows exp that has been 'spent'.
+     *
+     * Without this people would be able to use exp and then still sell it.
+     *
+     * Function from Essentials
+     *
+     * @param player the player to get the total exp from
+     * @return The total exp the player has
+     */
+    public static int getTotalExperience(final Player player) {
+        int exp = Math.round(getExpAtLevel(player.getLevel()) * player.getExp());
+        int currentLevel = player.getLevel();
+
+        while (currentLevel > 0) {
+            currentLevel--;
+            exp += getExpAtLevel(currentLevel);
+        }
+        if (exp < 0) {
+            exp = Integer.MAX_VALUE;
+        }
+        return exp;
     }
 }

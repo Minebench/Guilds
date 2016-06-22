@@ -2,6 +2,7 @@ package io.github.apfelcreme.Guilds.Listener;
 
 import io.github.apfelcreme.Guilds.Guild.Guild;
 import io.github.apfelcreme.Guilds.Guilds;
+import io.github.apfelcreme.Guilds.GuildsUtil;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -40,15 +41,15 @@ public class EnchantmentListener implements Listener {
         final Guild guild = plugin.getGuildManager().getGuild(event.getEnchanter());
         if (guild != null) {
             event.setExpLevelCost((int) Math.round(event.getExpLevelCost() * guild.getCurrentLevel().getEnchantmentCost()));
-            // This is number of levels a player needs to at least have for this enchantment to be available
+            // This is the number of levels a player needs to at least have for this enchantment to be available
             // It is displayed on the right of the enchantment entry
 
             final Player player = event.getEnchanter();
-            final int currentExp = player.getTotalExperience();
+            final int currentExp = GuildsUtil.getTotalExperience(player);
             new BukkitRunnable() {
                 public void run() {
                     if (player.isOnline()) {
-                        int enchantmentRefund = (int) Math.round((currentExp - player.getTotalExperience()) * guild.getCurrentLevel().getEnchantmentCost());
+                        int enchantmentRefund = (int) Math.round((currentExp - GuildsUtil.getTotalExperience(player)) * guild.getCurrentLevel().getEnchantmentCost());
                         player.giveExp(enchantmentRefund);
                         plugin.getChat().sendMessage(player,
                                 plugin.getGuildsConfig().getColoredText("info.guild.enchantmentGotCheaper", guild.getColor())
