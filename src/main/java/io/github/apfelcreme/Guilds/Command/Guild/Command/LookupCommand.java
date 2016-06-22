@@ -68,11 +68,16 @@ public class LookupCommand extends SubCommand {
                                     .replace("{0}",
                                             new SimpleDateFormat("dd.MM.YY HH:mm").format(
                                                     new Date(guildMember.getJoined()))));
-                            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
-                                    .getColoredText("info.guild.lookup.lastSeen", guild.getColor())
-                                    .replace("{0}",
-                                            new SimpleDateFormat("dd.MM.YY HH:mm").format(
-                                                    new Date(guildMember.getLastSeen()))));
+                            if(guild.getMember(sender.getUniqueId()) != null || sender.hasPermission("Guilds.allSeen")) {
+                                plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
+                                        .getColoredText("info.guild.lookup.lastSeen", guild.getColor())
+                                        .replace("{0}",
+                                                new SimpleDateFormat("dd.MM.YY HH:mm").format(
+                                                        new Date(guildMember.getLastSeen()))));
+                            }
+                        } else {
+                            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.playerDoesntExist")
+                                    .replace("{0}", strings[1]));
                         }
                     } else {
                         plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
