@@ -276,7 +276,7 @@ texts:
       enchantmentGotCheaper: '&mainColor Durch dein Gildenlevel hast du &accent{0}&mainColor Erfahrung gespart!'
       craftItemDoubled: '&mainColor Durch dein Gildenlevel hat sich der Ertrag verdoppelt!'
       furnaceExtract: '&mainColor Durch dein Gildenlevel erhälst du &accent{0}%&mainColor mehr Erfahrung!'
-      specialDropCreated: ' &accent{0}%&mainColor durch Gildenlevel zusätzlich erhalten!'
+      specialDropCreated: '&mainColor Ein Item (&accent{0}&mainColor) zusätzlich durch Gildenlevel erhalten!'
       stillMoneyInGuildBank: '&c Es befinden sich noch {0} Bench in der Gildenkasse!'
     guildadmin:
       add:
