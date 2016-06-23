@@ -394,6 +394,30 @@ public class GuildsConfig {
     }
 
     /**
+     * Whether or not one must meet the material requirements while upgrading
+     * @return true or false
+     */
+    public boolean requireMaterialForUpgrade() {
+        return plugin.getConfig().getBoolean("upgrade.requireMaterial", false);
+    }
+
+    /**
+     * Whether or not one must meet the experience requirements while upgrading
+     * @return true or false
+     */
+    public boolean requireExpForUpgrade() {
+        return plugin.getConfig().getBoolean("upgrade.requireExp", true);
+    }
+
+    /**
+     * Whether or not one must meet the money requirements while upgrading
+     * @return true or false
+     */
+    public boolean requireMoneyForUpgrade() {
+        return plugin.getConfig().getBoolean("upgrade.requireMoney", true);
+    }
+
+    /**
      * is the enchantment cost being reduced by the guild level?
      *
      * @return true or false

@@ -52,14 +52,21 @@ public class LevelCommand extends SubCommand {
                     if (level != null) {
                         plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("info.guild.level.head")
                                 .replace("{0}", level.getName()));
-                        plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("info.guild.level.cost")
-                                .replace("{0}", Double.toString(level.getCost())));
-                        plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("info.guild.level.expCost")
-                                .replace("{0}", Integer.toString(level.getExpCost())));
-                        for (Map.Entry<Material, Integer> entry : level.getMaterialRequirements().entrySet()) {
-                            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("info.guild.level.materialElement")
-                                    .replace("{0}", WordUtils.capitalize(entry.getKey().name().toLowerCase().replace("_", " ")))
-                                    .replace("{1}", entry.getValue().toString()));
+
+                        if (plugin.getGuildsConfig().requireMoneyForUpgrade()) {
+                            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("info.guild.level.cost")
+                                    .replace("{0}", Double.toString(level.getCost())));
+                        }
+                        if (plugin.getGuildsConfig().requireExpForUpgrade()) {
+                            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("info.guild.level.expCost")
+                                    .replace("{0}", Integer.toString(level.getExpCost())));
+                        }
+                        if (plugin.getGuildsConfig().requireMaterialForUpgrade()) {
+                            for (Map.Entry<Material, Integer> entry : level.getMaterialRequirements().entrySet()) {
+                                plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("info.guild.level.materialElement")
+                                        .replace("{0}", WordUtils.capitalize(entry.getKey().name().toLowerCase().replace("_", " ")))
+                                        .replace("{1}", entry.getValue().toString()));
+                            }
                         }
                         plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("info.guild.level.head2"));
                         plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("info.guild.level.playerLimit")

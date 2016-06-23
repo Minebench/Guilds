@@ -62,42 +62,48 @@ public class UpgradeCommand extends SubCommand {
                                         plugin.getGuildsConfig().getColoredText("info.guild.upgrade.requirementsMissing", guild.getColor())
                                                 .replace("{0}", plugin.getGuildManager().getNextLevel(guild).getName()));
                             }
-                            if (guild.getBalance() >= plugin.getGuildManager().getNextLevel(guild).getCost()) {
-                                plugin.getChat().sendMessage(sender,
-                                        plugin.getGuildsConfig().getColoredText("info.guild.upgrade.enoughMoney", guild.getColor())
-                                                .replace("{0}", Double.toString(guild.getBalance()))
-                                                .replace("{1}", Double.toString(plugin.getGuildManager().getNextLevel(guild).getCost())));
-                            } else {
-                                plugin.getChat().sendMessage(sender,
-                                        plugin.getGuildsConfig().getColoredText("info.guild.upgrade.notEnoughMoney", guild.getColor())
-                                                .replace("{0}", Double.toString(guild.getBalance()))
-                                                .replace("{1}", Double.toString(plugin.getGuildManager().getNextLevel(guild).getCost())));
-                            }
-                            if (guild.getExp() >= plugin.getGuildManager().getNextLevel(guild).getExpCost()) {
-                                plugin.getChat().sendMessage(sender,
-                                        plugin.getGuildsConfig().getColoredText("info.guild.upgrade.enoughExp", guild.getColor())
-                                                .replace("{0}", Integer.toString(guild.getExp()))
-                                                .replace("{1}", Integer.toString(plugin.getGuildManager().getNextLevel(guild).getExpCost())));
-                            } else {
-                                plugin.getChat().sendMessage(sender,
-                                        plugin.getGuildsConfig().getColoredText("info.guild.upgrade.notEnoughExp", guild.getColor())
-                                                .replace("{0}", Integer.toString(guild.getExp()))
-                                                .replace("{1}", Integer.toString(plugin.getGuildManager().getNextLevel(guild).getExpCost())));
-                            }
-                            for (Map.Entry<Material, Integer> entry : plugin.getGuildManager().getNextLevel(guild).getMaterialRequirements().entrySet()) {
-                                if (sender.getInventory().contains(entry.getKey(), entry.getValue())) {
+                            if (plugin.getGuildsConfig().requireMoneyForUpgrade()) {
+                                if (guild.getBalance() >= plugin.getGuildManager().getNextLevel(guild).getCost()) {
                                     plugin.getChat().sendMessage(sender,
-                                            plugin.getGuildsConfig().getColoredText("info.guild.upgrade.enoughMaterialElement", guild.getColor())
-                                                    .replace("{0}", WordUtils.capitalize(entry.getKey().name().toLowerCase().replace("_", " ")))
-                                                    .replace("{1}", GuildsUtil.countItems(sender.getInventory(), entry.getKey()).toString())
-                                                    .replace("{2}", plugin.getGuildManager().getNextLevel(guild).getMaterialRequirements().get(entry.getKey()).toString()));
+                                            plugin.getGuildsConfig().getColoredText("info.guild.upgrade.enoughMoney", guild.getColor())
+                                                    .replace("{0}", Double.toString(guild.getBalance()))
+                                                    .replace("{1}", Double.toString(plugin.getGuildManager().getNextLevel(guild).getCost())));
                                 } else {
                                     plugin.getChat().sendMessage(sender,
-                                            plugin.getGuildsConfig().getColoredText("info.guild.upgrade.notEnoughMaterialElement", guild.getColor())
-                                                    .replace("{0}", WordUtils.capitalize(entry.getKey().name().toLowerCase().replace("_", " ")))
-                                                    .replace("{1}", GuildsUtil.countItems(sender.getInventory(), entry.getKey()).toString())
-                                                    .replace("{2}", plugin.getGuildManager().getNextLevel(guild).getMaterialRequirements().get(entry.getKey()).toString()));
+                                            plugin.getGuildsConfig().getColoredText("info.guild.upgrade.notEnoughMoney", guild.getColor())
+                                                    .replace("{0}", Double.toString(guild.getBalance()))
+                                                    .replace("{1}", Double.toString(plugin.getGuildManager().getNextLevel(guild).getCost())));
+                                }
+                            }
+                            if (plugin.getGuildsConfig().requireExpForUpgrade()) {
+                                if (guild.getExp() >= plugin.getGuildManager().getNextLevel(guild).getExpCost()) {
+                                    plugin.getChat().sendMessage(sender,
+                                            plugin.getGuildsConfig().getColoredText("info.guild.upgrade.enoughExp", guild.getColor())
+                                                    .replace("{0}", Integer.toString(guild.getExp()))
+                                                    .replace("{1}", Integer.toString(plugin.getGuildManager().getNextLevel(guild).getExpCost())));
+                                } else {
+                                    plugin.getChat().sendMessage(sender,
+                                            plugin.getGuildsConfig().getColoredText("info.guild.upgrade.notEnoughExp", guild.getColor())
+                                                    .replace("{0}", Integer.toString(guild.getExp()))
+                                                    .replace("{1}", Integer.toString(plugin.getGuildManager().getNextLevel(guild).getExpCost())));
+                                }
+                            }
+                            if (plugin.getGuildsConfig().requireMaterialForUpgrade()) {
+                                for (Map.Entry<Material, Integer> entry : plugin.getGuildManager().getNextLevel(guild).getMaterialRequirements().entrySet()) {
+                                    if (sender.getInventory().contains(entry.getKey(), entry.getValue())) {
+                                        plugin.getChat().sendMessage(sender,
+                                                plugin.getGuildsConfig().getColoredText("info.guild.upgrade.enoughMaterialElement", guild.getColor())
+                                                        .replace("{0}", WordUtils.capitalize(entry.getKey().name().toLowerCase().replace("_", " ")))
+                                                        .replace("{1}", GuildsUtil.countItems(sender.getInventory(), entry.getKey()).toString())
+                                                        .replace("{2}", plugin.getGuildManager().getNextLevel(guild).getMaterialRequirements().get(entry.getKey()).toString()));
+                                    } else {
+                                        plugin.getChat().sendMessage(sender,
+                                                plugin.getGuildsConfig().getColoredText("info.guild.upgrade.notEnoughMaterialElement", guild.getColor())
+                                                        .replace("{0}", WordUtils.capitalize(entry.getKey().name().toLowerCase().replace("_", " ")))
+                                                        .replace("{1}", GuildsUtil.countItems(sender.getInventory(), entry.getKey()).toString())
+                                                        .replace("{2}", plugin.getGuildManager().getNextLevel(guild).getMaterialRequirements().get(entry.getKey()).toString()));
 
+                                    }
                                 }
                             }
                             if (plugin.getGuildManager().canBeUpgraded(guild, sender)) {

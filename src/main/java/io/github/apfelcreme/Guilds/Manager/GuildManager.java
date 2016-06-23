@@ -1156,15 +1156,17 @@ public class GuildManager {
         if (nextLevel == null) {
             return false;
         }
-        if (guild.getBalance() < nextLevel.getCost()) {
+        if (plugin.getGuildsConfig().requireMoneyForUpgrade() && guild.getBalance() < nextLevel.getCost()) {
             return false;
         }
-        if (guild.getExp() < nextLevel.getExpCost()) {
+        if (plugin.getGuildsConfig().requireExpForUpgrade() && guild.getExp() < nextLevel.getExpCost()) {
             return false;
         }
-        for (Map.Entry<Material, Integer> entry : nextLevel.getMaterialRequirements().entrySet()) {
-            if (GuildsUtil.countItems(upgrader.getInventory(), entry.getKey()) < entry.getValue()) {
-                return false;
+        if(plugin.getGuildsConfig().requireMoneyForUpgrade()) {
+            for (Map.Entry<Material, Integer> entry : nextLevel.getMaterialRequirements().entrySet()) {
+                if (GuildsUtil.countItems(upgrader.getInventory(), entry.getKey()) < entry.getValue()) {
+                    return false;
+                }
             }
         }
         return true;

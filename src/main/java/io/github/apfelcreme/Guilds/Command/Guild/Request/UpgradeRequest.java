@@ -50,7 +50,7 @@ public class UpgradeRequest extends Request {
                         .replace("{1}", plugin.getGuildManager().getNextLevel(guild).getName()));
 
         GuildLevel nextLevel = plugin.getGuildManager().getNextLevel(guild);
-        if (nextLevel != null) {
+        if (nextLevel != null && plugin.getGuildsConfig().requireMaterialForUpgrade()) {
             for (Map.Entry<Material, Integer> entry : nextLevel.getMaterialRequirements().entrySet()) {
                 sender.getInventory().removeItem(new ItemStack(entry.getKey(), entry.getValue()));
             }
