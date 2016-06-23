@@ -49,7 +49,7 @@ public class EnchantmentListener implements Listener {
             new BukkitRunnable() {
                 public void run() {
                     if (player.isOnline()) {
-                        int enchantmentRefund = (int) Math.round((currentExp - GuildsUtil.getTotalExperience(player)) * guild.getCurrentLevel().getEnchantmentCost());
+                        int enchantmentRefund = (int) Math.round((currentExp - GuildsUtil.getTotalExperience(player)) * (1.0 - guild.getCurrentLevel().getEnchantmentCost()));
                         player.giveExp(enchantmentRefund);
                         plugin.getChat().sendMessage(player,
                                 plugin.getGuildsConfig().getColoredText("info.guild.enchantmentGotCheaper", guild.getColor())
