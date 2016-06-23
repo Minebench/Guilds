@@ -50,7 +50,9 @@ public class GiveExpRequest extends Request {
         sender.setLevel(0);
         sender.setExp(0.0f);
         sender.giveExp(total - exp);
-        sender.getWorld().playSound(sender.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 3.0f, 5.0f);
+        if(sender.getLevel() < 1) {
+            sender.getWorld().playSound(sender.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 3.0f, 5.0f);
+        }
         plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                 .getColoredText("info.guild.exp.paidExp", guild.getColor())
                 .replace("{0}", exp.toString()));
