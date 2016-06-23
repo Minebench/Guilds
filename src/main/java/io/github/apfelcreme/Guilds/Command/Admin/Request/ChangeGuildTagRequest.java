@@ -25,7 +25,7 @@ import org.bukkit.entity.Player;
  *
  * @author Lord36 aka Apfelcreme
  */
-public class ChangeGuildTagRequest extends Request {
+public class ChangeGuildTagRequest extends AdminRequest {
 
     private Guild guild;
     private String newTag;

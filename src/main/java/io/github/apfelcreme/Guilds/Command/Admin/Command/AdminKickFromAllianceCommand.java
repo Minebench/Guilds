@@ -50,8 +50,6 @@ public class AdminKickFromAllianceCommand extends SubCommand {
                     if (alliance != null) {
                         if (alliance.containsGuild(guild)) {
                             plugin.getRequestController().addRequest(new KickFromAllianceRequest(plugin, sender, guild, alliance));
-                            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
-                                    .getText("info.guildadmin.confirm.confirm"));
                         } else {
                             plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.guildIsNotPartOfAlliance"));
                         }

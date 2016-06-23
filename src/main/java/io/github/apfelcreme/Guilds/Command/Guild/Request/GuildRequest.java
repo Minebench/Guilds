@@ -2,14 +2,11 @@ package io.github.apfelcreme.Guilds.Command.Guild.Request;
 
 import io.github.apfelcreme.Guilds.Command.Request;
 import io.github.apfelcreme.Guilds.Guild.Guild;
-import io.github.apfelcreme.Guilds.Guild.Rank;
 import io.github.apfelcreme.Guilds.Guilds;
-import io.github.apfelcreme.Guilds.GuildsConfig;
 import org.bukkit.entity.Player;
 
 /**
- * Guilds
- * Copyright (C) 2015 Lord36 aka Apfelcreme
+ * Copyright 2016 Max Lee (https://github.com/Phoenix616/)
  * <p>
  * This program is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -23,26 +20,17 @@ import org.bukkit.entity.Player;
  * <p>
  * You should have received a copy of the GNU General Public License along with
  * this program; if not, see <http://www.gnu.org/licenses/>.
- *
- * @author Lord36 aka Apfelcreme on 10.05.2015.
  */
-public class DeleteRankRequest extends GuildRequest {
+public abstract class GuildRequest extends Request {
 
-    private Rank rank;
-    private Guild guild;
+    protected Guild guild;
 
-    public DeleteRankRequest(Guilds plugin, Player sender, Rank rank, Guild guild) {
-        super(plugin, sender, guild);
-        this.rank = rank;
+    public GuildRequest(Guilds plugin, Player sender, Guild guild) {
+        super(plugin, sender);
         this.guild = guild;
     }
 
-    @Override
-    public void execute() {
-        plugin.getGuildManager().deleteRank(rank);
-        plugin.getChat().sendMessage(sender,
-                plugin.getGuildsConfig().getColoredText("info.guild.deleteRank.rankDeleted", guild.getColor()));
-        plugin.getLogger().info(sender.getName() + " has deleted rank '" + rank.getName() + "' in guild '"
-                + guild.getName() + "'");
+    public Guild getGuild() {
+        return guild;
     }
 }

@@ -57,8 +57,6 @@ public class CreateCommand extends SubCommand {
                             if (guild != null) {
                                 if (plugin.getAllianceManager().getAlliance(sender) == null) {
                                     if (plugin.getAllianceManager().getAlliance(name) == null) {
-                                        plugin.getRequestController().addRequest(
-                                                new CreateRequest(plugin, guild, sender, name, tag, color));
                                         plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                                 .getColoredText("info.alliance.create.name", color)
                                                 .replace("{0}", GuildsUtil.replaceChatColors(name)));
@@ -69,8 +67,8 @@ public class CreateCommand extends SubCommand {
                                                 .getColoredText("info.alliance.create.color", color)
                                                 .replace("{0}", WordUtils.capitalize(color.name()
                                                         .replace("_", " ").toLowerCase())));
-                                        plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
-                                                .getColoredText("info.alliance.confirm.confirm", color));
+                                        plugin.getRequestController().addRequest(
+                                                new CreateRequest(plugin, guild, sender, name, tag, color));
                                     } else {
                                         plugin.getChat().sendMessage(sender,
                                                 plugin.getGuildsConfig().getText("error.allianceAlreadyExists"));

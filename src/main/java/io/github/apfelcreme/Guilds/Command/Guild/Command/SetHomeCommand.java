@@ -48,8 +48,6 @@ public class SetHomeCommand extends SubCommand {
                 if (guild.getMember(sender.getUniqueId()).getRank().isLeader()) {
                     plugin.getRequestController().addRequest(
                             new SetHomeRequest(plugin, sender, guild, sender.getLocation()));
-                    plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
-                            .getColoredText("info.guild.confirm.confirm", guild.getColor()));
                 } else {
                     plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                             .getText("error.rank.noPermission")

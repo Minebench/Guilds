@@ -1,9 +1,7 @@
 package io.github.apfelcreme.Guilds.Command.Guild.Request;
 
-import io.github.apfelcreme.Guilds.Command.Request;
 import io.github.apfelcreme.Guilds.Guild.Guild;
 import io.github.apfelcreme.Guilds.Guilds;
-import io.github.apfelcreme.Guilds.GuildsConfig;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -27,19 +25,19 @@ import org.bukkit.entity.Player;
  *
  * @author Lord36 aka Apfelcreme on 16.07.2015.
  */
-public class ColorChangeRequest extends Request {
+public class ColorChangeRequest extends GuildRequest {
 
     private final Guild guild;
     private final ChatColor color;
 
     public ColorChangeRequest(Guilds plugin, Player sender, Guild guild, ChatColor color) {
-        super(plugin, sender);
+        super(plugin, sender, guild);
         this.guild = guild;
         this.color = color;
     }
 
     /**
-     * executes the Request
+     * executes the GuildRequest
      */
     @Override
     public void execute() {

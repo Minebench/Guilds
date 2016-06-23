@@ -51,8 +51,6 @@ public class ColorCommand extends SubCommand {
                         ChatColor color = plugin.getGuildsConfig().parseColor(strings[1]);
                         if (color != null) {
                             plugin.getRequestController().addRequest(new ColorChangeRequest(plugin, sender, guild, color));
-                            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
-                                    .getColoredText("info.guild.confirm.confirm", guild.getColor()));
                         } else {
                             plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noValidColor")
                                     .replace("{0}", strings[1]));

@@ -24,7 +24,7 @@ import org.bukkit.entity.Player;
  *
  * @author Lord36 aka Apfelcreme
  */
-public class KickFromAllianceRequest extends Request {
+public class KickFromAllianceRequest extends AdminRequest {
 
     private Guild guild;
     private Alliance alliance;

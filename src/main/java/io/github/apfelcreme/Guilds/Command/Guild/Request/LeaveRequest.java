@@ -25,12 +25,12 @@ import org.bukkit.entity.Player;
  *
  * @author Lord36 aka Apfelcreme on 10.05.2015.
  */
-public class LeaveRequest extends Request {
+public class LeaveRequest extends GuildRequest {
 
     private Guild guild;
 
     public LeaveRequest(Guilds plugin, Player sender, Guild guild) {
-        super(plugin, sender);
+        super(plugin, sender, guild);
         this.guild = guild;
     }
 

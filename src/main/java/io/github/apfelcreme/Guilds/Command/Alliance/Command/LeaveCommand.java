@@ -51,8 +51,6 @@ public class LeaveCommand extends SubCommand {
                     if (guild.getMember(sender.getUniqueId()).getRank().canDoDiplomacy()) {
                         plugin.getRequestController().addRequest(
                                 new AllianceLeaveRequest(plugin, sender, guild, alliance));
-                        plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
-                                .getColoredText("info.alliance.confirm.confirm", alliance.getColor()));
                     } else {
                         plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                 .getText("error.rank.noPermission").replace("{0}", plugin.getGuildsConfig().getText("info.guild.rank.info.doDiplomacy")));

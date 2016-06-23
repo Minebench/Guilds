@@ -25,7 +25,7 @@ import org.bukkit.entity.Player;
  *
  * @author Lord36 aka Apfelcreme
  */
-public class ChangeGuildNameRequest extends Request {
+public class ChangeGuildNameRequest extends AdminRequest {
 
     private Guild guild;
     private String newName;

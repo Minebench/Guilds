@@ -26,13 +26,13 @@ import org.bukkit.entity.Player;
  *
  * @author Lord36 aka Apfelcreme on 10.05.2015.
  */
-public class KickRequest extends Request {
+public class KickRequest extends GuildRequest {
 
     private GuildMember targetPlayer;
     private Guild guild;
 
     public KickRequest(Guilds plugin, Player sender, GuildMember targetPlayer, Guild guild) {
-        super(plugin, sender);
+        super(plugin, sender, guild);
         this.targetPlayer = targetPlayer;
         this.guild = guild;
     }

@@ -26,13 +26,13 @@ import org.bukkit.entity.Player;
  *
  * @author Lord36 aka Apfelcreme on 12.05.2015.
  */
-public class PayRequest extends Request {
+public class PayRequest extends GuildRequest {
 
     private Guild guild;
     private double amount;
 
     public PayRequest(Guilds plugin, Player sender, Guild guild, Double amount) {
-        super(plugin, sender);
+        super(plugin, sender, guild);
         this.guild = guild;
         this.amount = amount;
     }

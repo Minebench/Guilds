@@ -55,8 +55,6 @@ public class DeleteRankCommand extends SubCommand {
                                 if (!rank.isLeader()) {
                                     plugin.getRequestController().addRequest(
                                             new DeleteRankRequest(plugin, sender, rank, guild));
-                                    plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
-                                            .getColoredText("info.guild.confirm.confirm", guild.getColor()));
                                 } else {
                                     plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                             .getText("error.cannotDeleteLeaderRank"));

@@ -52,8 +52,6 @@ public class DisbandCommand extends SubCommand {
                                 .getText("info.guild.stillMoneyInGuildBank")
                                 .replace("{0}", Double.toString(guild.getBalance())));
                     }
-                    plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
-                            .getColoredText("info.guild.confirm.confirm", guild.getColor()));
                 } else {
                     plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                             .getText("error.rank.noPermission")

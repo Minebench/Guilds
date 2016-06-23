@@ -28,19 +28,17 @@ import org.bukkit.entity.Player;
  *
  * @author Lord36 aka Apfelcreme on 22.05.2015.
  */
-public class GiveExpRequest extends Request {
+public class GiveExpRequest extends GuildRequest {
 
-    private Guild guild;
     private int exp;
 
     public GiveExpRequest(Guilds plugin, Player sender, Guild guild, Integer exp) {
-        super(plugin, sender);
-        this.guild = guild;
+        super(plugin, sender, guild);
         this.exp = exp;
     }
 
     /**
-     * executes the Request
+     * executes the GuildRequest
      */
     @Override
     public void execute() {

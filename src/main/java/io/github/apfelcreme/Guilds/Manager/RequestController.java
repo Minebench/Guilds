@@ -1,7 +1,11 @@
 package io.github.apfelcreme.Guilds.Manager;
 
+import io.github.apfelcreme.Guilds.Command.Admin.Request.AdminRequest;
+import io.github.apfelcreme.Guilds.Command.Alliance.Request.AllianceRequest;
+import io.github.apfelcreme.Guilds.Command.Guild.Request.GuildRequest;
 import io.github.apfelcreme.Guilds.Command.Request;
 import io.github.apfelcreme.Guilds.Guilds;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
@@ -62,6 +66,19 @@ public class RequestController {
      */
     public void addRequest(Request request) {
         requests.put(request.getSender(), request);
+        if (request instanceof GuildRequest) {
+            plugin.getChat().sendMessage(request.getSender(), plugin.getGuildsConfig()
+                    .getColoredText("info.guild.confirm.confirm", ((GuildRequest) request).getGuild().getColor()));
+        } else if (request instanceof AllianceRequest) {
+            plugin.getChat().sendMessage(request.getSender(), plugin.getGuildsConfig()
+                    .getColoredText("info.alliance.confirm.confirm", ((AllianceRequest) request).getAlliance().getColor()));
+        } else if (request instanceof AdminRequest){
+            plugin.getChat().sendMessage(request.getSender(), plugin.getGuildsConfig()
+                    .getText("info.guildadmin.confirm.confirm"));
+        } else {
+            plugin.getChat().sendMessage(request.getSender(), plugin.getGuildsConfig()
+                    .getColoredText("info.guild.confirm.confirm", ChatColor.GREEN));
+        }
     }
 
     /**

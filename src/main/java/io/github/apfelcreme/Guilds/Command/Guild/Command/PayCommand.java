@@ -52,8 +52,6 @@ public class PayCommand extends SubCommand {
                         if (guild != null) {
                             if (plugin.getEconomy().getBalance(sender) >= amount) {
                                 plugin.getRequestController().addRequest(new PayRequest(plugin, sender, guild, amount));
-                                plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
-                                        .getColoredText("info.guild.confirm.confirm", guild.getColor()));
                             } else {
                                 plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.notEnoughMoney"));
                             }

@@ -47,8 +47,6 @@ public class LeaveCommand extends SubCommand {
             if (guild != null) {
                 if (!guild.getMember(sender.getUniqueId()).getRank().isLeader()) {
                     plugin.getRequestController().addRequest(new LeaveRequest(plugin, sender, guild));
-                    plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
-                            .getColoredText("info.guild.confirm.confirm", guild.getColor()));
                 } else {
                     plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.cannotLeaveLeader"));
                 }

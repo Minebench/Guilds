@@ -27,14 +27,14 @@ import org.bukkit.entity.Player;
  *
  * @author Lord36 aka Apfelcreme on 10.05.2015.
  */
-public class CreateRequest extends Request {
+public class CreateRequest extends GuildRequest {
 
     private String name;
     private String tag;
     private ChatColor color;
 
     public CreateRequest(Guilds plugin, Player sender, String name, String tag, ChatColor color) {
-        super(plugin, sender);
+        super(plugin, sender, new Guild(-1, name, tag, color, 0.0));
         this.name = name;
         this.tag = tag;
         this.color = color;
@@ -42,7 +42,6 @@ public class CreateRequest extends Request {
 
     @Override
     public void execute() {
-        Guild guild = new Guild(-1, name, tag, color, 0.0);
         plugin.getGuildManager().create(guild, sender);
         plugin.getEconomy().withdrawPlayer(sender, plugin.getGuildsConfig().getLevelData(1).getCost());
         plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()

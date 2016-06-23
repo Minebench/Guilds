@@ -52,8 +52,6 @@ public class AdminAddCommand extends SubCommand {
                         if (targetGuild != null) {
                             if (targetGuild.getMembers().size() < targetGuild.getCurrentLevel().getPlayerLimit()) {
                                 plugin.getRequestController().addRequest(new AddToGuildRequest(plugin, sender, uuid, targetGuild));
-                                plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
-                                        .getText("info.guildadmin.confirm.confirm"));
                             } else {
                                 plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                         .getText("error.guildFull"));

@@ -49,8 +49,6 @@ public class AdminChangeGuildTagCommand extends SubCommand {
                     String newTag = strings[2];
                     if (GuildsUtil.strip(newTag).length() <= plugin.getGuildsConfig().getGuildTagLength()) {
                         plugin.getRequestController().addRequest(new ChangeGuildTagRequest(plugin, sender, guild, newTag));
-                        plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
-                                .getText("info.guildadmin.confirm.confirm"));
                     } else {
                         plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.nameTooLong"));
                     }

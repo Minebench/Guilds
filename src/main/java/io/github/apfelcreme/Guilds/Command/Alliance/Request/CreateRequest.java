@@ -1,7 +1,6 @@
 package io.github.apfelcreme.Guilds.Command.Alliance.Request;
 
 import io.github.apfelcreme.Guilds.Alliance.Alliance;
-import io.github.apfelcreme.Guilds.Command.Request;
 import io.github.apfelcreme.Guilds.Guild.Guild;
 import io.github.apfelcreme.Guilds.Guilds;
 import org.bukkit.ChatColor;
@@ -28,24 +27,17 @@ import java.util.Date;
  *
  * @author Lord36 aka Apfelcreme on 10.05.2015.
  */
-public class CreateRequest extends Request {
+public class CreateRequest extends AllianceRequest {
 
-    private Guild guild;
-    private String name;
-    private String tag;
     private ChatColor color;
 
     public CreateRequest(Guilds plugin, Guild guild, Player sender, String name, String tag, ChatColor color) {
-        super(plugin, sender);
-        this.guild = guild;
-        this.name = name;
-        this.tag = tag;
+        super(plugin, sender, guild, new Alliance(name, tag, color, new Date().getTime(), guild));
         this.color = color;
     }
 
     @Override
     public void execute() {
-        Alliance alliance = new Alliance(name, tag, color, new Date().getTime(), guild);
         plugin.getAllianceManager().create(alliance);
         plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                 .getColoredText("info.alliance.create.allianceCreated", color)

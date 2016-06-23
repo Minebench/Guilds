@@ -28,7 +28,7 @@ import java.util.UUID;
  *
  * @author Lord36 aka Apfelcreme on 10.05.2015.
  */
-public class AddToGuildRequest extends Request {
+public class AddToGuildRequest extends AdminRequest {
 
     private Guild guild;
     private UUID target;

@@ -55,8 +55,6 @@ public class KickCommand extends SubCommand {
                                 if (guild.getMember(sender.getUniqueId()).getRank().canKick()) {
                                     plugin.getRequestController().addRequest(
                                             new KickRequest(plugin, sender, guild.getMember(uuid), guild));
-                                    plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
-                                            .getColoredText("info.guild.confirm.confirm", guild.getColor()));
                                 } else {
                                     plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                             .getText("error.rank.noPermission").replace("{0}", plugin.getGuildsConfig().getText("info.guild.rank.info.kick")));

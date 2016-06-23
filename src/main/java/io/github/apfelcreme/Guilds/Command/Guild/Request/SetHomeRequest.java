@@ -27,19 +27,19 @@ import org.bukkit.entity.Player;
  *
  * @author Lord36 aka Apfelcreme on 11.08.2015.
  */
-public class SetHomeRequest extends Request {
+public class SetHomeRequest extends GuildRequest {
 
     private Guild guild;
     private Location location;
 
     public SetHomeRequest(Guilds plugin, Player sender, Guild guild, Location location) {
-        super(plugin, sender);
+        super(plugin, sender, guild);
         this.guild = guild;
         this.location = location;
     }
 
     /**
-     * executes the Request
+     * executes the GuildRequest
      */
     @Override
     public void execute() {

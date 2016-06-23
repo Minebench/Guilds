@@ -52,8 +52,6 @@ public class WithdrawCommand extends SubCommand {
                         if (guild != null) {
                             if (guild.getMember(sender.getUniqueId()).getRank().canWithdrawMoney()) {
                                 plugin.getRequestController().addRequest(new WithdrawRequest(plugin, sender, guild, amount));
-                                plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
-                                        .getColoredText("info.guild.confirm.confirm", guild.getColor()));
                             } else {
                                 plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                         .getText("error.rank.noPermission").replace("{0}", plugin.getGuildsConfig().getText("info.guild.rank.info.withdrawMoney")));

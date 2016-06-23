@@ -50,8 +50,6 @@ public class AdminChangeGuildNameCommand extends SubCommand {
                     if (GuildsUtil.strip(newName).length() <= plugin.getGuildsConfig().getGuildNameLength()) {
                         if (plugin.getGuildManager().getGuild(newName) == null) {
                             plugin.getRequestController().addRequest(new ChangeGuildNameRequest(plugin, sender, guild, newName));
-                            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
-                                    .getText("info.guildadmin.confirm.confirm"));
                         } else {
                             plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.guildAlreadyExists"));
                         }

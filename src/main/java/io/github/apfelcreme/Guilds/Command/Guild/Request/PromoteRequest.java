@@ -27,14 +27,14 @@ import org.bukkit.entity.Player;
  *
  * @author Lord36 aka Apfelcreme on 15.05.2015.
  */
-public class PromoteRequest extends Request {
+public class PromoteRequest extends GuildRequest {
 
     private GuildMember targetPlayer;
     private Guild guild;
     private Rank rank;
 
     public PromoteRequest(Guilds plugin, Player sender, GuildMember targetPlayer, Guild guild, Rank rank) {
-        super(plugin, sender);
+        super(plugin, sender, guild);
         this.targetPlayer = targetPlayer;
         this.guild = guild;
         this.rank = rank;

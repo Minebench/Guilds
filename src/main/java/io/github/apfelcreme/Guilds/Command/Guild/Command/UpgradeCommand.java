@@ -110,8 +110,6 @@ public class UpgradeCommand extends SubCommand {
                             if (plugin.getGuildManager().canBeUpgraded(guild, sender)) {
                                 // guild is ready to be upgraded
                                 plugin.getRequestController().addRequest(new UpgradeRequest(plugin, sender, guild));
-                                plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
-                                        .getColoredText("info.guild.confirm.confirm", guild.getColor()));
                             }
                         } else {
                             plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()

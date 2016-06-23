@@ -30,12 +30,12 @@ import java.util.Map;
  *
  * @author Lord36 aka Apfelcreme on 11.05.2015.
  */
-public class UpgradeRequest extends Request {
+public class UpgradeRequest extends GuildRequest {
 
     private Guild guild;
 
     public UpgradeRequest(Guilds plugin, Player sender, Guild guild) {
-        super(plugin, sender);
+        super(plugin, sender, guild);
         this.guild = guild;
     }
 

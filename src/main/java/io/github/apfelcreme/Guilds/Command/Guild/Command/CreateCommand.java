@@ -58,8 +58,6 @@ public class CreateCommand extends SubCommand {
                                 if (plugin.getGuildManager().getGuild(sender) == null) {
                                     if (plugin.getGuildManager().getGuild(name) == null) {
                                         if (plugin.getEconomy().has(sender, plugin.getGuildsConfig().getLevelData(1).getCost())) {
-                                            plugin.getRequestController().addRequest(
-                                                    new CreateRequest(plugin, sender, name, tag, color));
                                             plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                                     .getColoredText("info.guild.create.name", color)
                                                     .replace("{0}", GuildsUtil.replaceChatColors(name)));
@@ -74,8 +72,8 @@ public class CreateCommand extends SubCommand {
                                                     .getColoredText("info.guild.create.price", color)
                                                     .replace("{0}", new DecimalFormat("#.##").format(
                                                             plugin.getGuildsConfig().getLevelData(1).getCost())));
-                                            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
-                                                    .getColoredText("info.guild.confirm.confirm", color));
+                                            plugin.getRequestController().addRequest(
+                                                    new CreateRequest(plugin, sender, name, tag, color));
                                         } else {
                                             plugin.getChat().sendMessage(sender,
                                                     plugin.getGuildsConfig().getText("error.notEnoughMoneyFounding")

@@ -60,8 +60,6 @@ public class PromoteCommand extends SubCommand {
                                             new PromoteRequest(plugin,
                                                     sender, guild.getMember(uuid),
                                                     guild, rank));
-                                    plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
-                                            .getColoredText("info.guild.confirm.confirm", guild.getColor()));
                                 } else {
                                     plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.unknownRank"));
                                 }

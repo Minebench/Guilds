@@ -25,12 +25,12 @@ import org.bukkit.entity.Player;
  *
  * @author Lord36 aka Apfelcreme on 10.05.2015.
  */
-public class DisbandRequest extends Request {
+public class DisbandRequest extends GuildRequest {
 
     private Guild guild;
 
     public DisbandRequest(Guilds plugin, Player sender, Guild guild) {
-        super(plugin, sender);
+        super(plugin, sender, guild);
         this.guild = guild;
     }
 

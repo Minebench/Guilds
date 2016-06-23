@@ -25,15 +25,10 @@ import org.bukkit.entity.Player;
  *
  * @author Lord36 aka Apfelcreme on 21.07.2015.
  */
-public class AllianceLeaveRequest extends Request {
-
-    private final Guild guild;
-    private final Alliance alliance;
+public class AllianceLeaveRequest extends AllianceRequest {
 
     public AllianceLeaveRequest(Guilds plugin, Player sender, Guild guild, Alliance alliance) {
-        super(plugin, sender);
-        this.guild = guild;
-        this.alliance = alliance;
+        super(plugin, sender, guild, alliance);
     }
 
     /**

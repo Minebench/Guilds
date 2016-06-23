@@ -26,13 +26,12 @@ import org.bukkit.entity.Player;
  *
  * @author Lord36 aka Apfelcreme on 13.05.2015.
  */
-public class WithdrawRequest extends Request {
+public class WithdrawRequest extends GuildRequest {
 
-    private Guild guild;
     private double amount;
 
     public WithdrawRequest(Guilds plugin, Player sender, Guild guild, Double amount) {
-        super(plugin, sender);
+        super(plugin, sender, guild);
         this.guild = guild;
         this.amount = amount;
     }
