@@ -143,8 +143,6 @@ public class Guilds extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PlayerLoginListener(this), this);
         getServer().getPluginManager().registerEvents(new PlayerQuitListener(this), this);
 
-        getGuildsConfig().getNewRandomDrop();
-
         getGuildManager().loadGuilds();
 
     }
