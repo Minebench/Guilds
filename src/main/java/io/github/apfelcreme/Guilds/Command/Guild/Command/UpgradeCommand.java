@@ -91,7 +91,7 @@ public class UpgradeCommand extends SubCommand {
                             }
                             if (plugin.getGuildsConfig().requireMaterialForUpgrade()) {
                                 for (Map.Entry<Material, Integer> entry : plugin.getGuildManager().getNextLevel(guild).getMaterialRequirements().entrySet()) {
-                                    if (sender.getInventory().contains(new ItemStack(entry.getKey(), entry.getValue()))) {
+                                    if (GuildsUtil.countItems(sender.getInventory(), entry.getKey(), false) >= entry.getValue()) {
                                         plugin.getChat().sendMessage(sender,
                                                 plugin.getGuildsConfig().getColoredText("info.guild.upgrade.enoughMaterialElement", guild.getColor())
                                                         .replace("{0}", WordUtils.capitalize(entry.getKey().name().toLowerCase().replace("_", " ")))
