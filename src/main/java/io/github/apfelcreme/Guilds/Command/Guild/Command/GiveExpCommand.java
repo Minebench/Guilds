@@ -44,8 +44,8 @@ public class GiveExpCommand extends SubCommand {
      */
     public void execute(CommandSender commandSender, String[] strings) {
         Player sender = (Player) commandSender;
-        if ((plugin.getServer().getDefaultGameMode() != GameMode.CREATIVE)
-                && (sender.getGameMode() != GameMode.CREATIVE)) {
+        if ((plugin.getServer().getDefaultGameMode() != GameMode.CREATIVE && sender.getGameMode() != GameMode.CREATIVE)
+                || sender.hasPermission("Guilds.giveExpCreative")) {
             if (sender.hasPermission("Guilds.giveExp") && plugin.getGuildsConfig().requireExpForUpgrade()) {
                 if (strings.length >= 2) {
                     if (GuildsUtil.isNumeric(strings[1])) {

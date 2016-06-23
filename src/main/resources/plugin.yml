@@ -145,6 +145,8 @@ permissions:
     description: disbands a guild
   Guilds.giveExp:
     description: gives exp to a guild
+  Guilds.giveExpCreative:
+    description: allows exp giving in creative mode
   Guilds.guildInfo:
     description: show some info on a guild
   Guilds.guildHome:
