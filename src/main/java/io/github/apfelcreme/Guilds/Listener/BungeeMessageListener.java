@@ -39,7 +39,7 @@ public class BungeeMessageListener implements PluginMessageListener {
     }
 
     public void onPluginMessageReceived(String s, final Player player, byte[] bytes) {
-        if (!s.equals("Guilds")) {
+        if (!s.equals("Guilds") || !plugin.getGuildsConfig().useBungeeCord()) {
             return;
         }
         ByteArrayDataInput in = ByteStreams.newDataInput(bytes);
