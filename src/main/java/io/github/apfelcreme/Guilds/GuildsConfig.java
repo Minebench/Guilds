@@ -172,7 +172,7 @@ public class GuildsConfig {
      * @return the number of blackboardMessages that are loaded
      */
     public int getBlackboardMessageLimit() {
-        return plugin.getConfig().getInt("guilds.blackboard.limit", 5);
+        return plugin.getConfig().getInt("guilds.blackboard.limit");
     }
 
     /**
@@ -181,7 +181,7 @@ public class GuildsConfig {
      * @return the number of elements that are printed per page in lists like '/guild roster'
      */
     public int getListsPageSize() {
-        return plugin.getConfig().getInt("guilds.lists.pageSize", 10);
+        return plugin.getConfig().getInt("guilds.lists.pageSize");
     }
 
     /**
@@ -250,7 +250,7 @@ public class GuildsConfig {
      * @return the maximum length of a guild name
      */
     public int getGuildNameLength() {
-        return plugin.getConfig().getInt("guilds.guildNameLength", 30);
+        return plugin.getConfig().getInt("guilds.guildNameLength");
     }
 
     /**
@@ -259,7 +259,7 @@ public class GuildsConfig {
      * @return the maximum length of a guild tag
      */
     public int getGuildTagLength() {
-        return plugin.getConfig().getInt("guilds.guildTagLength", 4);
+        return plugin.getConfig().getInt("guilds.guildTagLength");
     }
 
     /**
@@ -268,7 +268,7 @@ public class GuildsConfig {
      * @return the maximum length of a prefix
      */
     public int getPrefixLength() {
-        return plugin.getConfig().getInt("guilds.prefixLength", 25);
+        return plugin.getConfig().getInt("guilds.prefixLength");
     }
 
     /**
@@ -277,7 +277,7 @@ public class GuildsConfig {
      * @return true or false
      */
     public boolean isCrossServerTeleportAllowed() {
-        return plugin.getConfig().getBoolean("guilds.crossServerTeleport", false);
+        return plugin.getConfig().getBoolean("guilds.crossServerTeleport");
     }
 
     /**
@@ -398,7 +398,7 @@ public class GuildsConfig {
      * @return true or false
      */
     public boolean requireMaterialForUpgrade() {
-        return plugin.getConfig().getBoolean("upgrade.requireMaterial", false);
+        return plugin.getConfig().getBoolean("upgrade.requireMaterial");
     }
 
     /**
@@ -406,7 +406,7 @@ public class GuildsConfig {
      * @return true or false
      */
     public boolean requireExpForUpgrade() {
-        return plugin.getConfig().getBoolean("upgrade.requireExp", true);
+        return plugin.getConfig().getBoolean("upgrade.requireExp");
     }
 
     /**
@@ -414,7 +414,7 @@ public class GuildsConfig {
      * @return true or false
      */
     public boolean requireMoneyForUpgrade() {
-        return plugin.getConfig().getBoolean("upgrade.requireMoney", true);
+        return plugin.getConfig().getBoolean("upgrade.requireMoney");
     }
 
     /**
@@ -423,7 +423,7 @@ public class GuildsConfig {
      * @return true or false
      */
     public boolean isEnchantmentBonusActivated() {
-        return plugin.getConfig().getBoolean("bonus.cheaperEnchantment", false);
+        return plugin.getConfig().getBoolean("bonus.cheaperEnchantment");
     }
 
     /**
@@ -432,7 +432,7 @@ public class GuildsConfig {
      * @return true or false
      */
     public boolean isMoreFurnaceExpBonusActivated() {
-        return plugin.getConfig().getBoolean("bonus.moreFurnaceExp", false);
+        return plugin.getConfig().getBoolean("bonus.moreFurnaceExp");
     }
 
     /**
@@ -441,7 +441,7 @@ public class GuildsConfig {
      * @return true or false
      */
     public boolean isDoubleCraftingBonusActivated() {
-        return plugin.getConfig().getBoolean("bonus.doubleCrafting", false);
+        return plugin.getConfig().getBoolean("bonus.doubleCrafting");
     }
 
     /**
@@ -450,7 +450,7 @@ public class GuildsConfig {
      * @return true or false
      */
     public boolean isSpecialDropBonusActivated() {
-        return plugin.getConfig().getBoolean("bonus.specialDrop", false);
+        return plugin.getConfig().getBoolean("bonus.specialDrop");
     }
 
     /**
@@ -458,7 +458,7 @@ public class GuildsConfig {
      * @return
      */
     public boolean useBungeeCord() {
-        return plugin.getConfig().getBoolean("bungeecord", true);
+        return plugin.getConfig().getBoolean("bungeecord");
     }
 
     /**

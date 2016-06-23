@@ -21,7 +21,7 @@ guilds:
   guildNameLength: 30
   guildTagLength: 4
   prefixLength: 25
-  crossServerTeleport: true
+  crossServerTeleport: false
 bonus:
   cheaperEnchantment: true
   moreFurnaceExp: false
@@ -35,6 +35,10 @@ specialDrops:
   DIAMOND: 0.05
   EMERALD_ORE: 0.03
   DIAMOND_ORE: 0.02
+upgrade:
+  requireMoney: true
+  requireExp: true
+  requireMaterial: false
 level:
   '1':
     name: 'Bruderschaft'
