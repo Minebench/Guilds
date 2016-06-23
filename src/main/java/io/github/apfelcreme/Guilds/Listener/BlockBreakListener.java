@@ -2,7 +2,7 @@ package io.github.apfelcreme.Guilds.Listener;
 
 import io.github.apfelcreme.Guilds.Guild.Guild;
 import io.github.apfelcreme.Guilds.Guilds;
-import org.bukkit.Material;
+import io.github.apfelcreme.Guilds.GuildsUtil;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -34,18 +34,39 @@ public class BlockBreakListener implements Listener {
         this.plugin = plugin;
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onBlockBreak(BlockBreakEvent event) {
-        Guild guild = plugin.getGuildManager().getGuild(event.getPlayer().getUniqueId());
-        if (guild != null) {
-            Double random = Math.random();
-            if (random < guild.getCurrentLevel().getSpecialDropChance()) {
-                Material drop = plugin.getGuildsConfig().getNewRandomDrop();
-                if (drop != null) {
-                    event.getPlayer().getWorld().dropItem(event.getBlock().getLocation(), new ItemStack(drop, 1));
-                }
-            }
+        if (!plugin.getGuildsConfig().isSpecialDropBonusActivated()) {
+            return;
         }
+
+        Guild guild = plugin.getGuildManager().getGuild(event.getPlayer().getUniqueId());
+        if (guild == null) {
+            return;
+        }
+
+        for (ItemStack drop : event.getBlock().getDrops(event.getPlayer().getInventory().getItemInMainHand())) {
+            if (!plugin.getGuildsConfig().isSpecialDrop(drop.getType())) {
+                continue;
+            }
+
+            double random = Math.random();
+            if (random > guild.getCurrentLevel().getSpecialDropChance()) {
+                continue;
+            }
+
+            double matRandom = Math.random();
+            if (matRandom > plugin.getGuildsConfig().getSpecialDropChance(drop.getType())) {
+                continue;
+            }
+
+            event.getPlayer().getWorld().dropItem(event.getBlock().getLocation(), new ItemStack(drop.getType(), 1)
+            );
+            plugin.getChat().sendMessage(event.getPlayer(),
+                    plugin.getGuildsConfig().getColoredText("info.guild.specialDropCreated", guild.getColor())
+                            .replace("{0}", GuildsUtil.humanize(drop.getType())));
+        }
+
     }
 
 }

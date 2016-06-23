@@ -317,27 +317,21 @@ public class GuildsConfig {
     }
 
     /**
-     * generates a random Drop with the weights configured in the config.yml
+     * get whether or not this material is eligible for a special drop
      *
-     * @return a Material that will be dropped for the player in the BlockBreakEvent
+     * @return true or false
      */
-    public Material getNewRandomDrop() {
-        Map<String, Object> input = plugin.getConfig().getConfigurationSection("specialDrops").getValues(true);
-        Double total = 0.0;
-        Map<Material, Double> chances = new HashMap<Material, Double>();
-        Map<Material, Double> cumulatedChances = new HashMap<Material, Double>();
-        for (Map.Entry<String, Object> material : input.entrySet()) {
-            chances.put(Material.valueOf(material.getKey()), Double.parseDouble(material.getValue().toString()));
-            cumulatedChances.put(Material.valueOf(material.getKey()), total);
-            total += Double.parseDouble(material.getValue().toString());
-        }
-        Double random = Math.random() * total;
-        for (Map.Entry<Material, Double> material : cumulatedChances.entrySet()) {
-            if ((random > cumulatedChances.get(material.getKey())) && (random < (cumulatedChances.get(material.getKey()) + chances.get(material.getKey())))) {
-                return material.getKey();
-            }
-        }
-        return null;
+    public boolean isSpecialDrop(Material type) {
+        return plugin.getConfig().get("specialDrops." + type.toString(), null) != null;
+    }
+
+    /**
+     * Get the chance of a certain material to create an additional drop
+     *
+     * @return the chance as a double configured in the config, should be between 0.0 and 1.0
+     */
+    public double getSpecialDropChance(Material type) {
+        return plugin.getConfig().getDouble("specialDrops." + type.toString());
     }
 
     /**

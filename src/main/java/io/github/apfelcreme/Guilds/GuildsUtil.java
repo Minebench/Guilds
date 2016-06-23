@@ -203,4 +203,16 @@ public class GuildsUtil {
         }
         return exp;
     }
+
+    /**
+     * Humanize a material name. E.g turn STONE_AXE into Stone Axe
+     * @return the humanized material name
+     */
+    public static String humanize(Material type) {
+        String[] parts = type.toString().split("_");
+        for (int i = 0; i < parts.length; i++) {
+            parts[i] = parts[i].substring(0, 1) + parts[i].substring(1).toLowerCase();
+        }
+        return join(parts, " ");
+    }
 }
