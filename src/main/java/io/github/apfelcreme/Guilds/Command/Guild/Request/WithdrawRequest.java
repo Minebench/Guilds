@@ -29,7 +29,7 @@ import org.bukkit.entity.Player;
 public class WithdrawRequest extends Request {
 
     private Guild guild;
-    private Double amount;
+    private double amount;
 
     public WithdrawRequest(Guilds plugin, Player sender, Guild guild, Double amount) {
         super(plugin, sender);
@@ -44,9 +44,9 @@ public class WithdrawRequest extends Request {
             plugin.getGuildManager().setBalance(guild, guild.getBalance() - amount);
             plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                     .getColoredText("info.guild.withdrawMoney.withdrewMoney", guild.getColor())
-                    .replace("{0}", amount.toString()));
+                    .replace("{0}", Double.toString(amount)));
 
-            plugin.getLogger().info(sender.getName() + " has withdrew " + amount.toString() + " from" +
+            plugin.getLogger().info(sender.getName() + " has withdrew " + Double.toString(amount) + " from" +
                     " guild '" + guild.getName() + "'");
         }
     }

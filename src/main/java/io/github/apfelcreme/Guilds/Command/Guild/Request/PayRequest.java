@@ -29,7 +29,7 @@ import org.bukkit.entity.Player;
 public class PayRequest extends Request {
 
     private Guild guild;
-    private Double amount;
+    private double amount;
 
     public PayRequest(Guilds plugin, Player sender, Guild guild, Double amount) {
         super(plugin, sender);
@@ -44,12 +44,12 @@ public class PayRequest extends Request {
             plugin.getGuildManager().setBalance(guild, guild.getBalance() + amount);
             plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                     .getColoredText("info.guild.pay.paidMoney", guild.getColor())
-                    .replace("{0}", amount.toString()));
+                    .replace("{0}", Double.toString(amount)));
             plugin.getChat().sendGuildChannelBroadcast(guild,
                     plugin.getGuildsConfig().getText("info.chat.playerPaid")
                             .replace("{0}", sender.getName())
-                            .replace("{1}", amount.toString()));
-            plugin.getLogger().info(sender.getName() + " has payed " + amount.toString() + " to guild '"
+                            .replace("{1}", Double.toString(amount)));
+            plugin.getLogger().info(sender.getName() + " has payed " + amount + " to guild '"
                     + guild.getName() + "'");
         }
     }

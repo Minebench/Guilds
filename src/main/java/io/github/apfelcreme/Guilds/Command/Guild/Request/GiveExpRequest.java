@@ -31,7 +31,7 @@ import org.bukkit.entity.Player;
 public class GiveExpRequest extends Request {
 
     private Guild guild;
-    private Integer exp;
+    private int exp;
 
     public GiveExpRequest(Guilds plugin, Player sender, Guild guild, Integer exp) {
         super(plugin, sender);
@@ -55,13 +55,12 @@ public class GiveExpRequest extends Request {
         }
         plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                 .getColoredText("info.guild.exp.paidExp", guild.getColor())
-                .replace("{0}", exp.toString()));
+                .replace("{0}", Integer.toString(exp)));
         plugin.getChat().sendGuildChannelBroadcast(guild,
                 plugin.getGuildsConfig().getText("info.chat.playerPaidExp")
                         .replace("{0}", sender.getName())
-                        .replace("{1}", exp.toString())
+                        .replace("{1}", Integer.toString(exp))
         );
-        plugin.getLogger().info(sender.getName() + " has payed " + exp.toString() + " exp to guild '"
-                + guild.getName() + "'");
+        plugin.getLogger().info(sender.getName() + " has payed " + exp + " exp to guild '" + guild.getName() + "'");
     }
 }
