@@ -181,6 +181,8 @@ permissions:
     description: set the guild home
   Guilds.upgradeGuild:
     description: upgrades a guild
+  Guilds.upgradeGuildCreative:
+    description: allows ugprading of a guild in creative
   Guilds.withdrawFromGuild:
     description: takes money from a guild
 

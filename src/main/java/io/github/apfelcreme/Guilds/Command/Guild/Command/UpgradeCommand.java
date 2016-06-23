@@ -47,8 +47,8 @@ public class UpgradeCommand extends SubCommand {
      */
     public void execute(CommandSender commandSender, String[] strings) {
         Player sender = (Player) commandSender;
-        if ((plugin.getServer().getDefaultGameMode() != GameMode.CREATIVE)
-                && (sender.getGameMode() != GameMode.CREATIVE)) {
+        if ((plugin.getServer().getDefaultGameMode() != GameMode.CREATIVE && sender.getGameMode() != GameMode.CREATIVE)
+                || sender.hasPermission("Guilds.upgradeGuildCreative")) {
             if (sender.hasPermission("Guilds.upgradeGuild")) {
                 Guild guild = plugin.getGuildManager().getGuild(sender);
                 if (guild != null) {
