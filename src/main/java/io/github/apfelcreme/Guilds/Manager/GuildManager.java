@@ -1164,7 +1164,7 @@ public class GuildManager {
         }
         if(plugin.getGuildsConfig().requireMoneyForUpgrade()) {
             for (Map.Entry<Material, Integer> entry : nextLevel.getMaterialRequirements().entrySet()) {
-                if (GuildsUtil.countItems(upgrader.getInventory(), entry.getKey()) < entry.getValue()) {
+                if (GuildsUtil.countItems(upgrader.getInventory(), entry.getKey(), true) < entry.getValue()) {
                     return false;
                 }
             }

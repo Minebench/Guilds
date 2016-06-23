@@ -4,6 +4,7 @@ import io.github.apfelcreme.Guilds.Command.Request;
 import io.github.apfelcreme.Guilds.Guild.Guild;
 import io.github.apfelcreme.Guilds.Guild.GuildLevel;
 import io.github.apfelcreme.Guilds.Guilds;
+import io.github.apfelcreme.Guilds.GuildsUtil;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -52,7 +53,7 @@ public class UpgradeRequest extends Request {
         GuildLevel nextLevel = plugin.getGuildManager().getNextLevel(guild);
         if (nextLevel != null && plugin.getGuildsConfig().requireMaterialForUpgrade()) {
             for (Map.Entry<Material, Integer> entry : nextLevel.getMaterialRequirements().entrySet()) {
-                sender.getInventory().removeItem(new ItemStack(entry.getKey(), entry.getValue()));
+                GuildsUtil.removeItems(sender.getInventory(), entry.getKey(), entry.getValue(), true);
             }
         }
 

@@ -118,16 +118,45 @@ public class GuildsUtil {
      *
      * @param inventory the inventory
      * @param material  the material
+     * @param countSpecial should we count items that have meta/enchantments/are damaged?
      * @return the number of a specific material in an inventory
      */
-    public static Integer countItems(Inventory inventory, Material material) {
+    public static int countItems(Inventory inventory, Material material, boolean countSpecial) {
         int amount = 0;
         for (ItemStack itemStack : inventory.getContents()) {
             if (itemStack != null && itemStack.getType() == material) {
-                amount += itemStack.getAmount();
+                if (countSpecial || (!itemStack.hasItemMeta() && itemStack.getDurability() == 0)) {
+                    amount += itemStack.getAmount();
+                }
             }
         }
         return amount;
+    }
+
+    /**
+     * Remove a specific material from an inventory
+     *
+     * @param inventory the inventory
+     * @param material  the material
+     * @param count the amount to remove
+     * @param removeSpecial should we remove items that have meta/enchantments/are damaged?
+     */
+    public static void removeItems(Inventory inventory, Material material, int count, boolean removeSpecial) {
+        for (int i = 0; i < inventory.getContents().length && count > 0; i++) {
+            ItemStack itemStack = inventory.getContents()[i];
+            if (itemStack != null && itemStack.getType() == material) {
+                if (removeSpecial || (!itemStack.hasItemMeta() && itemStack.getDurability() == 0)) {
+                    if (itemStack.getAmount() > count) {
+                        itemStack.setAmount(itemStack.getAmount() - count);
+                        inventory.setItem(i, itemStack);
+                        count = 0;
+                    } else {
+                        count -= itemStack.getAmount();
+                        inventory.clear(i);
+                    }
+                }
+            }
+        }
     }
 
     /**

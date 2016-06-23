@@ -10,6 +10,7 @@ import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.Map;
 
@@ -90,17 +91,17 @@ public class UpgradeCommand extends SubCommand {
                             }
                             if (plugin.getGuildsConfig().requireMaterialForUpgrade()) {
                                 for (Map.Entry<Material, Integer> entry : plugin.getGuildManager().getNextLevel(guild).getMaterialRequirements().entrySet()) {
-                                    if (sender.getInventory().contains(entry.getKey(), entry.getValue())) {
+                                    if (sender.getInventory().contains(new ItemStack(entry.getKey(), entry.getValue()))) {
                                         plugin.getChat().sendMessage(sender,
                                                 plugin.getGuildsConfig().getColoredText("info.guild.upgrade.enoughMaterialElement", guild.getColor())
                                                         .replace("{0}", WordUtils.capitalize(entry.getKey().name().toLowerCase().replace("_", " ")))
-                                                        .replace("{1}", GuildsUtil.countItems(sender.getInventory(), entry.getKey()).toString())
+                                                        .replace("{1}", Integer.toString(GuildsUtil.countItems(sender.getInventory(), entry.getKey(), true)))
                                                         .replace("{2}", plugin.getGuildManager().getNextLevel(guild).getMaterialRequirements().get(entry.getKey()).toString()));
                                     } else {
                                         plugin.getChat().sendMessage(sender,
                                                 plugin.getGuildsConfig().getColoredText("info.guild.upgrade.notEnoughMaterialElement", guild.getColor())
                                                         .replace("{0}", WordUtils.capitalize(entry.getKey().name().toLowerCase().replace("_", " ")))
-                                                        .replace("{1}", GuildsUtil.countItems(sender.getInventory(), entry.getKey()).toString())
+                                                        .replace("{1}", Integer.toString(GuildsUtil.countItems(sender.getInventory(), entry.getKey(), true)))
                                                         .replace("{2}", plugin.getGuildManager().getNextLevel(guild).getMaterialRequirements().get(entry.getKey()).toString()));
 
                                     }
