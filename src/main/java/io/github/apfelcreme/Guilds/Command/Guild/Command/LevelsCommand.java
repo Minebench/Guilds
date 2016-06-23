@@ -43,10 +43,10 @@ public class LevelsCommand extends SubCommand {
             ConfigurationSection configurationSection = plugin.getConfig().getConfigurationSection("level");
 
             plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("info.guild.levels.head"));
-            for (Object o : configurationSection.getKeys(false)) {
+            for (String level : configurationSection.getKeys(false)) {
                 plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("info.guild.levels.element")
-                        .replace("{0}", o.toString())
-                        .replace("{1}", plugin.getGuildsConfig().getLevelData(Integer.parseInt(o.toString())).getName()));
+                        .replace("{0}", level)
+                        .replace("{1}", plugin.getGuildsConfig().getLevelData(Integer.parseInt(level)).getName()));
             }
             plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("info.guild.levels.bottom"));
         } else {
