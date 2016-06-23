@@ -41,7 +41,6 @@ public class GuildsConfig {
             plugin.getDataFolder().mkdirs();
         }
         plugin.saveDefaultConfig();
-        plugin.saveResource("lang." + getLanguage() + ".yml", false);
 
         reloadLanguageConfig();
     }
@@ -50,6 +49,7 @@ public class GuildsConfig {
      * reloads the language file
      */
     public void reloadLanguageConfig() {
+        plugin.saveResource("lang." + getLanguage() + ".yml", false);
         languageConfigFile = new File(plugin.getDataFolder(), "lang." + getLanguage() + ".yml");
         languageConfig = YamlConfiguration.loadConfiguration(languageConfigFile);
     }
