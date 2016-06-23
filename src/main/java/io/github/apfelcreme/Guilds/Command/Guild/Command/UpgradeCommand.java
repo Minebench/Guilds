@@ -95,13 +95,13 @@ public class UpgradeCommand extends SubCommand {
                                         plugin.getChat().sendMessage(sender,
                                                 plugin.getGuildsConfig().getColoredText("info.guild.upgrade.enoughMaterialElement", guild.getColor())
                                                         .replace("{0}", WordUtils.capitalize(entry.getKey().name().toLowerCase().replace("_", " ")))
-                                                        .replace("{1}", Integer.toString(GuildsUtil.countItems(sender.getInventory(), entry.getKey(), true)))
+                                                        .replace("{1}", Integer.toString(GuildsUtil.countItems(sender.getInventory(), entry.getKey(), false)))
                                                         .replace("{2}", plugin.getGuildManager().getNextLevel(guild).getMaterialRequirements().get(entry.getKey()).toString()));
                                     } else {
                                         plugin.getChat().sendMessage(sender,
                                                 plugin.getGuildsConfig().getColoredText("info.guild.upgrade.notEnoughMaterialElement", guild.getColor())
                                                         .replace("{0}", WordUtils.capitalize(entry.getKey().name().toLowerCase().replace("_", " ")))
-                                                        .replace("{1}", Integer.toString(GuildsUtil.countItems(sender.getInventory(), entry.getKey(), true)))
+                                                        .replace("{1}", Integer.toString(GuildsUtil.countItems(sender.getInventory(), entry.getKey(), false)))
                                                         .replace("{2}", plugin.getGuildManager().getNextLevel(guild).getMaterialRequirements().get(entry.getKey()).toString()));
 
                                     }
