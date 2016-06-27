@@ -31,10 +31,10 @@ specialDrops:
   COAL: 1.0
   IRON_INGOT: 0.5
   GOLD_INGOT: 0.2
-  EMERALD: 0.1
-  DIAMOND: 0.1
-  EMERALD_ORE: 0.06
-  DIAMOND_ORE: 0.04
+  EMERALD: 1.0
+  DIAMOND: 1.0
+  REDSTONE: 1.0
+  QUARTZ: 1.0
 upgrade:
   requireMoney: true
   requireExp: true

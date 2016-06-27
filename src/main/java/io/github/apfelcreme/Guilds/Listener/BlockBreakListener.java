@@ -50,13 +50,12 @@ public class BlockBreakListener implements Listener {
                 continue;
             }
 
-            double random = Math.random();
-            if (random > guild.getCurrentLevel().getSpecialDropChance()) {
+            if (guild.getCurrentLevel().getSpecialDropChance() < 1.0 && Math.random() > guild.getCurrentLevel().getSpecialDropChance()) {
                 continue;
             }
 
-            double matRandom = Math.random();
-            if (matRandom > plugin.getGuildsConfig().getSpecialDropChance(drop.getType())) {
+            double matChance = plugin.getGuildsConfig().getSpecialDropChance(drop.getType());
+            if (matChance < 1.0 && Math.random() > matChance) {
                 continue;
             }
 
