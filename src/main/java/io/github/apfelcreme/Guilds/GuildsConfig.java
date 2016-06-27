@@ -4,11 +4,15 @@ package io.github.apfelcreme.Guilds;
 import io.github.apfelcreme.Guilds.Guild.GuildLevel;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Guilds
@@ -320,18 +324,23 @@ public class GuildsConfig {
      * get whether or not this material is eligible for a special drop
      *
      * @return true or false
+     * @param item
      */
-    public boolean isSpecialDrop(Material type) {
-        return plugin.getConfig().get("specialDrops." + type.toString(), null) != null;
+    public boolean isSpecialDrop(ItemStack item) {
+        return (item.getDurability() == 0 && plugin.getConfig().isSet("specialDrops." + item.getType().toString()))
+                || plugin.getConfig().isSet("specialDrops." + item.getType().toString() + "-" + item.getDurability());
     }
 
     /**
      * Get the chance of a certain material to create an additional drop
      *
      * @return the chance as a double configured in the config, should be between 0.0 and 1.0
+     * @param item
      */
-    public double getSpecialDropChance(Material type) {
-        return plugin.getConfig().getDouble("specialDrops." + type.toString());
+    public double getSpecialDropChance(ItemStack item) {
+        return item.getDurability() == 0 ?
+                plugin.getConfig().getDouble("specialDrops." + item.getType().toString()) :
+                plugin.getConfig().getDouble("specialDrops." + item.getType().toString() + "-" + item.getDurability());
     }
 
     /**

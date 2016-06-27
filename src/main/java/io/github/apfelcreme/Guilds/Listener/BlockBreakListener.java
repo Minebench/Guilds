@@ -46,7 +46,7 @@ public class BlockBreakListener implements Listener {
         }
 
         for (ItemStack drop : event.getBlock().getDrops(event.getPlayer().getInventory().getItemInMainHand())) {
-            if (!plugin.getGuildsConfig().isSpecialDrop(drop.getType())) {
+            if (!plugin.getGuildsConfig().isSpecialDrop(drop)) {
                 continue;
             }
 
@@ -54,13 +54,12 @@ public class BlockBreakListener implements Listener {
                 continue;
             }
 
-            double matChance = plugin.getGuildsConfig().getSpecialDropChance(drop.getType());
+            double matChance = plugin.getGuildsConfig().getSpecialDropChance(drop);
             if (matChance < 1.0 && Math.random() > matChance) {
                 continue;
             }
 
-            event.getPlayer().getWorld().dropItem(event.getBlock().getLocation(), new ItemStack(drop.getType(), 1)
-            );
+            event.getPlayer().getWorld().dropItem(event.getBlock().getLocation(), new ItemStack(drop.getType(), 1));
             plugin.getChat().sendMessage(event.getPlayer(),
                     plugin.getGuildsConfig().getColoredText("info.guild.specialDropCreated", guild.getColor())
                             .replace("{0}", GuildsUtil.humanize(drop.getType())));

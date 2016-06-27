@@ -35,6 +35,7 @@ specialDrops:
   DIAMOND: 1.0
   REDSTONE: 1.0
   QUARTZ: 1.0
+  INK_SACK-4: 1.0 # LAPIS
 upgrade:
   requireMoney: true
   requireExp: true
