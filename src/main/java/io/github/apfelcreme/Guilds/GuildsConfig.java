@@ -4,6 +4,7 @@ package io.github.apfelcreme.Guilds;
 import io.github.apfelcreme.Guilds.Guild.GuildLevel;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 
@@ -13,6 +14,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 
 /**
  * Guilds
@@ -285,39 +287,64 @@ public class GuildsConfig {
     }
 
     /**
-     * the materials that are required to upgrade the guild on the given level
+     * get the level data by its level integer
      *
-     * @param level the guild level + 1
-     * @return the materials that are needed for the upgrade
+     * @param level the guild level
+     * @return the LevelData
      */
-    public GuildLevel getLevelData(Integer level) {
+    public GuildLevel getLevelData(int level) {
         String name = plugin.getConfig()
-                .getString("level." + level.toString() + ".name");
+                .getString("level." + Integer.toString(level) + ".name");
         if (name == null) {
             return null;
         }
         int playerLimit = plugin.getConfig()
-                .getInt("level." + level.toString() + ".limit");
+                .getInt("level." + Integer.toString(level) + ".limit");
         double enchantmentCost = plugin.getConfig()
-                .getDouble("level." + level.toString() + ".enchantmentCost");
+                .getDouble("level." + Integer.toString(level) + ".enchantmentCost");
         double doubleCraftProbability = plugin.getConfig()
-                .getDouble("level." + level.toString() + ".doubleCraftProbability");
+                .getDouble("level." + Integer.toString(level) + ".doubleCraftProbability");
         double specialDropChance = plugin.getConfig()
-                .getDouble("level." + level.toString() + ".specialDropChance");
+                .getDouble("level." + Integer.toString(level) + ".specialDropChance");
         double furnaceExpGainRatio = plugin.getConfig()
-                .getDouble("level." + level.toString() + ".furnaceExpGainRatio");
+                .getDouble("level." + Integer.toString(level) + ".furnaceExpGainRatio");
         double cost = plugin.getConfig()
-                .getDouble("level." + level.toString() + ".upgradeCost");
+                .getDouble("level." + Integer.toString(level) + ".upgradeCost");
         int expCost = plugin.getConfig()
-                .getInt("level." + level.toString() + ".upgradeExpCost");
+                .getInt("level." + Integer.toString(level) + ".upgradeExpCost");
         HashMap<Material, Integer> materialRequirements = new HashMap<Material, Integer>();
         for (Map.Entry entry : plugin.getConfig()
-                .getConfigurationSection("level." + level.toString() + ".upgradeMaterials").getValues(true).entrySet()) {
+                .getConfigurationSection("level." + Integer.toString(level) + ".upgradeMaterials").getValues(false).entrySet()) {
             materialRequirements.put(
                     Material.valueOf(entry.getKey().toString()), Integer.parseInt(entry.getValue().toString()));
         }
         return new GuildLevel(level, name, playerLimit, enchantmentCost, doubleCraftProbability, specialDropChance,
                 furnaceExpGainRatio, cost, expCost, materialRequirements);
+    }
+
+    /**
+     * get the level data by its name
+     *
+     * @param name the name of the guild level
+     * @return the LevelData
+     */
+    public GuildLevel getLevelData(String name) {
+        int level = -1;
+
+        ConfigurationSection levelSection = plugin.getConfig().getConfigurationSection("level");
+
+        for (String lvlStr : levelSection.getKeys(false)) {
+            if (name.equalsIgnoreCase(levelSection.getString(lvlStr + ".name"))) {
+                try {
+                    level = Integer.parseInt(lvlStr);
+                    break;
+                } catch (NumberFormatException e) {
+                    plugin.getLogger().log(Level.SEVERE, "Config level " + lvlStr + " is not an integer?", e);
+                }
+            }
+        }
+
+        return level > -1 ? getLevelData(level) : null;
     }
 
     /**

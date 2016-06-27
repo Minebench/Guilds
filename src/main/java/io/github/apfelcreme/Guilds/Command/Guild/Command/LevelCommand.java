@@ -47,52 +47,52 @@ public class LevelCommand extends SubCommand {
         Player sender = (Player) commandSender;
         if (sender.hasPermission("Guilds.level")) {
             if (strings.length > 1) {
+                GuildLevel level = null;
                 if (GuildsUtil.isNumeric(strings[1])) {
-                    GuildLevel level = plugin.getGuildsConfig().getLevelData(Integer.parseInt(strings[1]));
-                    if (level != null) {
-                        plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("info.guild.level.head")
-                                .replace("{0}", level.getName()));
+                    level = plugin.getGuildsConfig().getLevelData(Integer.parseInt(strings[1]));
+                } else {
+                    level = plugin.getGuildsConfig().getLevelData(strings[1]);
+                }
+                if (level != null) {
+                    plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("info.guild.level.head")
+                            .replace("{0}", level.getName()));
 
-                        if (plugin.getGuildsConfig().requireMoneyForUpgrade()) {
-                            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("info.guild.level.cost")
-                                    .replace("{0}", Double.toString(level.getCost())));
+                    if (plugin.getGuildsConfig().requireMoneyForUpgrade()) {
+                        plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("info.guild.level.cost")
+                                .replace("{0}", Double.toString(level.getCost())));
+                    }
+                    if (plugin.getGuildsConfig().requireExpForUpgrade()) {
+                        plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("info.guild.level.expCost")
+                                .replace("{0}", Integer.toString(level.getExpCost())));
+                    }
+                    if (plugin.getGuildsConfig().requireMaterialForUpgrade()) {
+                        for (Map.Entry<Material, Integer> entry : level.getMaterialRequirements().entrySet()) {
+                            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("info.guild.level.materialElement")
+                                    .replace("{0}", WordUtils.capitalize(entry.getKey().name().toLowerCase().replace("_", " ")))
+                                    .replace("{1}", entry.getValue().toString()));
                         }
-                        if (plugin.getGuildsConfig().requireExpForUpgrade()) {
-                            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("info.guild.level.expCost")
-                                    .replace("{0}", Integer.toString(level.getExpCost())));
-                        }
-                        if (plugin.getGuildsConfig().requireMaterialForUpgrade()) {
-                            for (Map.Entry<Material, Integer> entry : level.getMaterialRequirements().entrySet()) {
-                                plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("info.guild.level.materialElement")
-                                        .replace("{0}", WordUtils.capitalize(entry.getKey().name().toLowerCase().replace("_", " ")))
-                                        .replace("{1}", entry.getValue().toString()));
-                            }
-                        }
-                        plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("info.guild.level.head2"));
-                        plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("info.guild.level.playerLimit")
-                                .replace("{0}", Integer.toString(level.getPlayerLimit())));
-                        if (plugin.getGuildsConfig().isEnchantmentBonusActivated()) {
-                            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("info.guild.level.enchantmentCost")
-                                    .replace("{0}", Double.toString(level.getEnchantmentCost() * 100)));
-                        }
-                        if (plugin.getGuildsConfig().isDoubleCraftingBonusActivated()) {
-                            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("info.guild.level.doubleCraftProbability")
-                                    .replace("{0}", Double.toString(level.getDoubleCraftProbability() * 100)));
-                        }
-                        if (plugin.getGuildsConfig().isSpecialDropBonusActivated()) {
-                            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("info.guild.level.specialDropChance")
-                                    .replace("{0}", Double.toString(level.getSpecialDropChance() * 100)));
-                        }
-                        if (plugin.getGuildsConfig().isMoreFurnaceExpBonusActivated()) {
-                            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("info.guild.level.furnaceExpGainRatio")
-                                    .replace("{0}", Double.toString(Math.ceil((level.getFurnaceExpGainRatio() - 1) * 100))));
-                        }
-                    } else {
-                        plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.unknownLevel"));
+                    }
+                    plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("info.guild.level.head2"));
+                    plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("info.guild.level.playerLimit")
+                            .replace("{0}", Integer.toString(level.getPlayerLimit())));
+                    if (plugin.getGuildsConfig().isEnchantmentBonusActivated()) {
+                        plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("info.guild.level.enchantmentCost")
+                                .replace("{0}", Double.toString(level.getEnchantmentCost() * 100)));
+                    }
+                    if (plugin.getGuildsConfig().isDoubleCraftingBonusActivated()) {
+                        plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("info.guild.level.doubleCraftProbability")
+                                .replace("{0}", Double.toString(level.getDoubleCraftProbability() * 100)));
+                    }
+                    if (plugin.getGuildsConfig().isSpecialDropBonusActivated()) {
+                        plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("info.guild.level.specialDropChance")
+                                .replace("{0}", Double.toString(level.getSpecialDropChance() * 100)));
+                    }
+                    if (plugin.getGuildsConfig().isMoreFurnaceExpBonusActivated()) {
+                        plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("info.guild.level.furnaceExpGainRatio")
+                                .replace("{0}", Double.toString(Math.ceil((level.getFurnaceExpGainRatio() - 1) * 100))));
                     }
                 } else {
-                    plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noNumber")
-                            .replace("{0}", strings[1]));
+                    plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.unknownLevel"));
                 }
             } else {
                 plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.wrongUsage.level"));
