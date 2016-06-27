@@ -21,6 +21,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.sql.*;
 import java.util.*;
+import java.util.logging.Level;
 
 /**
  * Guilds
@@ -314,5 +315,12 @@ public class Guilds extends JavaPlugin {
         } else {
             return getServer().getScheduler().runTask(this, runnable).getTaskId();
         }
+    }
+
+    /**
+     * Log a debug message
+     */
+    public void debug(String message) {
+        getLogger().log(getGuildsConfig().isDebugEnabled() ? Level.INFO : Level.FINE, message);
     }
 }

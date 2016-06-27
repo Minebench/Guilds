@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.logging.Level;
 
 /**
  * Guilds
@@ -210,7 +211,7 @@ public class DatabaseConnectionManager {
                     plugin.getGuildsConfig().getMysqlUser(),
                     plugin.getGuildsConfig().getMysqlPassword());
         } catch (SQLException e) {
-            plugin.getLogger().severe("Database connection could not be built");
+            plugin.getLogger().log(Level.SEVERE, "Database connection could not be built", e);
         }
         return null;
     }

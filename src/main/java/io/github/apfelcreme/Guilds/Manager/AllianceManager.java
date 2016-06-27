@@ -19,6 +19,7 @@ import java.util.Date;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 
 /**
  * Copyright 2016 Max Lee (https://github.com/Phoenix616/)
@@ -136,14 +137,13 @@ public class AllianceManager {
 
                             alliances.remove(allianceId);
                             alliances.put(allianceId, alliance);
-                            plugin.getLogger().info("Allianz " + alliance.getName() + " [" + tag + "] geladen");
+                            plugin.getLogger().info("Allianz " + alliance.getName() + " [" + tag + "] loaded");
                         }
 
                     } catch (SQLException e) {
                         e.printStackTrace();
                     } catch (ConcurrentModificationException e) {
-                        e.printStackTrace();
-                        plugin.getLogger().info("Beim Laden ist ein Fehler aufgetreten!");
+                        plugin.getLogger().log(Level.WARNING, "Error while loading alliance " + allianceId + "!", e);
                     }
                 }
             }

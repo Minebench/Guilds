@@ -54,6 +54,7 @@ public class EnchantmentListener implements Listener {
                         plugin.getChat().sendMessage(player,
                                 plugin.getGuildsConfig().getColoredText("info.guild.enchantmentGotCheaper", guild.getColor())
                                         .replace("{0}", Integer.toString(enchantmentRefund)));
+                        plugin.debug(player.getName() + "/" + guild.getTag() + " reduced enchant by " + (1.0 - guild.getCurrentLevel().getEnchantmentCost()) + "/" + enchantmentRefund);
                     }
                 }
             }.runTaskLater(plugin, 1);

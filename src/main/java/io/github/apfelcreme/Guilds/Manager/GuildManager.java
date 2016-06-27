@@ -30,6 +30,7 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.logging.Level;
 
 /**
  * Copyright 2016 Max Lee (https://github.com/Phoenix616/)
@@ -78,7 +79,7 @@ public class GuildManager {
                             reloadGuild(resultSet.getInt("guildId"));
                             z++;
                         }
-                        plugin.getLogger().info(z + " Gilden synchronisiert");
+                        plugin.getLogger().info(z + " Guilds synchronized");
                         connection.close();
                     } catch (SQLException e) {
                         e.printStackTrace();
@@ -265,8 +266,7 @@ public class GuildManager {
                     } catch (SQLException e) {
                         e.printStackTrace();
                     } catch (ConcurrentModificationException e) {
-                        e.printStackTrace();
-                        plugin.getLogger().info("Beim Laden ist ein Fehler aufgetreten!");
+                        plugin.getLogger().log(Level.WARNING, "Error while loading guild " + guildId + "!", e);
                     }
                 }
             }

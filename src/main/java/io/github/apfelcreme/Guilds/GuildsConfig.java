@@ -344,6 +344,13 @@ public class GuildsConfig {
     }
 
     /**
+     * Get whether or not the plugin runs in debug mode
+     */
+    public boolean isDebugEnabled() {
+        return plugin.getConfig().getBoolean("debug");
+    }
+
+    /**
      * returs a ChatColor from the chat input given (for /guild <...> <...> <Color>)
      *
      * @param color the color string e.g. 'gelb'

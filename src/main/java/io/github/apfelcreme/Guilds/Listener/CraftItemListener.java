@@ -46,6 +46,7 @@ public class CraftItemListener implements Listener {
 
                 plugin.getChat().sendMessage((Player) e.getWhoClicked(),
                         plugin.getGuildsConfig().getColoredText("info.guild.craftItemDoubled", guild.getColor()));
+                plugin.debug(e.getWhoClicked().getName() + "/" + guild.getName() + " double crafted  a " + doubledItem.getType() + "!");
             }
         }
     }

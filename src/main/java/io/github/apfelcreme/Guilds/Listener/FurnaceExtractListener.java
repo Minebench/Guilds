@@ -43,6 +43,7 @@ public class FurnaceExtractListener implements Listener {
             plugin.getChat().sendMessage(e.getPlayer(),
                     plugin.getGuildsConfig().getColoredText("info.guild.furnaceExtract", guild.getColor())
                             .replace("{0}", Double.toString(Math.ceil((guild.getCurrentLevel().getFurnaceExpGainRatio() - 1) * 100))));
+            plugin.debug(e.getPlayer().getName() + "/" + guild.getName() + " got additional exp from a furnace (" + oldGain + "/" + newGain + ")");
 
         }
     }

@@ -1,3 +1,4 @@
+debug: true
 bungeecord: true
 language: de
 mysql:

@@ -63,6 +63,7 @@ public class BlockBreakListener implements Listener {
             plugin.getChat().sendMessage(event.getPlayer(),
                     plugin.getGuildsConfig().getColoredText("info.guild.specialDropCreated", guild.getColor())
                             .replace("{0}", GuildsUtil.humanize(drop.getType())));
+            plugin.debug(event.getPlayer().getName() + "/" + guild.getName() + " generated a special drop (" + drop.getType() + ")");
         }
 
     }
