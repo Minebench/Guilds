@@ -45,7 +45,7 @@ public class BlockBreakListener implements Listener {
             return;
         }
 
-        for (ItemStack drop : event.getBlock().getDrops(event.getPlayer().getInventory().getItemInMainHand())) {
+        for (ItemStack drop : GuildsUtil.getDrops(event.getBlock(), event.getPlayer().getInventory().getItemInMainHand())) {
             if (!plugin.getGuildsConfig().isSpecialDrop(drop)) {
                 continue;
             }

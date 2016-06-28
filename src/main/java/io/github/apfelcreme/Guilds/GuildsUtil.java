@@ -2,10 +2,13 @@ package io.github.apfelcreme.Guilds;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Collection;
 import java.util.regex.Pattern;
 
 /**
@@ -214,5 +217,24 @@ public class GuildsUtil {
             parts[i] = parts[i].substring(0, 1) + parts[i].substring(1).toLowerCase();
         }
         return join(parts, " ");
+    }
+
+    /**
+     * Get the drops a tool will produce from a certain block,
+     * calculated with the silk touch enchantment in mind.
+     * (Block.getDrops(ItemStack) does not factor in Silk Touch)
+     * @param block The block that is mined
+     * @param tool The tool it is mined with
+     * @return The drops collection
+     */
+    public static Collection<ItemStack> getDrops(Block block, ItemStack tool) {
+        Collection<ItemStack> drops = block.getDrops(tool);
+
+        if(drops.size() > 0 && tool.containsEnchantment(Enchantment.SILK_TOUCH)) {
+            drops.clear();
+            drops.add(new ItemStack(block.getType()));
+        }
+
+        return drops;
     }
 }
