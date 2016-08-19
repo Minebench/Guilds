@@ -253,7 +253,7 @@ public class Guilds extends JavaPlugin {
      *
      * @return The plugin's database Connection
      */
-    public Connection getDatabaseConnection() {
+    public Connection getDatabaseConnection() throws SQLException {
         return dbConnMan.getConnection();
     }
 

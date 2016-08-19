@@ -1,12 +1,11 @@
 package io.github.apfelcreme.Guilds.Manager;
 
+import com.zaxxer.hikari.HikariDataSource;
 import io.github.apfelcreme.Guilds.Guilds;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.logging.Level;
 
 /**
  * Guilds
@@ -30,6 +29,7 @@ import java.util.logging.Level;
 public class DatabaseConnectionManager {
 
     private Guilds plugin;
+    private HikariDataSource ds;
 
     public DatabaseConnectionManager(Guilds plugin) {
         this.plugin = plugin;
@@ -42,34 +42,15 @@ public class DatabaseConnectionManager {
      * @return
      */
     private Connection initConnection() {
-        Connection connection;
-        try {
-            if (plugin.getGuildsConfig().getMysqlDatabase() == null || plugin.getGuildsConfig().getMysqlDatabase().isEmpty()) {
-                return null;
-            } else {
-                Class.forName("com.mysql.jdbc.Driver");
-                connection = DriverManager.getConnection("jdbc:mysql://" + plugin.getGuildsConfig().getMysqlUrl()
-                        + "/" + "", plugin.getGuildsConfig().getMysqlUser(), plugin.getGuildsConfig().getMysqlPassword());
-                if (connection != null) {
-                    try {
-                        connection.createStatement().execute(
-                                "CREATE DATABASE IF NOT EXISTS " + plugin.getGuildsConfig().getMysqlDatabase());
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
-                }
-                connection = DriverManager.getConnection("jdbc:mysql://" + plugin.getGuildsConfig().getMysqlUrl()
-                                + "/" +
-                                plugin.getGuildsConfig().getMysqlDatabase(),
-                        plugin.getGuildsConfig().getMysqlUser(),
-                        plugin.getGuildsConfig().getMysqlPassword());
-                initTables();
-                return connection;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+        if (plugin.getGuildsConfig().getMysqlDatabase() == null || plugin.getGuildsConfig().getMysqlDatabase().isEmpty()) {
+            return null;
+        } else {
+            ds = new HikariDataSource();
+            ds.setJdbcUrl("jdbc:mysql://" + plugin.getGuildsConfig().getMysqlUrl() + "/" + plugin.getGuildsConfig().getMysqlDatabase());
+            ds.setUsername(plugin.getGuildsConfig().getMysqlUser());
+            ds.setPassword(plugin.getGuildsConfig().getMysqlPassword());
+            ds.setConnectionTimeout(5000);
+            initTables();
         }
         return null;
     }
@@ -77,14 +58,13 @@ public class DatabaseConnectionManager {
     /**
      * creates the database and tables
      */
-    private void initTables() throws SQLException {
-        Connection connection = getConnection();
-        if (connection != null) {
-            PreparedStatement statement;
-            statement = connection.prepareStatement("CREATE DATABASE IF NOT EXISTS "
+    private void initTables() {
+        Connection connection = null;
+        try {
+            connection = getConnection();
+            PreparedStatement statement = connection.prepareStatement("CREATE DATABASE IF NOT EXISTS "
                     + plugin.getGuildsConfig().getMysqlDatabase());
             statement.executeUpdate();
-            statement.close();
 
             statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS "
                     + plugin.getGuildsConfig().getAllianceTable() + " (" +
@@ -95,7 +75,6 @@ public class DatabaseConnectionManager {
                     "color VARCHAR(20) NOT NULL DEFAULT 'DARK_GREEN', " +
                     "PRIMARY KEY (allianceId));");
             statement.executeUpdate();
-            statement.close();
 
             statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS "
                     + plugin.getGuildsConfig().getGuildsTable() + " (" +
@@ -116,7 +95,6 @@ public class DatabaseConnectionManager {
                     "FOREIGN KEY (allianceId) references " + plugin.getGuildsConfig().getAllianceTable() + " (allianceId), " +
                     "PRIMARY KEY (guildId));");
             statement.executeUpdate();
-            statement.close();
 
             statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS "
                     + plugin.getGuildsConfig().getRanksTable() + " (" +
@@ -136,7 +114,6 @@ public class DatabaseConnectionManager {
                     "FOREIGN KEY (guildId) REFERENCES " + plugin.getGuildsConfig().getGuildsTable() + " (guildId), " +
                     "PRIMARY KEY (rankId));");
             statement.executeUpdate();
-            statement.close();
 
             statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS "
                     + plugin.getGuildsConfig().getPlayerTable() + " (" +
@@ -151,7 +128,6 @@ public class DatabaseConnectionManager {
                     "FOREIGN KEY (rankId) REFERENCES " + plugin.getGuildsConfig().getRanksTable() + " (rankId), " +
                     "PRIMARY KEY (uuid));");
             statement.executeUpdate();
-            statement.close();
 
             statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS "
                     + plugin.getGuildsConfig().getBlackboardTable() + " (" +
@@ -165,7 +141,6 @@ public class DatabaseConnectionManager {
                     "FOREIGN KEY (guildId) REFERENCES " + plugin.getGuildsConfig().getGuildsTable() + " (guildId), " +
                     "PRIMARY KEY (messageId));");
             statement.executeUpdate();
-            statement.close();
 
             statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS "
                     + plugin.getGuildsConfig().getInvitesTable() + " (" +
@@ -179,7 +154,6 @@ public class DatabaseConnectionManager {
                     "FOREIGN KEY (targetPlayer) REFERENCES " + plugin.getGuildsConfig().getPlayerTable() + " (uuid), " +
                     "PRIMARY KEY (inviteId));");
             statement.executeUpdate();
-            statement.close();
 
             statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS "
                     + plugin.getGuildsConfig().getAllianceInviteTable() + " (" +
@@ -191,9 +165,10 @@ public class DatabaseConnectionManager {
                     "FOREIGN KEY (allianceId) REFERENCES " + plugin.getGuildsConfig().getAllianceTable() + " (allianceId), " +
                     "PRIMARY KEY (allianceInviteId));");
             statement.executeUpdate();
-            statement.close();
-
-            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            close(connection);
         }
     }
 
@@ -202,18 +177,18 @@ public class DatabaseConnectionManager {
      *
      * @return a Connection
      */
-    public Connection getConnection() {
-        try {
-            return DriverManager.getConnection("jdbc:mysql://" +
-                            plugin.getGuildsConfig().getMysqlUrl()
-                            + "/" +
-                            plugin.getGuildsConfig().getMysqlDatabase(),
-                    plugin.getGuildsConfig().getMysqlUser(),
-                    plugin.getGuildsConfig().getMysqlPassword());
-        } catch (SQLException e) {
-            plugin.getLogger().log(Level.SEVERE, "Database connection could not be built", e);
+    public Connection getConnection() throws SQLException {
+        return ds.getConnection();
+    }
+
+    public static void close(Connection c) {
+        if (c != null) {
+            try {
+                c.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
-        return null;
     }
 
 }
