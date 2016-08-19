@@ -41,7 +41,7 @@ public class DeleteRankRequest extends GuildRequest {
     public void execute() {
         plugin.getGuildManager().deleteRank(rank);
         plugin.getChat().sendMessage(sender,
-                plugin.getGuildsConfig().getColoredText("info.guild.deleteRank.rankDeleted", guild.getColor()));
+                plugin.getGuildsConfig().getColoredText("info.guild.deleteRank.rankDeleted", guild.getColor()).replace("{0}", rank.getName()));
         plugin.getLogger().info(sender.getName() + " has deleted rank '" + rank.getName() + "' in guild '"
                 + guild.getName() + "'");
     }
