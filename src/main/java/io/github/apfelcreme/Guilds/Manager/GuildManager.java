@@ -1231,7 +1231,7 @@ public class GuildManager {
                     try {
                         //give all players the newby rank who previously owned that rank that is now being deleted
                         PreparedStatement statement = connection.prepareStatement(
-                                "UPDATE " + plugin.getGuildsConfig().getPlayerTable() + " SET rank = " +
+                                "UPDATE " + plugin.getGuildsConfig().getPlayerTable() + " SET rankId = " +
                                         "(Select rankId from " + plugin.getGuildsConfig().getRanksTable() +
                                         " where guildId = ? and isBaseRank = 1) " +
                                         "WHERE rankId = ?;");
