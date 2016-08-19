@@ -1,16 +1,6 @@
 package io.github.apfelcreme.Guilds.Guild;
 
-import io.github.apfelcreme.Guilds.Bungee.BungeeConnection;
-import io.github.apfelcreme.Guilds.Guilds;
-import io.github.apfelcreme.Guilds.GuildsConfig;
-import io.github.apfelcreme.Guilds.Manager.DatabaseConnectionManager;
-import org.bukkit.OfflinePlayer;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.util.UUID;
 
 /**
