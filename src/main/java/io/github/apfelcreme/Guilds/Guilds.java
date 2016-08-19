@@ -210,6 +210,33 @@ public class Guilds extends JavaPlugin {
     }
 
     /**
+     * returns the name of a player
+     *
+     * @param playerId the UUID of the player
+     * @return the player's name
+     * @deprecated Why is this deprecated? Maybe it should be replaced with a full getGuildMember method?
+     */
+    public String getPlayerName(UUID playerId) {
+        Player onlinePlayer = getServer().getPlayer(playerId);
+        if (onlinePlayer != null) {
+            return onlinePlayer.getName();
+        } else {
+            if (uuiddb != null) {
+                String playerName = uuiddb.getStorage().getNameByUUID(playerId);
+                if (playerName != null) {
+                    return playerName;
+                }
+            }
+            OfflinePlayer offlinePlayer = getServer().getOfflinePlayer(playerId);
+            if (offlinePlayer != null) {
+                return offlinePlayer.getName();
+            } else {
+                return null;
+            }
+        }
+    }
+
+    /**
      * returns the chatInstance
      *
      * @return the chat

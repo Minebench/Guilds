@@ -1,10 +1,7 @@
 package io.github.apfelcreme.Guilds.Command.Admin.Request;
 
-import io.github.apfelcreme.Guilds.Command.Request;
 import io.github.apfelcreme.Guilds.Guild.Guild;
-import io.github.apfelcreme.Guilds.Guild.Rank;
 import io.github.apfelcreme.Guilds.Guilds;
-import io.github.apfelcreme.Guilds.GuildsConfig;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
@@ -41,19 +38,17 @@ public class AddToGuildRequest extends AdminRequest {
 
     @Override
     public void execute() {
+        String targetName = plugin.getPlayerName(target);
         plugin.getGuildManager().addMember(guild, target);
         plugin.getChat().sendMessage(sender,
                 plugin.getGuildsConfig().getText("info.guildadmin.add.addedPlayer")
-                        .replace("{0}",
-                                plugin.getServer().getOfflinePlayer(target) != null ?
-                                        plugin.getServer().getOfflinePlayer(target).getName() :
-                                        plugin.getGuildsConfig().getText("info.chat.playerGotAddedUnknownName"))
+                        .replace("{0}", targetName != null ? targetName :
+                                plugin.getGuildsConfig().getText("info.chat.playerGotAddedUnknownName"))
                         .replace("{1}", guild.getName()));
         plugin.getChat().sendGuildChannelBroadcast(
                 guild,
                 plugin.getGuildsConfig().getText("info.chat.playerGotAdded")
-                        .replace("{0}", plugin.getServer().getOfflinePlayer(target) != null ?
-                                plugin.getServer().getOfflinePlayer(target).getName() :
+                        .replace("{0}", targetName != null ? targetName :
                                 plugin.getGuildsConfig().getText("info.chat.playerGotAddedUnknownName")));
         Player messageReceiver = plugin.getServer().getPlayer(target);
         if (messageReceiver != null) {
@@ -62,6 +57,6 @@ public class AddToGuildRequest extends AdminRequest {
                             .replace("{0}", sender.getName())
                             .replace("{1}", guild.getName()));
         }
-        plugin.getLogger().info("Player '" + target + "' was added to '" + guild.getName() + "' by force!");
+        plugin.getLogger().info("Player '" + (targetName != null ? targetName + "/" : "") + target + "' was added to '" + guild.getName() + "' by force!");
     }
 }

@@ -1077,9 +1077,10 @@ public class GuildManager {
      * @return a nice message
      */
     public String formatMessage(Guild guild, BlackboardMessage message) {
-        // TODO: Find an implementation that works without calling getOfflinePlayer
-        OfflinePlayer player = plugin.getServer().getOfflinePlayer(message.getSender());
-        String name = ((player != null) && (player.getName() != null)) ? player.getName() : plugin.getGuildsConfig().getText("error.unknown");
+        String name = plugin.getPlayerName(message.getSender());
+        if (name == null) {
+            name = plugin.getGuildsConfig().getText("error.unknown");
+        }
         return plugin.getGuildsConfig().getColoredText("info.guild.blackboard.message", guild.getColor())
                 .replace("{0}", new SimpleDateFormat("dd.MM.yy HH:mm").format(message.getTimestamp()))
                 .replace("{1}", name)
