@@ -209,7 +209,7 @@ public class AllianceManager {
      */
     public Alliance getAlliance(String name) {
         for (Alliance alliance : alliances.values()) {
-            if (alliance.getName().equalsIgnoreCase(name)) {
+            if (GuildsUtil.strip(alliance.getName()).equalsIgnoreCase(GuildsUtil.strip(name))) {
                 return alliance;
             }
         }

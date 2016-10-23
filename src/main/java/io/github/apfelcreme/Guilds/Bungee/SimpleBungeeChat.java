@@ -92,7 +92,7 @@ public class SimpleBungeeChat implements BungeeChat {
             out.writeUTF(GuildsUtil.join(uuids.toArray(), ","));
             out.writeUTF(plugin.getGuildsConfig()
                     .getText("prefix.chat")
-                    .replace("{0}", guild.getColor() + guild.getTag()) + ChatColor.GRAY + message);
+                    .replace("{0}", guild.getColor() + GuildsUtil.replaceChatColors(guild.getTag())) + ChatColor.GRAY + message);
             Player player =
                     plugin.getServer().getOnlinePlayers().iterator().next();
             player.sendPluginMessage(plugin,
@@ -124,7 +124,7 @@ public class SimpleBungeeChat implements BungeeChat {
             out.writeUTF(GuildsUtil.join(uuids.toArray(), ","));
             out.writeUTF(plugin.getGuildsConfig()
                     .getText("prefix.chat")
-                    .replace("{0}", alliance.getColor() + alliance.getTag()) + ChatColor.GRAY + message);
+                    .replace("{0}", alliance.getColor() + GuildsUtil.replaceChatColors(alliance.getTag())) + ChatColor.GRAY + message);
             Player player =
                     plugin.getServer().getOnlinePlayers().iterator().next();
             player.sendPluginMessage(plugin,

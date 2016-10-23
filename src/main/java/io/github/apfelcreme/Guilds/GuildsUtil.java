@@ -89,21 +89,22 @@ public class GuildsUtil {
         if (input == null) {
             return null;
         }
-        for (int i = 0; i < ChatColor.values().length; i++) {
-            // the enum contains no element called "ChatColor.OBFUSCATED",
-            // but ChatColor.values()[] does !?
-            if (!ChatColor.values()[i].name()
-                    .equalsIgnoreCase("obfuscated")) {
-                String replace = "&"
-                        + ChatColor.values()[i].getChar();
-                input = input.replace(
-                        replace,
-                        ChatColor.valueOf(
-                                ChatColor.values()[i].name().toUpperCase())
-                                .toString());
-            }
-        }
-        return input;
+//        for (int i = 0; i < ChatColor.values().length; i++) {
+//            // the enum contains no element called "ChatColor.OBFUSCATED",
+//            // but ChatColor.values()[] does !?
+//            if (!ChatColor.values()[i].name()
+//                    .equalsIgnoreCase("obfuscated")) {
+//                String replace = "&"
+//                        + ChatColor.values()[i].getChar();
+//                input = input.replace(
+//                        replace,
+//                        ChatColor.valueOf(
+//                                ChatColor.values()[i].name().toUpperCase())
+//                                .toString());
+//            }
+//        }
+//        return input;
+        return ChatColor.translateAlternateColorCodes('&', input);
     }
 
     /**

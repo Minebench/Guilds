@@ -5,6 +5,7 @@ import io.github.apfelcreme.Guilds.Command.PluginCommandExecutor;
 import io.github.apfelcreme.Guilds.Guild.GuildMember;
 import io.github.apfelcreme.Guilds.Guilds;
 import io.github.apfelcreme.Guilds.GuildsConfig;
+import io.github.apfelcreme.Guilds.GuildsUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -54,7 +55,8 @@ public class AllianceChatCommandExecutor extends PluginCommandExecutor {
                 }
                 message = message.trim();
                 plugin.getChat().sendAllianceChannelBroadcast(alliance,
-                        plugin.getGuildsConfig().getText("prefix.chat").replace("{0}", member.getGuild().getColor() + member.getGuild().getTag()) +
+                        plugin.getGuildsConfig().getText("prefix.chat").replace("{0}", member.getGuild().getColor()
+                                + GuildsUtil.replaceChatColors(member.getGuild().getTag())) +
                                 (member.getPrefix() != null ? " " + member.getPrefix() : "") +
                                 " " + ChatColor.WHITE + sender.getName()
                                 + ": " + message);

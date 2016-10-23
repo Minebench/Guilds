@@ -1258,6 +1258,7 @@ public class GuildManager {
                     statement.setBoolean(10, session.isBaseRank());
                     statement.setInt(11, session.getRank().getId());
                     statement.setInt(12, session.getRank().getGuild().getId());
+                    statement.executeUpdate();
 
                     plugin.getBungeeConnection().forceGuildSync(session.getRank().getGuild().getId());
 

@@ -101,6 +101,12 @@ public class Guilds extends JavaPlugin {
             return;
         }
 
+
+
+
+
+        //TODO: Leerzeichen in Namen, rang editieren
+
         guildsConfig = new GuildsConfig(this);
 
         requestController = new RequestController(this);

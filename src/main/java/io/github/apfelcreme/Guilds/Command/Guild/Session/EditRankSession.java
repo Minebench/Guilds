@@ -169,6 +169,24 @@ public class EditRankSession {
         return rank;
     }
 
+    @Override
+    public String toString() {
+        return "EditRankSession{" +
+                "rank=" + rank +
+                ", currentState=" + currentState +
+                ", name='" + name + '\'' +
+                ", canInvite=" + canInvite +
+                ", canKick=" + canKick +
+                ", canPromote=" + canPromote +
+                ", canDisband=" + canDisband +
+                ", canUpgrade=" + canUpgrade +
+                ", canWithdrawMoney=" + canWithdrawMoney +
+                ", canUseBlackboard=" + canUseBlackboard +
+                ", canDoDiplomacy=" + canDoDiplomacy +
+                ", isBaseRank=" + isBaseRank +
+                '}';
+    }
+
     /**
      * returns the current state of the Session
      *
