@@ -255,7 +255,8 @@ public class GuildManager {
                         guilds.remove(guildId);
                         guilds.put(guildId, guild);
 
-                        plugin.getAllianceManager().checkForReload(allianceId);
+//                        plugin.getAllianceManager().checkForReload(allianceId);
+                        plugin.getAllianceManager().reload(allianceId);
                     }
 
                 } catch (SQLException e) {
