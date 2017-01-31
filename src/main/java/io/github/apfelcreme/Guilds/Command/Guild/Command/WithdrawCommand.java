@@ -51,7 +51,12 @@ public class WithdrawCommand extends SubCommand {
                         Guild guild = plugin.getGuildManager().getGuild(sender);
                         if (guild != null) {
                             if (guild.getMember(sender.getUniqueId()).getRank().canWithdrawMoney()) {
-                                plugin.getRequestController().addRequest(new WithdrawRequest(plugin, sender, guild, amount));
+                                if (guild.getBalance() >= amount) {
+                                    plugin.getRequestController().addRequest(new WithdrawRequest(plugin, sender, guild, amount));
+                                } else {
+                                    plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
+                                            .getText("error.guildNotEnoughMoney").replace("{0}", String.valueOf(amount)).replace("{1}", String.valueOf(guild.getBalance())));
+                                }
                             } else {
                                 plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                         .getText("error.rank.noPermission").replace("{0}", plugin.getGuildsConfig().getText("info.guild.rank.info.withdrawMoney")));

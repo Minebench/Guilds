@@ -38,13 +38,21 @@ public class WithdrawRequest extends GuildRequest {
 
     @Override
     public void execute() {
+        if (guild.getBalance() < amount) {
+            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
+                    .getText("error.guildNotEnoughMoney").replace("{0}", String.valueOf(amount)).replace("{1}", String.valueOf(guild.getBalance())));
+            return;
+        }
         EconomyResponse economyResponse = plugin.getEconomy().depositPlayer(sender.getPlayer(), amount);
         if (economyResponse.transactionSuccess()) {
             plugin.getGuildManager().setBalance(guild, guild.getBalance() - amount);
             plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                     .getColoredText("info.guild.withdrawMoney.withdrewMoney", guild.getColor())
                     .replace("{0}", Double.toString(amount)));
-
+            plugin.getChat().sendGuildChannelBroadcast(guild,
+                    plugin.getGuildsConfig().getText("info.chat.playerWithdrew")
+                            .replace("{0}", sender.getName())
+                            .replace("{1}", Double.toString(amount)));
             plugin.getLogger().info(sender.getName() + " has withdrew " + Double.toString(amount) + " from" +
                     " guild '" + guild.getName() + "'");
         }
