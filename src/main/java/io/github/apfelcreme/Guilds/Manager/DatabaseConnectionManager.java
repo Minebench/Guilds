@@ -165,6 +165,16 @@ public class DatabaseConnectionManager {
                     "FOREIGN KEY (allianceId) REFERENCES " + plugin.getGuildsConfig().getAllianceTable() + " (allianceId), " +
                     "PRIMARY KEY (allianceInviteId));");
             statement.executeUpdate();
+
+            statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS "
+                    + plugin.getGuildsConfig().getMoneyLogTable() + " (" +
+                    "guildId INTEGER NOT NULL, " +
+                    "player VARCHAR(36) NOT NULL, " +
+                    "balanceChange DOUBLE NOT NULL, " +
+                    "timestamp TIMESTAMP, " +
+                    "FOREIGN KEY (guildId) REFERENCES " + plugin.getGuildsConfig().getGuildsTable() + " (guildId), " +
+                    "FOREIGN KEY (player) REFERENCES " + plugin.getGuildsConfig().getPlayerTable() + " (uuid));");
+            statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {

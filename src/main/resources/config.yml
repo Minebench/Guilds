@@ -14,6 +14,7 @@ mysql:
     blackboard: Guilds_Blackboard
     alliance: Guilds_Alliances
     allianceInvites: Guilds_AllianceInvites
+    moneyLog: Guilds_MoneyLog
 guilds:
   blackboard:
     limit: 6

@@ -55,6 +55,7 @@ public class WithdrawRequest extends GuildRequest {
                             .replace("{1}", Double.toString(amount)));
             plugin.getLogger().info(sender.getName() + " has withdrew " + Double.toString(amount) + " from" +
                     " guild '" + guild.getName() + "'");
+            plugin.getGuildManager().logMoneyOperation(guild, sender.getUniqueId(), -amount);
         }
     }
 

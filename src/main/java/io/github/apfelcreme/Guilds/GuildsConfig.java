@@ -128,6 +128,15 @@ public class GuildsConfig {
     }
 
     /**
+     * returns the table name of the money log table
+     *
+     * @return the table name of the money log table
+     */
+    public String getMoneyLogTable() {
+        return plugin.getConfig().getString("mysql.tables.moneyLog");
+    }
+
+    /**
      * returns the username of the mysql user
      *
      * @return the username of the mysql user

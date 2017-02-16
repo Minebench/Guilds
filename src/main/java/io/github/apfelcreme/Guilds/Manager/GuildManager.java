@@ -817,6 +817,37 @@ public class GuildManager {
     }
 
     /**
+     * writes a log entry when a players pays or withdraws money from the bank.
+     *
+     * @param guild         the guild the player interacts with
+     * @param sender        the player who does this
+     * @param balanceChange the amount of money. >0 for payments, <0 for withdrawals
+     */
+    public void logMoneyOperation(Guild guild, UUID sender, final double balanceChange) {
+        plugin.runAsync(new Runnable() {
+            public void run() {
+                Connection connection = null;
+                try {
+                    connection = plugin.getDatabaseConnection();
+                    PreparedStatement statement = connection.prepareStatement(
+                            "INSERT IGNORE INTO " + plugin.getGuildsConfig().getMoneyLogTable()
+                                    + "(guildId, player, balanceChange, timestamp) VALUES (?, ?, ?, ?);");
+                    statement.setInt(1, guild.getId());
+                    statement.setString(2, sender.toString());
+                    statement.setDouble(3, balanceChange);
+                    statement.setTimestamp(4, new Timestamp(new Date().getTime()));
+                    statement.executeUpdate();
+
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                } finally {
+                    DatabaseConnectionManager.close(connection);
+                }
+            }
+        });
+    }
+
+    /**
      * sets the guild color
      *
      * @param color the new color
