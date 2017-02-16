@@ -51,6 +51,8 @@ public class PayRequest extends GuildRequest {
                             .replace("{1}", Double.toString(amount)));
             plugin.getLogger().info(sender.getName() + " has payed " + amount + " to guild '"
                     + guild.getName() + "'");
+        } else {
+            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.notEnoughMoney"));
         }
     }
 }
