@@ -1,10 +1,8 @@
 package io.github.apfelcreme.Guilds.Command.Guild.Request;
 
-import io.github.apfelcreme.Guilds.Command.Request;
 import io.github.apfelcreme.Guilds.Guild.Guild;
 import io.github.apfelcreme.Guilds.Guilds;
-import io.github.apfelcreme.Guilds.GuildsConfig;
-import io.github.apfelcreme.Guilds.GuildsUtil;
+import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -42,7 +40,8 @@ public class CreateRequest extends GuildRequest {
 
     @Override
     public void execute() {
-        if (plugin.getEconomy().has(sender, plugin.getGuildsConfig().getLevelData(1).getCost())) {
+        EconomyResponse economyResponse = plugin.getEconomy().withdrawPlayer(sender, plugin.getGuildsConfig().getLevelData(1).getCost());
+        if (!economyResponse.transactionSuccess()) {
             plugin.getChat().sendMessage(sender,
                     plugin.getGuildsConfig().getText("error.notEnoughMoneyFounding")
                             .replace("{0}", Double.toString(plugin.getGuildsConfig().getLevelData(1).getCost())));
@@ -50,7 +49,6 @@ public class CreateRequest extends GuildRequest {
         }
 
         plugin.getGuildManager().create(guild, sender);
-        plugin.getEconomy().withdrawPlayer(sender, plugin.getGuildsConfig().getLevelData(1).getCost());
         plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                 .getColoredText("info.guild.create.guildCreated", guild.getColor())
                 .replace("{0}", guild.getName()));
