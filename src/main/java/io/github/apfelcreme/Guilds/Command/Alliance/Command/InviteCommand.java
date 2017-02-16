@@ -43,13 +43,13 @@ public class InviteCommand extends SubCommand {
         Player sender = (Player) commandSender;
         if (sender.hasPermission("Guilds.allianceInvite")) {
             if (strings.length >= 2) {
-                if (plugin.getGuildManager().getGuild(sender) != null) {
-                    Guild guild = plugin.getGuildManager().getGuild(sender);
-                    Guild targetGuild = plugin.getGuildManager().getGuild(strings[1]);
-                    if (guild.getMember(sender.getUniqueId()).getRank().canDoDiplomacy()) {
+                Guild senderGuild = plugin.getGuildManager().getGuild(sender);
+                if (senderGuild != null) {
+                    if (senderGuild.getMember(sender.getUniqueId()).getRank().canDoDiplomacy()) {
+                        Guild targetGuild = plugin.getGuildManager().getGuild(strings[1]);
                         if (targetGuild != null) {
                             Alliance alliance = plugin.getAllianceManager().getAlliance(sender);
-                            plugin.getAllianceManager().addInvite(new AllianceInvite(alliance, guild));
+                            plugin.getAllianceManager().addInvite(new AllianceInvite(alliance, targetGuild));
                             plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                     .getColoredText("info.alliance.invite.invitedGuild", alliance.getColor())
                                     .replace("{0}", strings[1]));
