@@ -42,8 +42,13 @@ public class GiveExpRequest extends GuildRequest {
      */
     @Override
     public void execute() {
-        plugin.getGuildManager().setExp(guild, guild.getExp() + exp);
         int total = GuildsUtil.getTotalExperience(sender);
+        if (total < exp) {
+            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
+                    .getText("error.notEnoughExp"));
+            return;
+        }
+        plugin.getGuildManager().setExp(guild, guild.getExp() + exp);
         sender.setTotalExperience(0);
         sender.setLevel(0);
         sender.setExp(0.0f);
