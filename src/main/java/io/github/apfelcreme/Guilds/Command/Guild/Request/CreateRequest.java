@@ -42,6 +42,13 @@ public class CreateRequest extends GuildRequest {
 
     @Override
     public void execute() {
+        if (plugin.getEconomy().has(sender, plugin.getGuildsConfig().getLevelData(1).getCost())) {
+            plugin.getChat().sendMessage(sender,
+                    plugin.getGuildsConfig().getText("error.notEnoughMoneyFounding")
+                            .replace("{0}", Double.toString(plugin.getGuildsConfig().getLevelData(1).getCost())));
+            return;
+        }
+
         plugin.getGuildManager().create(guild, sender);
         plugin.getEconomy().withdrawPlayer(sender, plugin.getGuildsConfig().getLevelData(1).getCost());
         plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
