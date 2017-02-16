@@ -41,6 +41,12 @@ public class UpgradeRequest extends GuildRequest {
 
     @Override
     public void execute() {
+        if (!plugin.getGuildManager().canBeUpgraded(guild, sender)) {
+            plugin.getChat().sendMessage(sender,
+                    plugin.getGuildsConfig().getColoredText("info.guild.upgrade.requirementsMissing", guild.getColor())
+                            .replace("{0}", plugin.getGuildManager().getNextLevel(guild).getName()));
+            return;
+        }
         plugin.getGuildManager().upgrade(guild);
         plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                 .getColoredText("info.guild.upgrade.upgradedGuild", guild.getColor()));
