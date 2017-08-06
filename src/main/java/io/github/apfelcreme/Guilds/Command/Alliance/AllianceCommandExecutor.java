@@ -38,11 +38,11 @@ public class AllianceCommandExecutor extends PluginCommandExecutor {
     /**
      * @param commandSender the sender
      * @param command       the command
-     * @param s             ???
+     * @param label         the used alias
      * @param strings       the command args
-     * @return ??
+     * @return <tt>true</tt> if the command succeeded; <tt>false</tt> if not
      */
-    public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
+    public boolean onCommand(CommandSender commandSender, Command command, String label, String[] strings) {
         if (commandSender instanceof Player) {
             Player sender = (Player) commandSender;
             if (sender.hasPermission("Guilds.user")) {
