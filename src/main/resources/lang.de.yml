@@ -63,7 +63,7 @@ texts:
       deletePrefix: '&c Falsche Eingabe! Probiere /guild deleteprefix <Name>'
       deleteRank: '&c Falsche Eingabe! Probiere /guild deleterank <Rang>'
       editRank: '&c Falsche Eingabe! Probiere /guild editrank <Name>'
-      giveExp: '&c Falsche Eingabe! Probiere /guild exp <Exp>'
+      giveExp: '&c Falsche Eingabe! Probiere /guild exp <Exp>/<Level>L'
       invite: '&c Falsche Eingabe! Probiere /guild invite <Name>'
       inviteAlliance: '&c Falsche Eingabe! Probiere /alliance invite <Gilde>'
       kick: '&c Falsche Eingabe! Probiere /guild kick <Name>'

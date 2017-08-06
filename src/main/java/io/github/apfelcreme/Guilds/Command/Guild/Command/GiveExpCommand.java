@@ -44,37 +44,47 @@ public class GiveExpCommand extends SubCommand {
      */
     public void execute(CommandSender commandSender, String[] strings) {
         Player sender = (Player) commandSender;
-        if ((plugin.getServer().getDefaultGameMode() != GameMode.CREATIVE && sender.getGameMode() != GameMode.CREATIVE)
-                || sender.hasPermission("Guilds.giveExpCreative")) {
-            if (sender.hasPermission("Guilds.giveExp") && plugin.getGuildsConfig().requireExpForUpgrade()) {
-                if (strings.length >= 2) {
-                    if (GuildsUtil.isNumeric(strings[1])) {
-                        Integer exp = Integer.parseInt(strings[1]);
-                        Guild guild = plugin.getGuildManager().getGuild(sender);
-                        if (guild != null) {
-                            if (GuildsUtil.getTotalExperience(sender) >= exp) {
+        Guild guild = plugin.getGuildManager().getGuild(sender);
+        if (guild != null) {
+            if ((plugin.getServer().getDefaultGameMode() != GameMode.CREATIVE && sender.getGameMode() != GameMode.CREATIVE)
+                    || sender.hasPermission("Guilds.giveExpCreative")) {
+                if (sender.hasPermission("Guilds.giveExp") && plugin.getGuildsConfig().requireExpForUpgrade()) {
+                    if (strings.length >= 2) {
+                        String input = strings[1];
+                        boolean inputIsLevel = false;
+                        if (input.toUpperCase().endsWith("L")) {
+                            inputIsLevel = true;
+                            input = input.substring(0, input.length() - 1);
+                        }
+                        if (GuildsUtil.isNumeric(input)) {
+                            int inputNumber = Integer.parseInt(input);
+
+                            int exp = inputIsLevel
+                                    ? GuildsUtil.getExpAtLevel(sender.getLevel()) - GuildsUtil.getExpAtLevel(sender.getLevel() - inputNumber)
+                                    : inputNumber;
+
+                            if (GuildsUtil.getTotalExperience(sender) >= exp && exp >= 0) {
                                 plugin.getRequestController().addRequest(new GiveExpRequest(plugin, sender, guild, exp));
                             } else {
                                 plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                         .getText("error.notEnoughExp"));
                             }
                         } else {
-                            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
-                                    .getText("error.noCurrentGuild"));
+                            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noNumber")
+                                    .replace("{0}", input));
                         }
                     } else {
-                        plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noNumber")
-                                .replace("{0}", strings[1]));
+                        plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.wrongUsage.giveExp"));
                     }
                 } else {
-                    plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.wrongUsage.giveExp"));
+                    plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noPermission"));
                 }
             } else {
-                plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noPermission"));
+                plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
+                        .getText("error.noSurvival"));
             }
         } else {
-            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
-                    .getText("error.noSurvival"));
+            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noCurrentGuild"));
         }
     }
 }
