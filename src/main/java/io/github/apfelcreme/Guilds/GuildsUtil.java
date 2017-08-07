@@ -195,8 +195,20 @@ public class GuildsUtil {
      * @return The total exp the player has
      */
     public static int getTotalExperience(final Player player) {
-        int exp = Math.round(getExpAtLevel(player.getLevel()) * player.getExp());
-        int currentLevel = player.getLevel();
+        return getTotalExperience(player.getLevel()) + Math.round(getExpAtLevel(player.getLevel()) * player.getExp());
+    }
+
+    /**
+     * Get the amount of exp needed to reach a certain level
+     *
+     * Function from Essentials
+     *
+     * @param level the level to get the total exp from
+     * @return The total exp the player has
+     */
+    public static int getTotalExperience(final int level) {
+        int exp = 0;
+        int currentLevel = level;
 
         while (currentLevel > 0) {
             currentLevel--;

@@ -4,9 +4,7 @@ import io.github.apfelcreme.Guilds.Command.Guild.Request.GiveExpRequest;
 import io.github.apfelcreme.Guilds.Command.SubCommand;
 import io.github.apfelcreme.Guilds.Guild.Guild;
 import io.github.apfelcreme.Guilds.Guilds;
-import io.github.apfelcreme.Guilds.GuildsConfig;
 import io.github.apfelcreme.Guilds.GuildsUtil;
-import io.github.apfelcreme.Guilds.Manager.RequestController;
 import org.bukkit.GameMode;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -60,7 +58,7 @@ public class GiveExpCommand extends SubCommand {
                             int inputNumber = Integer.parseInt(input);
 
                             int exp = inputIsLevel
-                                    ? GuildsUtil.getExpAtLevel(sender.getLevel()) - GuildsUtil.getExpAtLevel(sender.getLevel() - inputNumber)
+                                    ? GuildsUtil.getTotalExperience(sender.getLevel()) - GuildsUtil.getTotalExperience(sender.getLevel() - inputNumber)
                                     : inputNumber;
 
                             if (GuildsUtil.getTotalExperience(sender) >= exp && exp >= 0) {
