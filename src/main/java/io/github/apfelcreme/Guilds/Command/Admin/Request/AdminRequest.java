@@ -2,6 +2,7 @@ package io.github.apfelcreme.Guilds.Command.Admin.Request;
 
 import io.github.apfelcreme.Guilds.Command.Request;
 import io.github.apfelcreme.Guilds.Guilds;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 /**
@@ -24,5 +25,13 @@ public abstract class AdminRequest extends Request {
 
     public AdminRequest(Guilds plugin, Player sender) {
         super(plugin, sender);
+    }
+
+    public void sendInfoMessage() {
+        sendInfoMessage(new String[0]);
+    }
+
+    protected void sendInfoMessage(String... replacements) {
+        sendInfoMessage("guildadmin", ChatColor.GREEN, replacements);
     }
 }

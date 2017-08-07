@@ -32,11 +32,8 @@ import java.util.Map;
  */
 public class UpgradeRequest extends GuildRequest {
 
-    private Guild guild;
-
     public UpgradeRequest(Guilds plugin, Player sender, Guild guild) {
         super(plugin, sender, guild);
-        this.guild = guild;
     }
 
     @Override
@@ -66,4 +63,13 @@ public class UpgradeRequest extends GuildRequest {
         plugin.getLogger().info(sender.getName() + " has upgraded guild '" + guild.getName() + "'" +
                 " to level "+(nextLevel != null ? Integer.toString(nextLevel.getLevel()) : "no next level?"));
     }
+
+    public void sendInfoMessage() {
+        GuildLevel nextLevel = plugin.getGuildManager().getNextLevel(guild);
+        if (nextLevel != null) {
+            sendInfoMessage(nextLevel.getName(), String.valueOf(nextLevel.getCost()), String.valueOf(nextLevel.getExpCost()));
+        }
+    }
+
+
 }

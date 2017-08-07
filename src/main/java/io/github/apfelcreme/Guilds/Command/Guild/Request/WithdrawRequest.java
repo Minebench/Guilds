@@ -32,7 +32,6 @@ public class WithdrawRequest extends GuildRequest {
 
     public WithdrawRequest(Guilds plugin, Player sender, Guild guild, Double amount) {
         super(plugin, sender, guild);
-        this.guild = guild;
         this.amount = amount;
     }
 
@@ -59,5 +58,7 @@ public class WithdrawRequest extends GuildRequest {
         }
     }
 
-
+    public void sendInfoMessage() {
+        sendInfoMessage(String.valueOf(amount));
+    }
 }

@@ -409,11 +409,15 @@ public class GuildsConfig {
      * returns a texty string
      *
      * @param key the config path
+     * @param replacements Optional replacements. Use {index} in the message to address them.
      * @return the text
      */
-    public String getText(String key) {
+    public String getText(String key, String... replacements) {
         String ret = (String) languageConfig.get("texts." + key);
         if (ret != null && !ret.isEmpty()) {
+            for (int i = 0; i < replacements.length; i++) {
+                ret = ret.replace("{" + i + "}", replacements[i]);
+            }
             return GuildsUtil.replaceChatColors(ret);
         } else {
             return "Missing text node: " + key;
@@ -425,18 +429,31 @@ public class GuildsConfig {
      *
      * @param key   the key
      * @param color the color
+     * @param replacements Optional replacements. Use {index} in the message to address them.
      * @return a nice String
      */
-    public String getColoredText(String key, ChatColor color) {
+    public String getColoredText(String key, ChatColor color, String... replacements) {
         String ret = (String) languageConfig.get("texts." + key);
 
         if (ret != null && !ret.isEmpty()) {
-            ret = ret.replaceAll("&accent", getAccentColor(color).toString());
-            ret = ret.replaceAll("&mainColor", color.toString());
+            for (int i = 0; i < replacements.length; i++) {
+                ret = ret.replace("{" + i + "}", replacements[i]);
+            }
+            ret = ret.replace("&accent", getAccentColor(color).toString());
+            ret = ret.replace("&mainColor", color.toString());
             return GuildsUtil.replaceChatColors(ret);
         } else {
             return "Missing text node: " + key;
         }
+    }
+
+    /**
+     * Check whether or not the language config has a value for a certain key
+     * @param key   The language key to check for
+     * @return      <tt>true</tt> if there is an entry; <tt>false</tt> if not
+     */
+    public boolean hasText(String key) {
+        return languageConfig.contains(key);
     }
 
     /**

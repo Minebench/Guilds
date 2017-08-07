@@ -1,6 +1,7 @@
 package io.github.apfelcreme.Guilds.Command;
 
 import io.github.apfelcreme.Guilds.Guilds;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 /**
@@ -41,5 +42,17 @@ public abstract class Request {
      */
     public abstract void execute();
 
+    /**
+     * Send an info message about this request to the sender
+     */
+    public abstract void sendInfoMessage();
 
+    protected void sendInfoMessage(String path, ChatColor color, String... replacements) {
+        String key = "request."
+                + (path == null || path.isEmpty() ? "" : path + ".")
+                + getClass().getSimpleName().toLowerCase().replace("request", "");
+        if (plugin.getGuildsConfig().hasText(key)) {
+            plugin.getChat().sendMessage(getSender(), plugin.getGuildsConfig().getColoredText(key, color, replacements));
+        }
+    }
 }

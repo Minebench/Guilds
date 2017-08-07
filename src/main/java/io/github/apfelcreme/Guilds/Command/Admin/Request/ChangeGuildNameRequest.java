@@ -50,4 +50,8 @@ public class ChangeGuildNameRequest extends AdminRequest {
                         .replace("{1}", GuildsUtil.replaceChatColors(newName)));
 
     }
+
+    public void sendInfoMessage() {
+        sendInfoMessage(guild.getName(), guild.getTag(), newName);
+    }
 }

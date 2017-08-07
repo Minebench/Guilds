@@ -66,6 +66,7 @@ public class RequestController {
      */
     public void addRequest(Request request) {
         requests.put(request.getSender(), request);
+        request.sendInfoMessage();
         if (request instanceof GuildRequest) {
             plugin.getChat().sendMessage(request.getSender(), plugin.getGuildsConfig()
                     .getColoredText("info.guild.confirm.confirm", ((GuildRequest) request).getGuild().getColor()));

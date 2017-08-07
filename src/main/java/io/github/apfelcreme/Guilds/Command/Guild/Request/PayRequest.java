@@ -28,12 +28,10 @@ import org.bukkit.entity.Player;
  */
 public class PayRequest extends GuildRequest {
 
-    private Guild guild;
     private double amount;
 
     public PayRequest(Guilds plugin, Player sender, Guild guild, Double amount) {
         super(plugin, sender, guild);
-        this.guild = guild;
         this.amount = amount;
     }
 
@@ -55,5 +53,9 @@ public class PayRequest extends GuildRequest {
         } else {
             plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.notEnoughMoney"));
         }
+    }
+
+    public void sendInfoMessage() {
+        sendInfoMessage(String.valueOf(amount));
     }
 }

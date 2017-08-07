@@ -27,11 +27,8 @@ import org.bukkit.entity.Player;
  */
 public class LeaveRequest extends GuildRequest {
 
-    private Guild guild;
-
     public LeaveRequest(Guilds plugin, Player sender, Guild guild) {
         super(plugin, sender, guild);
-        this.guild = guild;
     }
 
     @Override

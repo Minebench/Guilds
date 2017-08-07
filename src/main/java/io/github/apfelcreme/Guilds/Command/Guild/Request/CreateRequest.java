@@ -55,4 +55,8 @@ public class CreateRequest extends GuildRequest {
         plugin.getLogger().info(sender.getName() + " has created guild '"
                 + guild.getName() + "'");
     }
+
+    public void sendInfoMessage() {
+        sendInfoMessage(name, tag, color.name());
+    }
 }

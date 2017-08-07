@@ -4,7 +4,7 @@ import io.github.apfelcreme.Guilds.Alliance.Alliance;
 import io.github.apfelcreme.Guilds.Command.Request;
 import io.github.apfelcreme.Guilds.Guild.Guild;
 import io.github.apfelcreme.Guilds.Guilds;
-import org.bukkit.ChatColor;
+import org.apache.commons.lang.ArrayUtils;
 import org.bukkit.entity.Player;
 
 /**
@@ -36,5 +36,14 @@ public abstract class AllianceRequest extends Request {
 
     public Alliance getAlliance() {
         return alliance;
+    }
+
+    public void sendInfoMessage() {
+        sendInfoMessage(new String[0]);
+    }
+
+    protected void sendInfoMessage(String... replacements) {
+        sendInfoMessage("alliance", alliance.getColor(),
+                (String[]) ArrayUtils.addAll(new String[]{alliance.getName(), alliance.getTag(), guild.getName()}, replacements));
     }
 }

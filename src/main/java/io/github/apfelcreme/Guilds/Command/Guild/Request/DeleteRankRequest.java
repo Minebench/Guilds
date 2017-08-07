@@ -29,7 +29,6 @@ import org.bukkit.entity.Player;
 public class DeleteRankRequest extends GuildRequest {
 
     private Rank rank;
-    private Guild guild;
 
     public DeleteRankRequest(Guilds plugin, Player sender, Rank rank, Guild guild) {
         super(plugin, sender, guild);
@@ -44,5 +43,9 @@ public class DeleteRankRequest extends GuildRequest {
                 plugin.getGuildsConfig().getColoredText("info.guild.deleteRank.rankDeleted", guild.getColor()).replace("{0}", rank.getName()));
         plugin.getLogger().info(sender.getName() + " has deleted rank '" + rank.getName() + "' in guild '"
                 + guild.getName() + "'");
+    }
+
+    public void sendInfoMessage() {
+        sendInfoMessage(rank.getName());
     }
 }

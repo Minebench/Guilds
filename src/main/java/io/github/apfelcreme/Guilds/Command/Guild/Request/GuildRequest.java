@@ -3,6 +3,7 @@ package io.github.apfelcreme.Guilds.Command.Guild.Request;
 import io.github.apfelcreme.Guilds.Command.Request;
 import io.github.apfelcreme.Guilds.Guild.Guild;
 import io.github.apfelcreme.Guilds.Guilds;
+import org.apache.commons.lang.ArrayUtils;
 import org.bukkit.entity.Player;
 
 /**
@@ -32,5 +33,14 @@ public abstract class GuildRequest extends Request {
 
     public Guild getGuild() {
         return guild;
+    }
+
+    public void sendInfoMessage() {
+        sendInfoMessage(new String[0]);
+    }
+
+    protected void sendInfoMessage(String... replacements) {
+        sendInfoMessage("guild", getGuild().getColor(),
+                (String[]) ArrayUtils.addAll(new String[]{guild.getName(), guild.getTag()}, replacements));
     }
 }

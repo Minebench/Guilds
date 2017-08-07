@@ -1,11 +1,8 @@
 package io.github.apfelcreme.Guilds.Command.Guild.Request;
 
-import io.github.apfelcreme.Guilds.Command.Request;
 import io.github.apfelcreme.Guilds.Guild.Guild;
 import io.github.apfelcreme.Guilds.Guilds;
-import io.github.apfelcreme.Guilds.GuildsConfig;
 import io.github.apfelcreme.Guilds.GuildsUtil;
-import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
@@ -65,5 +62,9 @@ public class GiveExpRequest extends GuildRequest {
                         .replace("{1}", Integer.toString(exp))
         );
         plugin.getLogger().info(sender.getName() + " has payed " + exp + " exp to guild '" + guild.getName() + "'");
+    }
+
+    public void sendInfoMessage() {
+        sendInfoMessage(String.valueOf(exp));
     }
 }

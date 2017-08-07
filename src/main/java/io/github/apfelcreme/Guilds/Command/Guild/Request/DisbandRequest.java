@@ -27,11 +27,8 @@ import org.bukkit.entity.Player;
  */
 public class DisbandRequest extends GuildRequest {
 
-    private Guild guild;
-
     public DisbandRequest(Guilds plugin, Player sender, Guild guild) {
         super(plugin, sender, guild);
-        this.guild = guild;
     }
 
     @Override

@@ -27,12 +27,10 @@ import org.bukkit.entity.Player;
  */
 public class ColorChangeRequest extends GuildRequest {
 
-    private final Guild guild;
     private final ChatColor color;
 
     public ColorChangeRequest(Guilds plugin, Player sender, Guild guild, ChatColor color) {
         super(plugin, sender, guild);
-        this.guild = guild;
         this.color = color;
     }
 
@@ -45,5 +43,9 @@ public class ColorChangeRequest extends GuildRequest {
         plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                 .getColoredText("info.guild.color.colorSet", color)
                 .replace("{0}", WordUtils.capitalize(color.name().replace("_", " ").toLowerCase())));
+    }
+
+    public void sendInfoMessage() {
+        sendInfoMessage(color.name(), color.toString());
     }
 }

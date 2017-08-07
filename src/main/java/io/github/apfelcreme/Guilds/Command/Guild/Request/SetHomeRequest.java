@@ -29,12 +29,10 @@ import org.bukkit.entity.Player;
  */
 public class SetHomeRequest extends GuildRequest {
 
-    private Guild guild;
     private Location location;
 
     public SetHomeRequest(Guilds plugin, Player sender, Guild guild, Location location) {
         super(plugin, sender, guild);
-        this.guild = guild;
         this.location = location;
     }
 
@@ -52,5 +50,9 @@ public class SetHomeRequest extends GuildRequest {
                     + location.getZ() + ") in World " + location.getWorld().getName() + " on server "
                     + plugin.getServer().getName());
         }
+    }
+
+    public void sendInfoMessage() {
+        sendInfoMessage(location.getWorld().getName() + " " + location.getBlockX() + "/" + location.getBlockY() + "/" + location.getBlockZ());
     }
 }

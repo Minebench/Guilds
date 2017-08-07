@@ -29,12 +29,10 @@ import org.bukkit.entity.Player;
 public class KickRequest extends GuildRequest {
 
     private GuildMember targetPlayer;
-    private Guild guild;
 
     public KickRequest(Guilds plugin, Player sender, GuildMember targetPlayer, Guild guild) {
         super(plugin, sender, guild);
         this.targetPlayer = targetPlayer;
-        this.guild = guild;
     }
 
     @Override
@@ -54,5 +52,9 @@ public class KickRequest extends GuildRequest {
 
         plugin.getLogger().info(sender.getName() + " has kicked " + targetPlayer.getName()
                 + " from guild '" + guild.getName() + "'");
+    }
+
+    public void sendInfoMessage() {
+        sendInfoMessage(targetPlayer.getName(), targetPlayer.getRank().getName());
     }
 }

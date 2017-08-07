@@ -59,4 +59,9 @@ public class AddToGuildRequest extends AdminRequest {
         }
         plugin.getLogger().info("Player '" + (targetName != null ? targetName + "/" : "") + target + "' was added to '" + guild.getName() + "' by force!");
     }
+
+    public void sendInfoMessage() {
+        String targetName = plugin.getPlayerName(target);
+        sendInfoMessage(guild.getName(), guild.getTag(), targetName, String.valueOf(target));
+    }
 }

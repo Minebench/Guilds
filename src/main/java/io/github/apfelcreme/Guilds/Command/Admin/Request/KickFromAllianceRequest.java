@@ -62,4 +62,8 @@ public class KickFromAllianceRequest extends AdminRequest {
                         .replace("{0}", guild.getName()));
     }
 
+    public void sendInfoMessage() {
+        sendInfoMessage(guild.getName(), guild.getTag(), alliance.getName(), alliance.getTag());
+    }
+
 }

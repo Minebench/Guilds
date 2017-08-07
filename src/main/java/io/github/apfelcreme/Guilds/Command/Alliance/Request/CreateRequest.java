@@ -49,4 +49,8 @@ public class CreateRequest extends AllianceRequest {
         plugin.getLogger().info(guild.getName() + " has created alliance '"
                 + alliance.getName() + "'");
     }
+
+    public void sendInfoMessage() {
+        sendInfoMessage(color.name());
+    }
 }

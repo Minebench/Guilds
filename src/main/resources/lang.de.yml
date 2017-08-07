@@ -296,6 +296,28 @@ texts:
         configReloaded: '&2 Die Config wurde neu geladen!'
       sync:
         synced: '&2 Die Daten wurden erfolgreich synchronisiert!'
+  request:
+    guildadmin:
+      addtoguild: '&a {2}&2 zur Gilde &a{0}&2 hinzugefügen?'
+      changeguildname: '&2 Willst du den Namen der Gilde &a{1}/{0}&2 auf &a{2}&2 ändern?'
+      changeguildtag: '&2 Willst du den Tag der Gilde &a{1}/{0}&2 auf &a{2}&2 ändern?'
+      kickfromalliance:  '&2 Willst du die Gilde &a{1}/{0}&2 aus der Allianz &a{3}/{2}&2 entfernen?'
+    guild:
+      colorchange: '&mainColor Willst du die Farbe deiner Gilde auf &accent{3}{2}&mainColor ändern?'
+      create: '&mainColor Willst du die Gilde &accent{1}&mainColor/&accent{0}&mainColor gründen?'
+      deleterank: '&mainColor Willst du den Rang &accent{2}&mainColor entfernen?'
+      disband: '&mainColor Willst du deine Gilde &accent{1}&mainColor/&accent{0}&mainColor auflösen?'
+      giveexp: '&mainColor Willst du deiner Gilde &accent{2}&mainColor Erfahrung spenden?'
+      kick: '&mainColor Willst du &accent{3} &accent{2}&mainColor aus deiner Gilde ausschließen?'
+      leave: '&mainColor Willst du aus der Gilde &accent{1}&mainColor/&accent{0}&mainColor austreten?'
+      pay: '&mainColor Willst du deiner Gilde &accent{2}&mainColor Bench spenden?'
+      promote: '&mainColor Willst du den Rang von &accent{4} &accent{2}&mainColor auf &accent{3}&mainColor setzen?'
+      sethome: '&mainColor Willst du den Homepunkt deiner Gilde auf deine aktuelle Position setzen?'
+      upgrade: '&mainColor Willst du deine Gilde auf &accent{2}&mainColor upgraden? Kosten: &accent{3}&mainColor Bench, &accent{4}&mainColor Erfahrung'
+      withdraw: '&mainColor Willst du &accent{2}&mainColor Bench aus deiner Gildenkasse abheben?'
+    alliance:
+      leave: '&mainColor Willst du mit deiner Gilde aus der Allianz &accent{1}&mainColor/&accent{0}&mainColor austreten?'
+      create: '&mainColor Willst du die Allianz &accent{1}&mainColor/&accent{0}&mainColor gründen?'
   help:
     guildadmin:
       command:
