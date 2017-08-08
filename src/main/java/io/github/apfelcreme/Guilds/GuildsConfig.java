@@ -453,7 +453,7 @@ public class GuildsConfig {
      * @return      <tt>true</tt> if there is an entry; <tt>false</tt> if not
      */
     public boolean hasText(String key) {
-        return languageConfig.contains(key);
+        return languageConfig.contains("texts." + key);
     }
 
     /**
