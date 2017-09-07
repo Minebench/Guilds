@@ -4,7 +4,6 @@ import io.github.apfelcreme.Guilds.Command.SubCommand;
 import io.github.apfelcreme.Guilds.Guild.Guild;
 import io.github.apfelcreme.Guilds.GuildsUtil;
 import io.github.apfelcreme.Guilds.Guilds;
-import io.github.apfelcreme.Guilds.GuildsConfig;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -53,8 +52,14 @@ public class ListCommand extends SubCommand {
         }
         if (sender.hasPermission("Guilds.listGuild")) {
             if (page >= 0) {
-                List<Guild> guilds = new ArrayList<Guild>(plugin.getGuildManager().getGuilds());
-                Collections.sort(guilds, Collections.<Guild>reverseOrder());
+                List<Guild> guilds = new ArrayList<>(plugin.getGuildManager().getGuilds());
+                guilds.sort((g1, g2) -> {
+                    if (g1.getCurrentLevel().getLevel() == g2.getCurrentLevel().getLevel()) {
+                        return Integer.compare(g1.getMembers().size(), g2.getMembers().size());
+                    }
+                    return Integer.compare(g1.getCurrentLevel().getLevel(), g2.getCurrentLevel().getLevel());
+                });
+                guilds.sort(Collections.reverseOrder());
                 Integer pageSize = plugin.getGuildsConfig().getListsPageSize();
                 Integer maxPages = (int) Math.ceil((float) guilds.size() / pageSize);
                 if (page >= maxPages - 1) {
