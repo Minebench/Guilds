@@ -302,7 +302,7 @@ public class GuildManager {
      */
     public Guild getGuild(String name) {
         for (Guild guild : guilds.values()) {
-            if (GuildsUtil.strip(guild.getName()).equals(GuildsUtil.strip(name))) {
+            if (GuildsUtil.strip(guild.getName()).equalsIgnoreCase(GuildsUtil.strip(name))) {
                 return guild;
             }
         }
