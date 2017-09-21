@@ -116,14 +116,14 @@ texts:
         allianceDisbanded: '&mainColor Die Allianz wurde aufgelöst!'
       info:
         head: '&2 Informationen zu &mainColor{0}: '
-        element: '&8 - &mainColor[{0}] &a{1}'
+        element: '&8 - &7[{0}&7] &mainColor{1}'
       invite:
         invitedGuild: '&mainColor Du hast die Gilde &accent{0}&mainColor eingeladen!'
         youAcceptedInvite: '&mainColor Deine Gilde ist der Allianz {0} beigetreten!'
         youDeniedInvite: '&2 Deine Gilde hat die Einladung abgelehnt!'
       list:
         head: '&2 Derzeit existieren folgende Allianzen: (&a{0}&2/&a{1}&2)'
-        element: '&8 - &mainColor[{0}] &a{1}: &7{2} Gilden'
+        element: '&8 - &7[{0}&7] &mainColor{1}: &7{2} Gilden'
         bottom: '&2 Für andere Seiten: &a/alliance list <#>:'
       leave:
         youLeftAlliance: '&mainColor Deine Gilde ist aus der Allianz {0} ausgetreten!'
@@ -185,7 +185,8 @@ texts:
         teleportedToHome: '&mainColor Du wurdest zu deinem Gilden-Home teleportiert!'
       info:
         head: '&mainColor Deine Gilde sieht derzeit folgendermaßen aus:'
-        name: '&mainColor Name: &accent{0}'
+        name: '&mainColor Name: &accent[{1}] &accent{0}'
+        alliance: '&mainColor Allianz:&accent &7[{1}&7] &accent{0}'
         limit: '&mainColor Spieler-Limit: &accent{0}&mainColor/&accent{1}'
         currentBalance: '&mainColor Gildenkasse: &accent{0}&mainColor/&accent{1}'
         currentExpBalance: '&mainColor Erfahrung: &accent{0}&mainColor/&accent{1}'

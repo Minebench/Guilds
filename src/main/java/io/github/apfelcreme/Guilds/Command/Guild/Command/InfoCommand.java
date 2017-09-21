@@ -1,5 +1,6 @@
 package io.github.apfelcreme.Guilds.Command.Guild.Command;
 
+import io.github.apfelcreme.Guilds.Alliance.Alliance;
 import io.github.apfelcreme.Guilds.Command.SubCommand;
 import io.github.apfelcreme.Guilds.Guild.Guild;
 import io.github.apfelcreme.Guilds.Guilds;
@@ -60,7 +61,15 @@ public class InfoCommand extends SubCommand {
                         .getColoredText("info.guild.info.head", guild.getColor()));
                 plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                         .getColoredText("info.guild.info.name", guild.getColor())
-                        .replace("{0}", guild.getName()));
+                        .replace("{0}", guild.getName())
+                        .replace("{1}", guild.getTag()));
+                Alliance alliance = plugin.getAllianceManager().getAlliance(guild);
+                if (alliance != null) {
+                    plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
+                            .getColoredText("info.guild.info.alliance", guild.getColor())
+                            .replace("{0}", alliance.getColor() + alliance.getName())
+                            .replace("{1}", alliance.getTag()));
+                }
                 plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                         .getColoredText("info.guild.info.limit", guild.getColor())
                         .replace("{0}", Integer.toString(guild.getMembers().size()))
