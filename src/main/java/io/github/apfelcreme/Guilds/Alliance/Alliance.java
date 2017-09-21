@@ -141,7 +141,7 @@ public class Alliance implements Comparable<Alliance> {
      * @return the alliance tag
      */
     public String getTag() {
-        return tag;
+        return GuildsUtil.replaceChatColors(tag);
     }
 
     /**

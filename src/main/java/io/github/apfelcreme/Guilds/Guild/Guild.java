@@ -179,7 +179,7 @@ public class Guild implements Comparable<Guild> {
      * @return the clan tag
      */
     public String getTag() {
-        return tag;
+        return GuildsUtil.replaceChatColors(tag);
     }
 
     /**
