@@ -49,16 +49,30 @@ public class InviteCommand extends SubCommand {
                         Guild targetGuild = plugin.getGuildManager().getGuild(strings[1]);
                         if (targetGuild != null) {
                             Alliance alliance = plugin.getAllianceManager().getAlliance(sender);
-                            plugin.getAllianceManager().addInvite(new AllianceInvite(alliance, targetGuild));
-                            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
-                                    .getColoredText("info.alliance.invite.invitedGuild", alliance.getColor())
-                                    .replace("{0}", strings[1]));
-                            plugin.getChat().sendGuildChannelBroadcast(
-                                    targetGuild, plugin.getGuildsConfig()
-                                            .getText("info.chat.allianceGotInvited")
-                                            .replace("{0}", alliance.getName()));
-                            plugin.getChat().sendGuildChannelBroadcast(
-                                    targetGuild, plugin.getGuildsConfig().getText("info.chat.allianceAccept"));
+                            Alliance targetAlliance = plugin.getAllianceManager().getAlliance(targetGuild);
+                            if (targetAlliance == null) {
+                                plugin.getAllianceManager().addInvite(new AllianceInvite(alliance, targetGuild));
+                                plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
+                                        .getColoredText("info.alliance.invite.invitedGuild", alliance.getColor())
+                                        .replace("{0}", strings[1]));
+                                plugin.getChat().sendGuildChannelBroadcast(
+                                        targetGuild, plugin.getGuildsConfig()
+                                                .getText("info.chat.allianceGotInvited")
+                                                .replace("{0}", alliance.getName()));
+                                plugin.getChat().sendGuildChannelBroadcast(
+                                        targetGuild, plugin.getGuildsConfig().getText("info.chat.allianceAccept"));
+                            } else {
+                                if (targetAlliance.equals(alliance)) {
+                                    plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
+                                            .getText("error.isInThisAllianceAlready")
+                                            .replace("{0}", strings[1])
+                                            .replace("{1}", alliance.getName()));
+                                } else {
+                                    plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
+                                            .getText("error.isInAnAllianceAlready")
+                                            .replace("{0}", strings[1]));
+                                }
+                            }
                         } else {
                             plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                     .getText("error.guildDoesntExist")

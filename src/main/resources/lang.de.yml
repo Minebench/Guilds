@@ -22,6 +22,8 @@ texts:
     noSelfInvite: '&c Du kannst dich nicht selbst einladen!'
     isInThisGuildAlready: '&c {0} ist bereits Mitglied von {1}!'
     isInAGuildAlready: '&c {0} ist bereits Mitglied einer Gilde!'
+    isInThisAllianceAlready: '&c {0} ist bereits Mitglied von {1}!'
+    isInAnAllianceAlready: '&c {0} ist bereits Mitglied einer Allianz!'
     noValidColor: '&c {0} ist keine zulässige Farbe!'
     homeServerUnreachable: '&c Der Server ist derzeit nicht erreichbar!'
     wrongHomeServer: '&mainColor Du befindest dich derzeit auf dem falschen Server! Serverübergreifender Teleport ist derzeit deaktiviert!'
