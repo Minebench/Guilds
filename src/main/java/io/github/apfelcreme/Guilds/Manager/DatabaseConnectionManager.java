@@ -45,6 +45,7 @@ public class DatabaseConnectionManager {
         if (plugin.getGuildsConfig().getMysqlDatabase() == null || plugin.getGuildsConfig().getMysqlDatabase().isEmpty()) {
             return null;
         } else {
+            Class c = org.slf4j.impl.StaticLoggerBinder.class; // used to prevent minimizer from removing the logger binder
             ds = new HikariDataSource();
             ds.setJdbcUrl("jdbc:mysql://" + plugin.getGuildsConfig().getMysqlUrl() + "/" + plugin.getGuildsConfig().getMysqlDatabase());
             ds.setUsername(plugin.getGuildsConfig().getMysqlUser());
