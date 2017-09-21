@@ -45,6 +45,13 @@ public class InfoCommand extends SubCommand {
             Alliance alliance;
             if (strings.length > 1) {
                 alliance = plugin.getAllianceManager().getAlliance(strings[1]);
+                if (alliance == null) {
+                    alliance = plugin.getAllianceManager().getAllianceByTag(strings[1]);
+                    if (alliance == null) {
+                        plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.allianceDoesntExist"));
+                        return;
+                    }
+                }
             } else {
                 alliance = plugin.getAllianceManager().getAlliance(sender);
             }
@@ -60,7 +67,7 @@ public class InfoCommand extends SubCommand {
                 }
 
             } else {
-                plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.allianceDoesntExist"));
+                plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noCurrentAlliance"));
             }
 
         } else {

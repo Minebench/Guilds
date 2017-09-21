@@ -217,6 +217,21 @@ public class AllianceManager {
     }
 
     /**
+     * returns the alliance with the given tag
+     *
+     * @param tag the tag
+     * @return the alliance with the given tag
+     */
+    public Alliance getAllianceByTag(String tag) {
+        for (Alliance alliance : alliances.values()) {
+            if (GuildsUtil.strip(alliance.getTag()).equalsIgnoreCase(GuildsUtil.strip(tag))) {
+                return alliance;
+            }
+        }
+        return null;
+    }
+
+    /**
      * returns an alliance invite for a guild if there is one
      *
      * @param guild the guild
