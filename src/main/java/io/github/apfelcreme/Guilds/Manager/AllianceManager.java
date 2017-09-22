@@ -269,8 +269,8 @@ public class AllianceManager {
                     statement = connection.prepareStatement(
                             "UPDATE "+ plugin.getGuildsConfig().getGuildsTable()+
                                     " SET allianceId = ? where guildId = ?;");
-                    statement.setInt(1, invite.getGuild().getId());
-                    statement.setInt(2, invite.getAlliance().getId());
+                    statement.setInt(1, invite.getAlliance().getId());
+                    statement.setInt(2, invite.getGuild().getId());
                     statement.executeUpdate();
 
                     plugin.getBungeeConnection().forceAllianceSync(invite.getAlliance().getId());
