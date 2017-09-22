@@ -119,7 +119,7 @@ texts:
         element: '&8 - &7[{0}&7] &mainColor{1}'
       invite:
         invitedGuild: '&mainColor Du hast die Gilde &accent{0}&mainColor eingeladen!'
-        youAcceptedInvite: '&mainColor Deine Gilde ist der Allianz {0} beigetreten!'
+        youAcceptedInvite: '&mainColor Deine Gilde ist der Allianz &accent{0}&mainColor beigetreten!'
         youDeniedInvite: '&2 Deine Gilde hat die Einladung abgelehnt!'
       list:
         head: '&2 Derzeit existieren folgende Allianzen: (&a{0}&2/&a{1}&2)'

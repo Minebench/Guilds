@@ -55,7 +55,7 @@ public class InviteAcceptCommand extends SubCommand {
                     plugin.getChat().sendGuildChannelBroadcast(
                             invite.getGuild(),
                             plugin.getGuildsConfig()
-                                    .getText("info.chat.youJoinedAlliance").replace("{0}", guild.getName()));
+                                    .getText("info.chat.youJoinedAlliance").replace("{0}", invite.getAlliance().getName()));
 
                 } else {
                     plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noPendingInvites"));
