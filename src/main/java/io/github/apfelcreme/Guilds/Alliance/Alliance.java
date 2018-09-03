@@ -1,19 +1,13 @@
 package io.github.apfelcreme.Guilds.Alliance;
 
-import io.github.apfelcreme.Guilds.Bungee.BungeeConnection;
 import io.github.apfelcreme.Guilds.Guild.Guild;
 import io.github.apfelcreme.Guilds.Guild.GuildMember;
-import io.github.apfelcreme.Guilds.Guilds;
-import io.github.apfelcreme.Guilds.GuildsConfig;
 import io.github.apfelcreme.Guilds.GuildsUtil;
-import io.github.apfelcreme.Guilds.Manager.DatabaseConnectionManager;
 import org.bukkit.ChatColor;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * Alliances
@@ -78,7 +72,7 @@ public class Alliance implements Comparable<Alliance> {
         this.color = color;
         this.founded = founded;
         this.guilds = guilds;
-        allianceInvites = new ArrayList<AllianceInvite>();
+        allianceInvites = new ArrayList<>();
     }
 
     public Alliance(String name, String tag, ChatColor color, long founded, Guild founder) {
@@ -86,7 +80,7 @@ public class Alliance implements Comparable<Alliance> {
         this.tag = tag;
         this.color = color;
         this.founded = founded;
-        guilds = new ArrayList<Guild>();
+        guilds = new ArrayList<>();
         guilds.add(founder);
     }
 
@@ -170,10 +164,9 @@ public class Alliance implements Comparable<Alliance> {
      */
     public GuildMember getMember(UUID uuid) {
         for (Guild guild : guilds) {
-            for (GuildMember member : guild.getMembers()) {
-                if (member.getUuid().equals(uuid)) {
-                    return member;
-                }
+            GuildMember member = guild.getMember(uuid);
+            if (member != null) {
+                return member;
             }
         }
         return null;

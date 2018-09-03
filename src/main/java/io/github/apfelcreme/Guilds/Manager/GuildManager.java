@@ -286,12 +286,7 @@ public class GuildManager {
      * @return the players guild
      */
     public Guild getGuild(OfflinePlayer player) {
-        for (Guild guild : guilds.values()) {
-            if (guild.getMember(player.getUniqueId()) != null) {
-                return guild;
-            }
-        }
-        return null;
+        return getGuild(player.getUniqueId());
     }
 
     /**
@@ -357,10 +352,9 @@ public class GuildManager {
      */
     public Invite getInvite(UUID targetPlayer) {
         for (Guild guild : guilds.values()) {
-            for (Map.Entry<UUID, Invite> entry : guild.getPendingInvites().entrySet()) {
-                if (entry.getKey().equals(targetPlayer)) {
-                    return entry.getValue();
-                }
+            Invite invite = guild.getPendingInvites().get(targetPlayer);
+            if (invite != null) {
+                return invite;
             }
         }
         return null;

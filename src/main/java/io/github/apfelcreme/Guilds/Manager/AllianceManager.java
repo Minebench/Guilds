@@ -240,7 +240,7 @@ public class AllianceManager {
     public AllianceInvite getInvite(Guild guild) {
         for (Alliance alliance : alliances.values())
             for (AllianceInvite invite : alliance.getPendingAllianceInvites()) {
-                if (invite.getGuild().getName().equals(guild.getName())) {
+                if (invite.getGuild().getId() == guild.getId()) {
                     return invite;
                 }
             }

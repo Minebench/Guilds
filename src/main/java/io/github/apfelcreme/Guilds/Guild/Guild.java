@@ -3,8 +3,15 @@ package io.github.apfelcreme.Guilds.Guild;
 import io.github.apfelcreme.Guilds.GuildsUtil;
 import org.bukkit.ChatColor;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * Guilds
@@ -43,9 +50,9 @@ public class Guild implements Comparable<Guild> {
     private String tag;
 
     /**
-     * the list of members
+     * the map of members
      */
-    private List<GuildMember> members;
+    private Map<UUID, GuildMember> members = new LinkedHashMap<>();
 
     /**
      * the color used in the guild chat
@@ -119,10 +126,9 @@ public class Guild implements Comparable<Guild> {
         this.tag = tag;
         this.color = color;
         this.balance = balance;
-        members = new ArrayList<GuildMember>();
-        ranks = new LinkedList<Rank>();
-        pendingInvites = new HashMap<UUID, Invite>();
-        blackboardMessages = new ArrayList<BlackboardMessage>();
+        ranks = new LinkedList<>();
+        pendingInvites = new HashMap<>();
+        blackboardMessages = new ArrayList<>();
     }
 
     public Guild(int id, String name, String tag, ChatColor color, double balance, int exp, List<GuildMember> members, List<Rank> ranks,
@@ -131,7 +137,9 @@ public class Guild implements Comparable<Guild> {
         this.name = name;
         this.tag = tag;
         this.color = color;
-        this.members = members;
+        for (GuildMember member : members) {
+            this.members.put(member.getUuid(), member);
+        }
         this.balance = balance;
         this.exp = exp;
         this.ranks = ranks;
@@ -142,8 +150,8 @@ public class Guild implements Comparable<Guild> {
         this.homeZ = guildHomeZ;
         this.homeWorld = guildHomeWorld;
         this.homeServer = guildHomeServer;
-        blackboardMessages = new ArrayList<BlackboardMessage>();
-        pendingInvites = new HashMap<UUID, Invite>();
+        blackboardMessages = new ArrayList<>();
+        pendingInvites = new HashMap<>();
     }
 
     /**
@@ -169,8 +177,8 @@ public class Guild implements Comparable<Guild> {
      *
      * @return the list of members
      */
-    public List<GuildMember> getMembers() {
-        return members;
+    public Collection<GuildMember> getMembers() {
+        return members.values();
     }
 
     /**
@@ -198,12 +206,7 @@ public class Guild implements Comparable<Guild> {
      * @return the matching player object
      */
     public GuildMember getMember(UUID uuid) {
-        for (GuildMember member : members) {
-            if (member.getUuid().equals(uuid)) {
-                return member;
-            }
-        }
-        return null;
+        return members.get(uuid);
     }
 
     /**
