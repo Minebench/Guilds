@@ -8,8 +8,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * Alliances
@@ -49,33 +51,14 @@ public class GuildsUtil {
      * @param array     the array of strings
      * @param separator the seperator
      * @return a joined string
+     * @deprecated Use {@link String#join(CharSequence, CharSequence...)}
      */
+    @Deprecated
     public static String join(Object[] array, String separator) {
         if (array == null) {
             return null;
         } else {
-            if (separator == null) {
-                separator = "";
-            }
-
-            int noOfItems = array.length;
-            if (noOfItems <= 0) {
-                return "";
-            } else {
-                StringBuilder buf = new StringBuilder(noOfItems * 16);
-
-                for (int i = 0; i < array.length; ++i) {
-                    if (i > 0) {
-                        buf.append(separator);
-                    }
-
-                    if (array[i] != null) {
-                        buf.append(array[i]);
-                    }
-                }
-
-                return buf.toString();
-            }
+            return String.join(separator == null ? "" : separator, Arrays.stream(array).map(String::valueOf).collect(Collectors.toList()));
         }
     }
 
@@ -229,7 +212,7 @@ public class GuildsUtil {
         for (int i = 0; i < parts.length; i++) {
             parts[i] = parts[i].substring(0, 1) + parts[i].substring(1).toLowerCase();
         }
-        return join(parts, " ");
+        return String.join(" ", parts);
     }
 
     /**

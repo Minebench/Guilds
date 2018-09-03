@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 
 /**
  * Alliances
@@ -36,6 +37,47 @@ public class BungeeConnection {
     }
 
     /**
+     * Send a command over the Bungee connection
+     * @param operation The operation to do
+     * @param arguments Some arguments
+     * @param data
+     */
+    public void send(String operation, String arguments, Object... data) {
+        if (!plugin.getServer().getMessenger().isOutgoingChannelRegistered(plugin, "guilds:" + operation)) {
+            plugin.getServer().getMessenger().registerOutgoingPluginChannel(plugin, "guilds:" + operation);
+        }
+
+        ByteArrayOutputStream b = new ByteArrayOutputStream();
+        DataOutputStream out = new DataOutputStream(b);
+
+        try {
+            out.writeUTF(arguments);
+
+            for (Object w : data) {
+                if (w instanceof String) {
+                    out.writeUTF((String) w);
+                } else if (w instanceof Integer) {
+                    out.writeInt((Integer) w);
+                } else {
+                    try (ByteArrayOutputStream bos = new ByteArrayOutputStream ();
+                         ObjectOutputStream oOut = new ObjectOutputStream(bos)){
+                        oOut.writeObject(w);
+                        out.write(bos.toByteArray());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            Player player =  plugin.getServer().getOnlinePlayers().iterator().next();
+            player.sendPluginMessage(plugin, "guilds:" + operation, b.toByteArray());
+            out.close();
+            b.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
      * sends a request to the bungee to sync the list of guilds on all servers
      */
     public void forceGuildsSync() {
@@ -43,18 +85,7 @@ public class BungeeConnection {
             plugin.getGuildManager().loadGuilds();
             return;
         }
-        ByteArrayOutputStream b = new ByteArrayOutputStream();
-        DataOutputStream out = new DataOutputStream(b);
-
-        try {
-            out.writeUTF("SyncGuilds");
-            Player player =  plugin.getServer().getOnlinePlayers().iterator().next();
-            player.sendPluginMessage(plugin, "Guilds", b.toByteArray());
-            out.close();
-            b.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        send("sync", "guilds");
     }
 
     /**
@@ -65,19 +96,7 @@ public class BungeeConnection {
             plugin.getGuildManager().reloadGuild(guildId);
             return;
         }
-        ByteArrayOutputStream b = new ByteArrayOutputStream();
-        DataOutputStream out = new DataOutputStream(b);
-
-        try {
-            out.writeUTF("SyncGuild");
-            out.writeInt(guildId);
-            Player player =  plugin.getServer().getOnlinePlayers().iterator().next();
-            player.sendPluginMessage(plugin, "Guilds", b.toByteArray());
-            out.close();
-            b.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        send("sync", "guild", guildId);
     }
 
     /**
@@ -88,18 +107,7 @@ public class BungeeConnection {
             plugin.getAllianceManager().loadAlliances();
             return;
         }
-        ByteArrayOutputStream b = new ByteArrayOutputStream();
-        DataOutputStream out = new DataOutputStream(b);
-
-        try {
-            out.writeUTF("SyncAlliances");
-            Player player = plugin.getServer().getOnlinePlayers().iterator().next();
-            player.sendPluginMessage(plugin, "Guilds", b.toByteArray());
-            out.close();
-            b.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        send("sync", "alliances");
     }
 
     /**
@@ -110,19 +118,7 @@ public class BungeeConnection {
             plugin.getAllianceManager().reload(allianceId);
             return;
         }
-        ByteArrayOutputStream b = new ByteArrayOutputStream();
-        DataOutputStream out = new DataOutputStream(b);
-
-        try {
-            out.writeUTF("SyncAlliance");
-            out.writeInt(allianceId);
-            Player player = plugin.getServer().getOnlinePlayers().iterator().next();
-            player.sendPluginMessage(plugin, "Guilds", b.toByteArray());
-            out.close();
-            b.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        send("sync", "alliance", allianceId);
     }
 
     /**
@@ -134,21 +130,8 @@ public class BungeeConnection {
     public void sendPlayerToGuildHome(Player player, Guild guild) {
 
         if (plugin.getGuildsConfig().useBungeeCord() && plugin.getGuildsConfig().isCrossServerTeleportAllowed()) {
-            ByteArrayOutputStream b = new ByteArrayOutputStream();
-            DataOutputStream out = new DataOutputStream(b);
 
-            try {
-                out.writeUTF("SendPlayerToGuildHome");
-                out.writeUTF(player.getUniqueId().toString());
-                out.writeUTF(guild.getName());
-                out.writeUTF(guild.getHomeServer());
-                player.sendPluginMessage(plugin,
-                        "Guilds", b.toByteArray());
-                out.close();
-                b.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            send("player", "guildhome", player.getUniqueId().toString(), guild.getName(), guild.getHomeServer());
         } else {
             String serverAddress = plugin.getServer().getIp()
                     + ":" + Integer.toString(plugin.getServer().getPort());

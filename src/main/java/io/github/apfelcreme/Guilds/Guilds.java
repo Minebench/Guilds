@@ -132,8 +132,7 @@ public class Guilds extends JavaPlugin {
         getServer().getPluginCommand(".").setExecutor(new GuildChatCommandExecutor(this));
         getServer().getPluginCommand(",").setExecutor(new AllianceChatCommandExecutor(this));
 
-        getServer().getMessenger().registerOutgoingPluginChannel(this, "Guilds");
-        getServer().getMessenger().registerIncomingPluginChannel(this, "Guilds", new BungeeMessageListener(this));
+        new BungeeMessageListener(this);
 
         if (getGuildsConfig().isEnchantmentBonusActivated()) {
             getServer().getPluginManager().registerEvents(new EnchantmentListener(this), this);

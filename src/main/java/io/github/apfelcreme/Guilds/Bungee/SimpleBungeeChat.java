@@ -15,6 +15,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Copyright (C) 2016 Lord36 aka Apfelcreme
@@ -81,27 +83,11 @@ public class SimpleBungeeChat implements BungeeChat {
      * @param message the broadcast message
      */
     public void sendGuildChannelBroadcast(Guild guild, String message) {
-        ByteArrayOutputStream b = new ByteArrayOutputStream();
-        DataOutputStream out = new DataOutputStream(b);
-        try {
-            out.writeUTF("SendGuildChannelBroadcast");
-            List<UUID> uuids = new ArrayList<UUID>();
-            for (GuildMember guildMember : guild.getMembers()) {
-                uuids.add(guildMember.getUuid());
-            }
-            out.writeUTF(GuildsUtil.join(uuids.toArray(), ","));
-            out.writeUTF(plugin.getGuildsConfig()
-                    .getText("prefix.chat")
-                    .replace("{0}", guild.getColor() + GuildsUtil.replaceChatColors(guild.getTag())) + ChatColor.GRAY + message);
-            Player player =
-                    plugin.getServer().getOnlinePlayers().iterator().next();
-            player.sendPluginMessage(plugin,
-                    "Guilds", b.toByteArray());
-            out.close();
-            b.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        plugin.getBungeeConnection().send("broadcast", "guild",
+                guild.getMembers().stream().map(Object::toString).collect(Collectors.joining(",")),
+                plugin.getGuildsConfig()
+                        .getText("prefix.chat")
+                        .replace("{0}", guild.getColor() + GuildsUtil.replaceChatColors(guild.getTag())) + ChatColor.GRAY + message);
     }
 
     /**
@@ -111,29 +97,11 @@ public class SimpleBungeeChat implements BungeeChat {
      * @param message  the broadcast message
      */
     public void sendAllianceChannelBroadcast(Alliance alliance, String message) {
-        ByteArrayOutputStream b = new ByteArrayOutputStream();
-        DataOutputStream out = new DataOutputStream(b);
-        try {
-            out.writeUTF("SendAllianceChannelBroadcast");
-            List<UUID> uuids = new ArrayList<UUID>();
-            for (Guild guild : alliance.getGuilds()) {
-                for (GuildMember guildMember : guild.getMembers()) {
-                    uuids.add(guildMember.getUuid());
-                }
-            }
-            out.writeUTF(GuildsUtil.join(uuids.toArray(), ","));
-            out.writeUTF(plugin.getGuildsConfig()
-                    .getText("prefix.chat")
-                    .replace("{0}", alliance.getColor() + GuildsUtil.replaceChatColors(alliance.getTag())) + ChatColor.GRAY + message);
-            Player player =
-                    plugin.getServer().getOnlinePlayers().iterator().next();
-            player.sendPluginMessage(plugin,
-                    "Guilds", b.toByteArray());
-            out.close();
-            b.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        plugin.getBungeeConnection().send("broadcast", "alliance",
+                alliance.getGuilds().stream().flatMap(g -> g.getMembers().stream()).map(Object::toString).collect(Collectors.joining(",")),
+                plugin.getGuildsConfig()
+                        .getText("prefix.chat")
+                        .replace("{0}", alliance.getColor() + GuildsUtil.replaceChatColors(alliance.getTag())) + ChatColor.GRAY + message);
     }
 
     /**
@@ -143,20 +111,6 @@ public class SimpleBungeeChat implements BungeeChat {
      * @param message the broadcast message
      */
     public void sendBungeeMessage(UUID uuid, String message) {
-        ByteArrayOutputStream b = new ByteArrayOutputStream();
-        DataOutputStream out = new DataOutputStream(b);
-        try {
-            out.writeUTF("SendMessage");
-            out.writeUTF(uuid.toString());
-            out.writeUTF(getPrefix() + message);
-            Player player =
-                    plugin.getServer().getOnlinePlayers().iterator().next();
-            player.sendPluginMessage(plugin,
-                    "Guilds", b.toByteArray());
-            out.close();
-            b.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        plugin.getBungeeConnection().send("player", "message", uuid.toString(), getPrefix() + message);
     }
 }

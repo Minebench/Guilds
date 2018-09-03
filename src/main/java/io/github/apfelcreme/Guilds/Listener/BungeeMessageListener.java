@@ -36,51 +36,69 @@ public class BungeeMessageListener implements PluginMessageListener {
 
     public BungeeMessageListener(Guilds plugin) {
         this.plugin = plugin;
+
+        plugin.getServer().getMessenger().registerIncomingPluginChannel(plugin, "guilds:sync", this);
+        plugin.getServer().getMessenger().registerIncomingPluginChannel(plugin, "guilds:player", this);
+        plugin.getServer().getMessenger().registerIncomingPluginChannel(plugin, "guilds:error", this);
     }
 
     public void onPluginMessageReceived(String s, final Player player, byte[] bytes) {
-        if (!s.equals("Guilds") || !plugin.getGuildsConfig().useBungeeCord()) {
+        if (!s.startsWith("guilds:") || !plugin.getGuildsConfig().useBungeeCord()) {
             return;
         }
         ByteArrayDataInput in = ByteStreams.newDataInput(bytes);
-        String subChannel = in.readUTF();
-        if (subChannel.equals("syncGuilds")) {
-            String[] uuids = in.readUTF().split(" ");
-            plugin.getGuildManager().loadGuilds();
-            setPlayerStatus(uuids);
-        } else if (subChannel.equals("syncAlliances")) {
-            plugin.getAllianceManager().loadAlliances();
-        } else if (subChannel.equals("syncGuild")) {
-            Integer guildId = in.readInt();
-            String[] uuids = in.readUTF().split(" ");
-            plugin.getGuildManager().reloadGuild(guildId);
-            setPlayerStatus(uuids);
-        } else if (subChannel.equals("syncAlliance")) {
-            Integer allianceId = in.readInt();
-            plugin.getAllianceManager().reload(allianceId);
-        } else if (subChannel.equals("SendPlayerHome")) {
-            String uuid = in.readUTF();
-            String guildName = in.readUTF();
-            Guild guild = plugin.getGuildManager().getGuild(guildName);
-            sendPlayerToGuildHome(uuid, guild);
-        } else if (subChannel.equals("HomeServerUnreachable")) {
-            String uuid = in.readUTF();
-            GuildMember guildMember = plugin.getGuildManager().getGuildMember(UUID.fromString(uuid));
-            if (guildMember != null) {
-                plugin.getChat().sendMessage(guildMember, plugin.getGuildsConfig().getText("error.homeServerUnreachable"));
-            }
-        } else if (subChannel.equals("PlayerJoined")) {
-            String uuid = in.readUTF();
-            GuildMember guildMember = plugin.getGuildManager().getGuildMember(UUID.fromString(uuid));
-            if (guildMember != null) {
-                guildMember.setOnline(true);
-            }
-        } else if (subChannel.equals("PlayerDisconnected")) {
-            String uuid = in.readUTF();
-            GuildMember guildMember = plugin.getGuildManager().getGuildMember(UUID.fromString(uuid));
-            if (guildMember != null) {
-                guildMember.setOnline(false);
-            }
+        String operation = s.split(":")[1];
+        String[] args = in.readUTF().split(" ");
+        switch (operation) {
+            case "sync":
+                switch (args[0]) {
+                    case "guilds":
+                        String[] guildsPlayers = in.readUTF().split(" ");
+                        plugin.getGuildManager().loadGuilds();
+                        setPlayerStatus(guildsPlayers);
+                        return;
+                    case "alliances":
+                        plugin.getAllianceManager().loadAlliances();
+                        return;
+                    case "guild":
+                        Integer guildId = in.readInt();
+                        String[] guildPlayers = in.readUTF().split(" ");
+                        plugin.getGuildManager().reloadGuild(guildId);
+                        setPlayerStatus(guildPlayers);
+                        return;
+                    case "alliance":
+                        Integer allianceId = in.readInt();
+                        plugin.getAllianceManager().reload(allianceId);
+                        return;
+                }
+                return;
+            case "player":
+                String uuid = in.readUTF();
+                GuildMember guildMember = plugin.getGuildManager().getGuildMember(UUID.fromString(uuid));
+                switch (args[0]) {
+                    case "home":
+                        String guildName = in.readUTF();
+                        Guild guild = plugin.getGuildManager().getGuild(guildName);
+                        sendPlayerToGuildHome(uuid, guild);
+                        return;
+                    case "joined":
+                        if (guildMember != null) {
+                            guildMember.setOnline(true);
+                        }
+                        return;
+                    case "disconnected":
+                        if (guildMember != null) {
+                            guildMember.setOnline(false);
+                        }
+                        return;
+                }
+                return;
+            case "error":
+                uuid = in.readUTF();
+                guildMember = plugin.getGuildManager().getGuildMember(UUID.fromString(uuid));
+                if (guildMember != null) {
+                    plugin.getChat().sendMessage(guildMember, plugin.getGuildsConfig().getText("error." + args[0]));
+                }
         }
     }
 
