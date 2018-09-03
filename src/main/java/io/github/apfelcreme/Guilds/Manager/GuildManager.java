@@ -20,6 +20,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -68,12 +69,9 @@ public class GuildManager {
     public void loadGuilds() {
         plugin.runAsync(new Runnable() {
             public void run() {
-                Connection connection = null;
-                PreparedStatement statement = null;
-                try {
+                try (Connection connection = plugin.getDatabaseConnection()) {
                     guilds.clear();
-                    connection = plugin.getDatabaseConnection();
-                    statement = connection.prepareStatement("Select guildId from " + plugin.getGuildsConfig().getGuildsTable());
+                    PreparedStatement statement = connection.prepareStatement("Select guildId from " + plugin.getGuildsConfig().getGuildsTable());
                     ResultSet resultSet = statement.executeQuery();
                     int z = 0;
                     while (resultSet.next()) {
@@ -83,8 +81,6 @@ public class GuildManager {
                     plugin.getLogger().info(z + " Guilds synchronized");
                 } catch (SQLException e) {
                     e.printStackTrace();
-                } finally {
-                    DatabaseConnectionManager.close(connection);
                 }
             }
         });
@@ -99,17 +95,12 @@ public class GuildManager {
     public void reloadGuild(final int guildId) {
         plugin.runAsync(new Runnable() {
             public void run() {
-
-                Connection connection = null;
-                PreparedStatement statement = null;
-                ResultSet resultSet = null;
-                try {
-                    connection = plugin.getDatabaseConnection();
+                try (Connection connection = plugin.getDatabaseConnection()) {
                     Guild guild;
                     /**
                      * load the players, their ranks and the guild itself
                      */
-                    statement = connection.prepareStatement(
+                    PreparedStatement statement = connection.prepareStatement(
                             "Select " +
                                     "  g.guildId, g.guild, g.tag, g.color, g.balance, g.exp, g.level, g.founded, " +
                                     "  g.allianceId, g.guildHomeX, g.guildHomeY, g.guildHomeZ, g.guildHomeWorld, " +
@@ -117,7 +108,7 @@ public class GuildManager {
                                     "from " + plugin.getGuildsConfig().getGuildsTable() + " g " +
                                     "where g.guildId = ? ");
                     statement.setInt(1, guildId);
-                    resultSet = statement.executeQuery();
+                    ResultSet resultSet = statement.executeQuery();
 
                     if (resultSet.first()) {
                         int guildId = resultSet.getInt("guildId");
@@ -263,8 +254,6 @@ public class GuildManager {
                     e.printStackTrace();
                 } catch (ConcurrentModificationException e) {
                     plugin.getLogger().log(Level.WARNING, "Error while loading guild " + guildId + "!", e);
-                } finally {
-                    DatabaseConnectionManager.close(connection);
                 }
             }
         });
@@ -382,12 +371,9 @@ public class GuildManager {
     public void acceptInvite(final Invite invite) {
         plugin.runAsync(new Runnable() {
             public void run() {
-                Connection connection = null;
-                PreparedStatement statement = null;
-                try {
-                    connection = plugin.getDatabaseConnection();
+                try (Connection connection = plugin.getDatabaseConnection()) {
                     if (connection != null) {
-                        statement = connection.prepareStatement(
+                        PreparedStatement statement = connection.prepareStatement(
                                 "UPDATE " + plugin.getGuildsConfig().getInvitesTable() + " SET status = 1 " +
                                         "WHERE player = ? " +
                                         "AND targetplayer = ? " +
@@ -402,8 +388,6 @@ public class GuildManager {
                     }
                 } catch (SQLException e) {
                     e.printStackTrace();
-                } finally {
-                    DatabaseConnectionManager.close(connection);
                 }
             }
         });
@@ -415,12 +399,9 @@ public class GuildManager {
     public void denyInvite(final Invite invite) {
         plugin.runAsync(new Runnable() {
             public void run() {
-                Connection connection = null;
-                PreparedStatement statement = null;
-                try {
-                    connection = plugin.getDatabaseConnection();
+                try (Connection connection = plugin.getDatabaseConnection()) {
                     if (connection != null) {
-                        statement = connection.prepareStatement(
+                        PreparedStatement statement = connection.prepareStatement(
                                 "UPDATE " + plugin.getGuildsConfig().getInvitesTable() + " SET status = 2 " +
                                         "WHERE player = ? " +
                                         "AND targetplayer = ? " +
@@ -434,8 +415,6 @@ public class GuildManager {
                     }
                 } catch (SQLException e) {
                     e.printStackTrace();
-                } finally {
-                    DatabaseConnectionManager.close(connection);
                 }
             }
         });
@@ -447,13 +426,10 @@ public class GuildManager {
     public void addInvite(final Invite invite) {
         plugin.runAsync(new Runnable() {
             public void run() {
-                Connection connection = null;
-                PreparedStatement statement = null;
-                try {
-                    connection = plugin.getDatabaseConnection();
+                try (Connection connection = plugin.getDatabaseConnection()) {
                     if (connection != null) {
 
-                        statement = connection.prepareStatement(
+                        PreparedStatement statement = connection.prepareStatement(
                                 "INSERT IGNORE INTO "
                                         + plugin.getGuildsConfig().getPlayerTable() + " (playerName, uuid) " +
                                         "VALUES (?, ?) ");
@@ -475,8 +451,6 @@ public class GuildManager {
                     }
                 } catch (SQLException e) {
                     e.printStackTrace();
-                } finally {
-                    DatabaseConnectionManager.close(connection);
                 }
             }
         });
@@ -490,13 +464,11 @@ public class GuildManager {
     public void create(final Guild guild, final OfflinePlayer founder) {
         plugin.runAsync(new Runnable() {
             public void run() {
-                Connection connection = null;
-                try {
-                    connection = plugin.getDatabaseConnection();
-
+                try (Connection connection = plugin.getDatabaseConnection()) {
                     PreparedStatement statement = connection
                             .prepareStatement("INSERT INTO " + plugin.getGuildsConfig().getGuildsTable() +
-                                    " (guild, tag, color, balance, exp, level, founded) VALUES (?, ?, ?, ?, ?, 1, ?);");
+                                    " (guild, tag, color, balance, exp, level, founded) VALUES (?, ?, ?, ?, ?, 1, ?);"
+                                    , new String[]{"guildId"});
                     statement.setString(1, guild.getName());
                     statement.setString(2, guild.getTag());
                     statement.setString(3, guild.getColor().name());
@@ -505,9 +477,7 @@ public class GuildManager {
                     statement.setLong(6, new Date().getTime());
                     statement.executeUpdate();
 
-                    statement = connection.prepareStatement("Select guildId from " + plugin.getGuildsConfig().getGuildsTable() + " where guild = ?");
-                    statement.setString(1, guild.getName());
-                    ResultSet resultSet = statement.executeQuery();
+                    ResultSet resultSet = statement.getGeneratedKeys();
                     resultSet.first();
                     guild.setId(resultSet.getInt("guildId"));
 
@@ -581,8 +551,6 @@ public class GuildManager {
                     plugin.getBungeeConnection().forceGuildSync(guild.getId());
                 } catch (SQLException e) {
                     e.printStackTrace();
-                } finally {
-                    DatabaseConnectionManager.close(connection);
                 }
             }
         });
@@ -596,9 +564,7 @@ public class GuildManager {
     public void setPlayerRank(final Guild guild, final GuildMember guildMember, final Rank rank) {
         plugin.runAsync(new Runnable() {
             public void run() {
-                Connection connection = null;
-                try {
-                    connection = plugin.getDatabaseConnection();
+                try (Connection connection = plugin.getDatabaseConnection()) {
                     PreparedStatement statement = connection.prepareStatement(
                             "UPDATE " + plugin.getGuildsConfig().getPlayerTable() + " SET rankId = ? " +
                                     "where uuid = ?;");
@@ -609,8 +575,6 @@ public class GuildManager {
                     plugin.getBungeeConnection().forceGuildSync(guild.getId());
                 } catch (SQLException e) {
                     e.printStackTrace();
-                } finally {
-                    DatabaseConnectionManager.close(connection);
                 }
             }
         });
@@ -624,9 +588,7 @@ public class GuildManager {
     private void setLeader(final Guild guild, final OfflinePlayer guildMember) {
         plugin.runAsync(new Runnable() {
             public void run() {
-                Connection connection = null;
-                try {
-                    connection = plugin.getDatabaseConnection();
+                try (Connection connection = plugin.getDatabaseConnection()) {
                     if (connection != null) {
                         PreparedStatement statement = connection.prepareStatement(
                                 "UPDATE " + plugin.getGuildsConfig().getPlayerTable() +
@@ -642,8 +604,6 @@ public class GuildManager {
                     }
                 } catch (SQLException e) {
                     e.printStackTrace();
-                } finally {
-                    DatabaseConnectionManager.close(connection);
                 }
             }
         });
@@ -655,9 +615,7 @@ public class GuildManager {
     public void delete(final Guild guild) {
         plugin.runAsync(new Runnable() {
             public void run() {
-                Connection connection = null;
-                try {
-                    connection = plugin.getDatabaseConnection();
+                try (Connection connection = plugin.getDatabaseConnection()) {
                     PreparedStatement statement = connection.prepareStatement(
                             "UPDATE " + plugin.getGuildsConfig().getPlayerTable() + " SET guildId = NULL, rankId = NULL" +
                                     " where guildId = ? "
@@ -701,8 +659,6 @@ public class GuildManager {
 
                 } catch (SQLException e) {
                     e.printStackTrace();
-                } finally {
-                    DatabaseConnectionManager.close(connection);
                 }
             }
         });
@@ -716,9 +672,7 @@ public class GuildManager {
     public void addMember(final Guild guild, final UUID targetPlayer) {
          plugin.runAsync(new Runnable() {
              public void run() {
-                 Connection connection = null;
-                 try {
-                     connection = plugin.getDatabaseConnection();
+                 try (Connection connection = plugin.getDatabaseConnection()) {
                      PreparedStatement statement = connection.prepareStatement(
                              "UPDATE " + plugin.getGuildsConfig().getPlayerTable() +
                                      " SET " +
@@ -739,8 +693,6 @@ public class GuildManager {
                      }
                  } catch (SQLException e) {
                      e.printStackTrace();
-                 } finally {
-                     DatabaseConnectionManager.close(connection);
                  }
              }
          });
@@ -754,9 +706,7 @@ public class GuildManager {
     public void removeMember(final Guild guild, final GuildMember guildMember) {
         plugin.runAsync(new Runnable() {
             public void run() {
-                Connection connection = null;
-                try {
-                    connection = plugin.getDatabaseConnection();
+                try (Connection connection = plugin.getDatabaseConnection()) {
                     PreparedStatement statement = connection.prepareStatement(
                             "UPDATE " + plugin.getGuildsConfig().getPlayerTable() +
                                     " SET guildId = NULL, rankId = null, prefix = null" +
@@ -773,8 +723,6 @@ public class GuildManager {
                     }
                 } catch (SQLException e) {
                     e.printStackTrace();
-                } finally {
-                    DatabaseConnectionManager.close(connection);
                 }
             }
         });
@@ -789,9 +737,7 @@ public class GuildManager {
         guild.setBalance(balance);
         plugin.runAsync(new Runnable() {
             public void run() {
-                Connection connection = null;
-                try {
-                    connection = plugin.getDatabaseConnection();
+                try (Connection connection = plugin.getDatabaseConnection()) {
                     PreparedStatement statement = connection.prepareStatement(
                             "UPDATE " + plugin.getGuildsConfig().getGuildsTable() +
                                     " SET balance = ? where guildId = ? ");
@@ -803,8 +749,6 @@ public class GuildManager {
 
                 } catch (SQLException e) {
                     e.printStackTrace();
-                } finally {
-                    DatabaseConnectionManager.close(connection);
                 }
             }
         });
@@ -820,9 +764,7 @@ public class GuildManager {
     public void logMoneyOperation(Guild guild, UUID sender, final double balanceChange) {
         plugin.runAsync(new Runnable() {
             public void run() {
-                Connection connection = null;
-                try {
-                    connection = plugin.getDatabaseConnection();
+                try (Connection connection = plugin.getDatabaseConnection()) {
                     PreparedStatement statement = connection.prepareStatement(
                             "INSERT IGNORE INTO " + plugin.getGuildsConfig().getMoneyLogTable()
                                     + "(guildId, player, balanceChange, timestamp) VALUES (?, ?, ?, ?);");
@@ -834,8 +776,6 @@ public class GuildManager {
 
                 } catch (SQLException e) {
                     e.printStackTrace();
-                } finally {
-                    DatabaseConnectionManager.close(connection);
                 }
             }
         });
@@ -849,9 +789,7 @@ public class GuildManager {
     public void setColor(final Guild guild, final ChatColor color) {
         plugin.runAsync(new Runnable() {
             public void run() {
-                Connection connection = null;
-                try {
-                    connection = plugin.getDatabaseConnection();
+                try (Connection connection = plugin.getDatabaseConnection()) {
                     PreparedStatement statement = connection.prepareStatement(
                             "UPDATE " + plugin.getGuildsConfig().getGuildsTable() +
                                     " SET color = ? where guildId = ? ");
@@ -862,8 +800,6 @@ public class GuildManager {
                     plugin.getBungeeConnection().forceGuildSync(guild.getId());
                 } catch (SQLException e) {
                     e.printStackTrace();
-                } finally {
-                    DatabaseConnectionManager.close(connection);
                 }
             }
         });
@@ -877,9 +813,7 @@ public class GuildManager {
     public void setName(final Guild guild, final String newName) {
         plugin.runAsync(new Runnable() {
             public void run() {
-                Connection connection = null;
-                try {
-                    connection = plugin.getDatabaseConnection();
+                try (Connection connection = plugin.getDatabaseConnection()) {
                     PreparedStatement statement = connection.prepareStatement(
                             "UPDATE " + plugin.getGuildsConfig().getGuildsTable() +
                                     " SET guild = ? where guildId = ? ");
@@ -890,8 +824,6 @@ public class GuildManager {
                     plugin.getBungeeConnection().forceGuildSync(guild.getId());
                 } catch (SQLException e) {
                     e.printStackTrace();
-                } finally {
-                    DatabaseConnectionManager.close(connection);
                 }
             }
         });
@@ -905,9 +837,7 @@ public class GuildManager {
     public void setTag(final Guild guild, final String newTag) {
         plugin.runAsync(new Runnable() {
             public void run() {
-                Connection connection = null;
-                try {
-                    connection = plugin.getDatabaseConnection();
+                try (Connection connection = plugin.getDatabaseConnection()) {
                     PreparedStatement statement = connection.prepareStatement(
                             "UPDATE " + plugin.getGuildsConfig().getGuildsTable() +
                                     " SET tag = ? where guildId = ? ");
@@ -918,8 +848,6 @@ public class GuildManager {
                     plugin.getBungeeConnection().forceGuildSync(guild.getId());
                 } catch (SQLException e) {
                     e.printStackTrace();
-                } finally {
-                    DatabaseConnectionManager.close(connection);
                 }
             }
         });
@@ -933,9 +861,7 @@ public class GuildManager {
     public void setExp(final Guild guild, final int exp) {
         plugin.runAsync(new Runnable() {
             public void run() {
-                Connection connection = null;
-                try {
-                    connection = plugin.getDatabaseConnection();
+                try (Connection connection = plugin.getDatabaseConnection()) {
                     PreparedStatement statement = connection.prepareStatement(
                             "UPDATE " + plugin.getGuildsConfig().getGuildsTable() +
                                     " SET exp = ? where guildId = ? ");
@@ -947,8 +873,6 @@ public class GuildManager {
 
                 } catch (SQLException e) {
                     e.printStackTrace();
-                } finally {
-                    DatabaseConnectionManager.close(connection);
                 }
             }
         });
@@ -960,9 +884,7 @@ public class GuildManager {
     public void upgrade(final Guild guild) {
         plugin.runAsync(new Runnable() {
             public void run() {
-                Connection connection = null;
-                try {
-                    connection = plugin.getDatabaseConnection();
+                try (Connection connection = plugin.getDatabaseConnection()) {
                     GuildLevel nextLevel = getNextLevel(guild);
                     PreparedStatement statement = connection.prepareStatement(
                             "UPDATE " + plugin.getGuildsConfig().getGuildsTable() +
@@ -977,8 +899,6 @@ public class GuildManager {
 
                 } catch (SQLException e) {
                     e.printStackTrace();
-                } finally {
-                    DatabaseConnectionManager.close(connection);
                 }
             }
         });
@@ -992,9 +912,7 @@ public class GuildManager {
     public void setHome(final Guild guild, final Location location) {
         plugin.runAsync(new Runnable() {
             public void run() {
-                Connection connection = null;
-                try {
-                    connection = plugin.getDatabaseConnection();
+                try (Connection connection = plugin.getDatabaseConnection()) {
                     PreparedStatement statement = connection.prepareStatement(
                             "UPDATE " + plugin.getGuildsConfig().getGuildsTable() + " SET " +
                                     "guildHomeX = ?, " +
@@ -1016,8 +934,6 @@ public class GuildManager {
 
                 } catch (SQLException e) {
                     e.printStackTrace();
-                } finally {
-                    DatabaseConnectionManager.close(connection);
                 }
             }
         });
@@ -1029,9 +945,7 @@ public class GuildManager {
     public void clearMessages(final Guild guild) {
         plugin.runAsync(new Runnable() {
             public void run() {
-                Connection connection = null;
-                try {
-                    connection = plugin.getDatabaseConnection();
+                try (Connection connection = plugin.getDatabaseConnection()) {
                     PreparedStatement statement = connection.prepareStatement(
                             "UPDATE " + plugin.getGuildsConfig().getBlackboardTable() + " SET cleared = 1 where guildId = ?");
                     statement.setInt(1, guild.getId());
@@ -1040,8 +954,6 @@ public class GuildManager {
                     plugin.getBungeeConnection().forceGuildSync(guild.getId());
                 } catch (SQLException e) {
                     e.printStackTrace();
-                } finally {
-                    DatabaseConnectionManager.close(connection);
                 }
             }
         });
@@ -1050,9 +962,7 @@ public class GuildManager {
     public void setMemberPrefix(final GuildMember member, final String prefix) {
         plugin.runAsync(new Runnable() {
             public void run() {
-                Connection connection = null;
-                try {
-                    connection = plugin.getDatabaseConnection();
+                try (Connection connection = plugin.getDatabaseConnection()) {
                     PreparedStatement statement = connection.prepareStatement(
                             "UPDATE " + plugin.getGuildsConfig().getPlayerTable() +
                                     " SET prefix = ?" +
@@ -1064,8 +974,6 @@ public class GuildManager {
                     plugin.getBungeeConnection().forceGuildSync(plugin.getGuildManager().getGuild(member.getUuid()).getId());
                 } catch (SQLException e) {
                     e.printStackTrace();
-                } finally {
-                    DatabaseConnectionManager.close(connection);
                 }
             }
         });
@@ -1074,9 +982,7 @@ public class GuildManager {
     public void addBlackboardMessage(final Guild guild, final BlackboardMessage message) {
         plugin.runAsync(new Runnable() {
             public void run() {
-                Connection connection = null;
-                try {
-                    connection = plugin.getDatabaseConnection();
+                try (Connection connection = plugin.getDatabaseConnection()) {
                     PreparedStatement statement = connection.prepareStatement(
                             "INSERT IGNORE INTO "
                                     + plugin.getGuildsConfig().getBlackboardTable() + " (player, guildId, message, timestamp) " +
@@ -1090,8 +996,6 @@ public class GuildManager {
                     plugin.getBungeeConnection().forceGuildSync(guild.getId());
                 } catch (SQLException e) {
                     e.printStackTrace();
-                } finally {
-                    DatabaseConnectionManager.close(connection);
                 }
             }
         });
@@ -1169,9 +1073,7 @@ public class GuildManager {
     public void addRank(final Rank rank) {
         plugin.runAsync(new Runnable() {
             public void run() {
-                Connection connection = null;
-                try {
-                    connection = plugin.getDatabaseConnection();
+                try (Connection connection = plugin.getDatabaseConnection()) {
                     PreparedStatement statement;
                     if (rank.isBaseRank()) {
                         statement = connection.prepareStatement(
@@ -1202,8 +1104,6 @@ public class GuildManager {
                     plugin.getBungeeConnection().forceGuildSync(rank.getGuild().getId());
                 } catch (SQLException e) {
                     e.printStackTrace();
-                } finally {
-                    DatabaseConnectionManager.close(connection);
                 }
             }
         });
@@ -1215,9 +1115,7 @@ public class GuildManager {
     public void deleteRank(final Rank rank) {
         plugin.runAsync(new Runnable() {
             public void run() {
-                Connection connection = null;
-                try {
-                    connection = plugin.getDatabaseConnection();
+                try (Connection connection = plugin.getDatabaseConnection()) {
                     //give all players the newby rank who previously owned that rank that is now being deleted
                     PreparedStatement statement = connection.prepareStatement(
                             "UPDATE " + plugin.getGuildsConfig().getPlayerTable() + " SET rankId = " +
@@ -1240,8 +1138,6 @@ public class GuildManager {
                     plugin.getBungeeConnection().forceGuildSync(rank.getGuild().getId());
                 } catch (SQLException e) {
                     e.printStackTrace();
-                } finally {
-                    DatabaseConnectionManager.close(connection);
                 }
             }
         });
@@ -1254,9 +1150,7 @@ public class GuildManager {
     public void saveEditedRank(final EditRankSession session) {
         plugin.runAsync(new Runnable() {
             public void run() {
-                Connection connection = null;
-                try {
-                    connection = plugin.getDatabaseConnection();
+                try (Connection connection = plugin.getDatabaseConnection()) {
                     PreparedStatement statement = connection.prepareStatement(
                             "UPDATE " + plugin.getGuildsConfig().getRanksTable() + " SET " +
                                     "rankName = ?, " +
@@ -1288,11 +1182,8 @@ public class GuildManager {
 
                     plugin.getBungeeConnection().forceGuildSync(session.getRank().getGuild().getId());
 
-                    connection.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
-                } finally {
-                    DatabaseConnectionManager.close(connection);
                 }
             }
         });

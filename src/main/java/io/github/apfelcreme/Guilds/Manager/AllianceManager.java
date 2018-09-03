@@ -57,11 +57,9 @@ public class AllianceManager {
     public void loadAlliances() {
         plugin.runAsync(new Runnable() {
             public void run() {
-                Connection connection = null;
-                try {
+                try (Connection connection = plugin.getDatabaseConnection()) {
 //                  guilds.clear();
                     alliances.clear();
-                    connection = plugin.getDatabaseConnection();
                     PreparedStatement statement = connection.prepareStatement("Select allianceId from " + plugin.getGuildsConfig().getAllianceTable());
                     ResultSet resultSet = statement.executeQuery();
                     int z = 0;
@@ -70,11 +68,8 @@ public class AllianceManager {
                         z++;
                     }
                     plugin.getLogger().info(z + " Allianzen synchronisiert");
-                    connection.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
-                } finally {
-                    DatabaseConnectionManager.close(connection);
                 }
             }
         });
@@ -88,11 +83,9 @@ public class AllianceManager {
     public void reload(final int allianceId) {
         plugin.runAsync(new Runnable() {
             public void run() {
-                Connection connection = null;
-                try {
+                try (Connection connection = plugin.getDatabaseConnection()) {
                     Alliance alliance;
 
-                    connection = plugin.getDatabaseConnection();
                     PreparedStatement statement = connection.prepareStatement(
                             "Select g.guildId, a.allianceId, a.alliance, a.tag as allianceTag, a.color as allianceColor, a.founded from " + plugin.getGuildsConfig().getGuildsTable() + " g " +
                                     "left join " + plugin.getGuildsConfig().getAllianceTable() + " a on g.allianceId = a.allianceId " +
@@ -144,8 +137,6 @@ public class AllianceManager {
                     e.printStackTrace();
                 } catch (ConcurrentModificationException e) {
                     plugin.getLogger().log(Level.WARNING, "Error while loading alliance " + allianceId + "!", e);
-                } finally {
-                    DatabaseConnectionManager.close(connection);
                 }
             }
         });
@@ -255,9 +246,7 @@ public class AllianceManager {
     public void acceptInvite(final AllianceInvite invite) {
         plugin.runAsync(new Runnable() {
             public void run() {
-                Connection connection = null;
-                try {
-                    connection = plugin.getDatabaseConnection();
+                try (Connection connection = plugin.getDatabaseConnection()) {
                     PreparedStatement statement = connection.prepareStatement(
                             "UPDATE "+ plugin.getGuildsConfig().getAllianceInviteTable()+" SET status = 1 " +
                                     "WHERE guildId = ? " +
@@ -277,8 +266,6 @@ public class AllianceManager {
                     plugin.getBungeeConnection().forceGuildSync(invite.getGuild().getId());
                 } catch (SQLException e) {
                     e.printStackTrace();
-                } finally {
-                    DatabaseConnectionManager.close(connection);
                 }
             }
         });
@@ -290,9 +277,7 @@ public class AllianceManager {
     public void denyInvite(final AllianceInvite invite) {
         plugin.runAsync(new Runnable() {
             public void run() {
-                Connection connection = null;
-                try {
-                    connection = plugin.getDatabaseConnection();
+                try (Connection connection = plugin.getDatabaseConnection()) {
                     PreparedStatement statement = connection.prepareStatement(
                             "UPDATE " + plugin.getGuildsConfig().getAllianceInviteTable() + " SET status = 2 " +
                                     "WHERE guildId = ? " +
@@ -305,8 +290,6 @@ public class AllianceManager {
                     plugin.getBungeeConnection().forceGuildSync(invite.getGuild().getId());
                 } catch (SQLException e) {
                     e.printStackTrace();
-                } finally {
-                    DatabaseConnectionManager.close(connection);
                 }
             }
         });
@@ -315,9 +298,7 @@ public class AllianceManager {
     public void addInvite(final AllianceInvite invite) {
         plugin.runAsync(new Runnable() {
             public void run() {
-                Connection connection = null;
-                try {
-                    connection = plugin.getDatabaseConnection();
+                try (Connection connection = plugin.getDatabaseConnection()) {
                     PreparedStatement statement = connection.prepareStatement(
                             "INSERT INTO " + plugin.getGuildsConfig().getAllianceInviteTable() + " (allianceId, guildId) " +
                                     "VALUES (?, ?); ");
@@ -329,8 +310,6 @@ public class AllianceManager {
                     plugin.getBungeeConnection().forceGuildSync(invite.getGuild().getId());
                 } catch (SQLException e) {
                     e.printStackTrace();
-                } finally {
-                    DatabaseConnectionManager.close(connection);
                 }
             }
         });
@@ -343,22 +322,17 @@ public class AllianceManager {
     public void create(final Alliance alliance) {
         plugin.runAsync(new Runnable() {
             public void run() {
-                Connection connection = null;
-                try {
-                    connection = plugin.getDatabaseConnection();
+                try (Connection connection = plugin.getDatabaseConnection()) {
                     PreparedStatement statement = connection.prepareStatement(
-                            "INSERT INTO " + plugin.getGuildsConfig().getAllianceTable() + "(alliance, founded, tag, color) VALUES (?, ?, ?, ?)");
+                            "INSERT INTO " + plugin.getGuildsConfig().getAllianceTable() + "(alliance, founded, tag, color) VALUES (?, ?, ?, ?)",
+                            new String[]{"allianceId"});
                     statement.setString(1, alliance.getName());
                     statement.setLong(2, new Date().getTime());
                     statement.setString(3, alliance.getTag());
                     statement.setString(4, alliance.getColor().name());
                     statement.executeUpdate();
 
-
-                    statement = connection.prepareStatement(
-                            "Select allianceId from " + plugin.getGuildsConfig().getAllianceTable() + " where alliance = ?");
-                    statement.setString(1, alliance.getName());
-                    ResultSet resultSet = statement.executeQuery();
+                    ResultSet resultSet = statement.getGeneratedKeys();
                     resultSet.first();
                     alliance.setId(resultSet.getInt("allianceId"));
 
@@ -374,8 +348,6 @@ public class AllianceManager {
                     plugin.getBungeeConnection().forceGuildSync(alliance.getGuilds().get(0).getId());
                 } catch (SQLException e) {
                     e.printStackTrace();
-                } finally {
-                    DatabaseConnectionManager.close(connection);
                 }
             }
         });
@@ -388,9 +360,7 @@ public class AllianceManager {
     public void delete(final Alliance alliance) {
         plugin.runAsync(new Runnable() {
             public void run() {
-                Connection connection = null;
-                try {
-                    connection = plugin.getDatabaseConnection();
+                try (Connection connection = plugin.getDatabaseConnection()) {
                     PreparedStatement statement = connection.prepareStatement(
                             "UPDATE " + plugin.getGuildsConfig().getGuildsTable() + " SET allianceId = null " +
                                     "WHERE allianceId = ? ");
@@ -411,8 +381,6 @@ public class AllianceManager {
                     plugin.getBungeeConnection().forceAlliancesSync();
                 } catch (SQLException e) {
                     e.printStackTrace();
-                } finally {
-                    DatabaseConnectionManager.close(connection);
                 }
             }
         });
@@ -422,9 +390,7 @@ public class AllianceManager {
         alliance.setColor(color);
         plugin.runAsync(new Runnable() {
             public void run() {
-                Connection connection = null;
-                try {
-                    connection = plugin.getDatabaseConnection();
+                try (Connection connection = plugin.getDatabaseConnection()) {
                     PreparedStatement statement = connection.prepareStatement(
                             "UPDATE " + plugin.getGuildsConfig().getAllianceTable() +
                                     " SET color = ? where allianceId = ? ");
@@ -438,8 +404,6 @@ public class AllianceManager {
 
                 } catch (SQLException e) {
                     e.printStackTrace();
-                } finally {
-                    DatabaseConnectionManager.close(connection);
                 }
             }
         });
@@ -448,9 +412,7 @@ public class AllianceManager {
     public void removeMember(final Alliance alliance, final Guild guild) {
         plugin.runAsync(new Runnable() {
             public void run() {
-                Connection connection = null;
-                try {
-                    connection = plugin.getDatabaseConnection();
+                try (Connection connection = plugin.getDatabaseConnection()) {
                     PreparedStatement statement = connection.prepareStatement(
                             "UPDATE " + plugin.getGuildsConfig().getGuildsTable() +
                                     " SET allianceId = null " +
@@ -462,8 +424,6 @@ public class AllianceManager {
                     plugin.getBungeeConnection().forceAllianceSync(alliance.getId());
                 } catch (SQLException e) {
                     e.printStackTrace();
-                } finally {
-                    DatabaseConnectionManager.close(connection);
                 }
             }
         });

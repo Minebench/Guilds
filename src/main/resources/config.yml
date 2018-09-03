@@ -6,6 +6,7 @@ mysql:
   password: ####
   database: ####
   url: ####
+  parameters: ""
   tables:
     player: Guilds_Player
     guilds: Guilds_Guilds

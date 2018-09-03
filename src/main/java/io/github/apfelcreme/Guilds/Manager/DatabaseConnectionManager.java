@@ -6,6 +6,7 @@ import io.github.apfelcreme.Guilds.Guilds;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.logging.Level;
 
 /**
  * Guilds
@@ -45,9 +46,33 @@ public class DatabaseConnectionManager {
         if (plugin.getGuildsConfig().getMysqlDatabase() == null || plugin.getGuildsConfig().getMysqlDatabase().isEmpty()) {
             return null;
         } else {
-            Class c = org.slf4j.impl.StaticLoggerBinder.class; // used to prevent minimizer from removing the logger binder
             ds = new HikariDataSource();
-            ds.setJdbcUrl("jdbc:mysql://" + plugin.getGuildsConfig().getMysqlUrl() + "/" + plugin.getGuildsConfig().getMysqlDatabase());
+            String dataSourceClassName = tryDataSourceClassName("org.mariadb.jdbc.MariaDbDataSource");
+            if (dataSourceClassName == null) {
+                dataSourceClassName = tryDataSourceClassName("com.mysql.jdbc.jdbc2.optional.MysqlDataSource");
+            }
+            if (dataSourceClassName != null) {
+                plugin.getLogger().log(Level.INFO, "Using " + dataSourceClassName + " database source");
+                ds.setDataSourceClassName(dataSourceClassName);
+            }
+
+            if (dataSourceClassName == null) {
+                String driverClassName = tryDriverClassName("org.mariadb.jdbc.Driver");
+                if (driverClassName == null) {
+                    driverClassName = tryDriverClassName("com.mysql.cj.jdbc.Driver");
+                }
+                if (driverClassName == null) {
+                    driverClassName = tryDriverClassName("com.mysql.jdbc.Driver");
+                }
+
+                if (driverClassName != null) {
+                    plugin.getLogger().log(Level.INFO, "Using " + driverClassName + " database driver");
+                    ds.setDriverClassName(driverClassName);
+                } else {
+                    throw new RuntimeException("Could not find database driver or data source class! Plugin wont work without a database!");
+                }
+            }
+            ds.addDataSourceProperty("url", "jdbc:mysql://" + plugin.getGuildsConfig().getMysqlUrl() + "/" + plugin.getGuildsConfig().getMysqlDatabase() + plugin.getGuildsConfig().getMysqlParameters());
             ds.setUsername(plugin.getGuildsConfig().getMysqlUser());
             ds.setPassword(plugin.getGuildsConfig().getMysqlPassword());
             ds.setConnectionTimeout(5000);
@@ -56,13 +81,27 @@ public class DatabaseConnectionManager {
         return null;
     }
 
+    private String tryDriverClassName(String className) {
+        try {
+            Class.forName(className).newInstance();
+            return className;
+        } catch (Exception ignored) {}
+        return null;
+    }
+
+    private String tryDataSourceClassName(String className) {
+        try {
+            Class.forName(className);
+            return className;
+        } catch (Exception ignored) {}
+        return null;
+    }
+
     /**
      * creates the database and tables
      */
     private void initTables() {
-        Connection connection = null;
-        try {
-            connection = getConnection();
+        try (Connection connection = getConnection()) {
             PreparedStatement statement = connection.prepareStatement("CREATE DATABASE IF NOT EXISTS "
                     + plugin.getGuildsConfig().getMysqlDatabase());
             statement.executeUpdate();
@@ -178,8 +217,6 @@ public class DatabaseConnectionManager {
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            close(connection);
         }
     }
 
@@ -189,17 +226,7 @@ public class DatabaseConnectionManager {
      * @return a Connection
      */
     public Connection getConnection() throws SQLException {
-        return ds.getConnection();
-    }
-
-    public static void close(Connection c) {
-        if (c != null) {
-            try {
-                c.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
+        return ds != null ? ds.getConnection() : null;
     }
 
 }

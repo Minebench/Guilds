@@ -173,6 +173,15 @@ public class GuildsConfig {
     }
 
     /**
+     * returns the database parameters
+     *
+     * @return the database parameters
+     */
+    public String getMysqlParameters() {
+        return plugin.getConfig().getString("mysql.parameters");
+    }
+
+    /**
      * returns the default message prefix
      *
      * @return the default message prefix
