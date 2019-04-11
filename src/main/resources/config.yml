@@ -38,7 +38,7 @@ specialDrops:
   DIAMOND: 1.0
   REDSTONE: 1.0
   QUARTZ: 1.0
-  INK_SACK-4: 1.0 # LAPIS
+  LAPIS_LAZULI: 1.0
 upgrade:
   requireMoney: true
   requireExp: true
@@ -68,7 +68,7 @@ level:
     upgradeMaterials:
       DIAMOND: 16
       MOSSY_COBBLESTONE: 64
-      SAPLING: 64
+      OAK_SAPLING: 64
       GLOWSTONE: 64
   '3':
     name: 'Mannschaft'
@@ -83,7 +83,7 @@ level:
       DIAMOND: 24
       ANVIL: 1
       IRON_SWORD: 3
-      GOLD_SWORD: 2
+      GOLDEN_SWORD: 2
       DIAMOND_SWORD: 1
   '4':
     name: 'Horde'
@@ -97,9 +97,9 @@ level:
     upgradeMaterials:
       DIAMOND: 32
       SADDLE: 3
-      LEASH: 32
+      LEAD: 32
       LEATHER: 64
-      CARROT_ITEM: 64
+      CARROT: 64
   '5':
     name: 'Schar'
     limit: 30
@@ -127,7 +127,7 @@ level:
       SHIELD: 12
       IRON_INGOT: 64
       BREAD: 64
-      POTATO_ITEM: 64
+      POTATO: 64
   '7':
     name: 'Bund'
     limit: 40
@@ -138,11 +138,11 @@ level:
     upgradeCost: 30000
     upgradeExpCost: 50000
     upgradeMaterials:
-      RED_ROSE: 16
+      POPPY: 16
       DIAMOND: 32
       GOLD_INGOT: 64
       ANVIL: 1
-      BOOK_AND_QUILL: 1
+      WRITABLE_BOOK: 1
   '8':
     name: 'Liga'
     limit: 45
@@ -153,8 +153,8 @@ level:
     upgradeCost: 40000
     upgradeExpCost: 75000
     upgradeMaterials:
-      BOOK_AND_QUILL: 3
-      EMPTY_MAP: 64
+      WRITABLE_BOOK: 3
+      MAP: 64
       IRON_SWORD: 16
       DIAMOND: 64
   '9':
@@ -168,8 +168,8 @@ level:
     upgradeExpCost: 100000
     upgradeMaterials:
       SHIELD: 16
-      GOLD_SWORD: 16
-      RED_ROSE: 16
+      GOLDEN_SWORD: 16
+      POPPY: 16
       BREAD: 64
       PUMPKIN_PIE: 64
       COOKED_MUTTON: 64
@@ -200,8 +200,8 @@ level:
     upgradeMaterials:
       GOLDEN_APPLE: 64
       GOLD_BLOCK: 64
-      WATCH: 4
-      GOLD_SWORD: 16
+      CLOCK: 4
+      GOLDEN_SWORD: 16
   '12':
     name: 'Streitmacht'
     limit: 100
@@ -214,8 +214,8 @@ level:
     upgradeMaterials:
       DRAGON_EGG: 1
       BANNER: 1
-      INK_SACK: 64
-      IRON_BARDING: 1
-      GOLD_BARDING: 1
-      DIAMOND_BARDING: 1
+      INK_SAC: 64
+      IRON_HORSE_ARMOR: 1
+      GOLD_HORSE_ARMOR: 1
+      DIAMOND_HORSE_ARMOR: 1
 

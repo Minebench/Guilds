@@ -372,8 +372,7 @@ public class GuildsConfig {
      * @param item
      */
     public boolean isSpecialDrop(ItemStack item) {
-        return (item.getDurability() == 0 && plugin.getConfig().isSet("specialDrops." + item.getType().toString()))
-                || plugin.getConfig().isSet("specialDrops." + item.getType().toString() + "-" + item.getDurability());
+        return plugin.getConfig().isSet("specialDrops." + item.getType().toString());
     }
 
     /**
@@ -383,9 +382,7 @@ public class GuildsConfig {
      * @param item
      */
     public double getSpecialDropChance(ItemStack item) {
-        return item.getDurability() == 0 ?
-                plugin.getConfig().getDouble("specialDrops." + item.getType().toString()) :
-                plugin.getConfig().getDouble("specialDrops." + item.getType().toString() + "-" + item.getDurability());
+        return plugin.getConfig().getDouble("specialDrops." + item.getType().toString());
     }
 
     /**

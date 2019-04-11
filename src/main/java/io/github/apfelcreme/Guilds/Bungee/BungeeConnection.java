@@ -134,12 +134,13 @@ public class BungeeConnection {
             send("player", "guildhome", player.getUniqueId().toString(), guild.getName(), guild.getHomeServer());
         } else {
             String serverAddress = plugin.getServer().getIp()
-                    + ":" + Integer.toString(plugin.getServer().getPort());
+                    + ":" + plugin.getServer().getPort();
             if (serverAddress.equals(guild.getHomeServer())) {
-                player.teleport(plugin.getGuildManager().getHome(guild));
-                plugin.getChat().sendMessage(player,
-                        plugin.getGuildsConfig().getColoredText(
-                                "info.guild.home.teleportedToHome", guild.getColor()));
+                player.teleportAsync(plugin.getGuildManager().getHome(guild)).thenAccept(success -> {
+                    plugin.getChat().sendMessage(player,
+                            plugin.getGuildsConfig().getColoredText(
+                                    "info.guild.home.teleportedToHome", guild.getColor()));
+                });
             } else {
                 plugin.getChat().sendMessage(player,
                         plugin.getGuildsConfig().getText("error.wrongHomeServer"));

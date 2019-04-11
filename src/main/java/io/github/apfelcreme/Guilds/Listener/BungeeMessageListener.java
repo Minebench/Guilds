@@ -126,16 +126,15 @@ public class BungeeMessageListener implements PluginMessageListener {
      * @param guild the guild he is part of
      */
     private void sendPlayerToGuildHome(final String uuid, final Guild guild) {
-        plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
-
-            public void run() {
-                Location home = plugin.getGuildManager().getHome(guild);
-                Player target = plugin.getServer().getPlayer(UUID.fromString(uuid));
-                target.teleport(home);
-
-                plugin.getChat().sendMessage(target,
-                        plugin.getGuildsConfig().getColoredText(
-                                "info.guild.home.teleportedToHome", guild.getColor()));
+        plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+            Location home = plugin.getGuildManager().getHome(guild);
+            Player target = plugin.getServer().getPlayer(UUID.fromString(uuid));
+            if (target != null) {
+                target.teleportAsync(home).thenAccept(success -> {
+                    plugin.getChat().sendMessage(target,
+                            plugin.getGuildsConfig().getColoredText(
+                                    "info.guild.home.teleportedToHome", guild.getColor()));
+                });
             }
         }, 40L);
 
