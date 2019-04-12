@@ -312,29 +312,35 @@ public class GuildsConfig {
      */
     public GuildLevel getLevelData(int level) {
         String name = plugin.getConfig()
-                .getString("level." + Integer.toString(level) + ".name");
+                .getString("level." + level + ".name");
         if (name == null) {
             return null;
         }
         int playerLimit = plugin.getConfig()
-                .getInt("level." + Integer.toString(level) + ".limit");
+                .getInt("level." + level + ".limit");
         double enchantmentCost = plugin.getConfig()
-                .getDouble("level." + Integer.toString(level) + ".enchantmentCost");
+                .getDouble("level." + level + ".enchantmentCost");
         double doubleCraftProbability = plugin.getConfig()
-                .getDouble("level." + Integer.toString(level) + ".doubleCraftProbability");
+                .getDouble("level." + level + ".doubleCraftProbability");
         double specialDropChance = plugin.getConfig()
-                .getDouble("level." + Integer.toString(level) + ".specialDropChance");
+                .getDouble("level." + level + ".specialDropChance");
         double furnaceExpGainRatio = plugin.getConfig()
-                .getDouble("level." + Integer.toString(level) + ".furnaceExpGainRatio");
+                .getDouble("level." + level + ".furnaceExpGainRatio");
         double cost = plugin.getConfig()
-                .getDouble("level." + Integer.toString(level) + ".upgradeCost");
+                .getDouble("level." + level + ".upgradeCost");
         int expCost = plugin.getConfig()
-                .getInt("level." + Integer.toString(level) + ".upgradeExpCost");
-        HashMap<Material, Integer> materialRequirements = new HashMap<Material, Integer>();
-        for (Map.Entry entry : plugin.getConfig()
-                .getConfigurationSection("level." + Integer.toString(level) + ".upgradeMaterials").getValues(false).entrySet()) {
-            materialRequirements.put(
-                    Material.valueOf(entry.getKey().toString()), Integer.parseInt(entry.getValue().toString()));
+                .getInt("level." + level + ".upgradeExpCost");
+        HashMap<Material, Integer> materialRequirements = new HashMap<>();
+        if (plugin.getConfig().isConfigurationSection("level." + level + ".upgradeMaterials")) {
+            for (Map.Entry<String, Object> entry : plugin.getConfig()
+                    .getConfigurationSection("level." + level + ".upgradeMaterials").getValues(false).entrySet()) {
+                try {
+                    materialRequirements.put(
+                            Material.valueOf(entry.getKey().toUpperCase()), Integer.parseInt(entry.getValue().toString()));
+                } catch (IllegalArgumentException e) {
+                    plugin.getLogger().log(Level.WARNING, entry.getKey() + " is not a valid Material name!");
+                }
+            }
         }
         return new GuildLevel(level, name, playerLimit, enchantmentCost, doubleCraftProbability, specialDropChance,
                 furnaceExpGainRatio, cost, expCost, materialRequirements);
