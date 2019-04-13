@@ -84,7 +84,7 @@ public class SimpleBungeeChat implements BungeeChat {
      */
     public void sendGuildChannelBroadcast(Guild guild, String message) {
         plugin.getBungeeConnection().send("broadcast", "guild",
-                guild.getMembers().stream().map(Object::toString).collect(Collectors.joining(",")),
+                guild.getMembers().stream().map(m -> m.getUuid().toString()).collect(Collectors.joining(",")),
                 plugin.getGuildsConfig()
                         .getText("prefix.chat")
                         .replace("{0}", guild.getColor() + GuildsUtil.replaceChatColors(guild.getTag())) + ChatColor.GRAY + message);
@@ -98,7 +98,7 @@ public class SimpleBungeeChat implements BungeeChat {
      */
     public void sendAllianceChannelBroadcast(Alliance alliance, String message) {
         plugin.getBungeeConnection().send("broadcast", "alliance",
-                alliance.getGuilds().stream().flatMap(g -> g.getMembers().stream()).map(Object::toString).collect(Collectors.joining(",")),
+                alliance.getGuilds().stream().flatMap(g -> g.getMembers().stream()).map(m -> m.getUuid().toString()).collect(Collectors.joining(",")),
                 plugin.getGuildsConfig()
                         .getText("prefix.chat")
                         .replace("{0}", alliance.getColor() + GuildsUtil.replaceChatColors(alliance.getTag())) + ChatColor.GRAY + message);
