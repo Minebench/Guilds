@@ -230,7 +230,9 @@ public class DatabaseConnectionManager {
                     " ADD guildHomePitch FLOAT DEFAULT 0 AFTER guildHomeZ," +
                     " ADD guildHomeYaw FLOAT DEFAULT 0 AFTER guildHomeZ");
         } catch (SQLException e) {
-            e.printStackTrace();
+            if (!e.getMessage().contains("Duplicate column name")) {
+                e.printStackTrace();
+            }
         }
     }
 
