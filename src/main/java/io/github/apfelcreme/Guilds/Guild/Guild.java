@@ -96,9 +96,19 @@ public class Guild implements Comparable<Guild> {
     private double homeY;
 
     /**
-     * the u coordinate of the guild home
+     * the z coordinate of the guild home
      */
     private double homeZ;
+
+    /**
+     * the yaw of the guild home
+     */
+    private float homeYaw;
+
+    /**
+     * the pitch of the guild home
+     */
+    private float homePitch;
 
     /**
      * the world of the guild home
@@ -132,7 +142,8 @@ public class Guild implements Comparable<Guild> {
     }
 
     public Guild(int id, String name, String tag, ChatColor color, double balance, int exp, List<GuildMember> members, List<Rank> ranks,
-                 GuildLevel currentLevel, Date founded, double guildHomeX, double guildHomeY, double guildHomeZ, String guildHomeWorld, String guildHomeServer) {
+                 GuildLevel currentLevel, Date founded, double guildHomeX, double guildHomeY, double guildHomeZ, float guildHomeYaw,
+                 float guildHomePitch, String guildHomeWorld, String guildHomeServer) {
         this.id = id;
         this.name = name;
         this.tag = tag;
@@ -148,6 +159,8 @@ public class Guild implements Comparable<Guild> {
         this.homeX = guildHomeX;
         this.homeY = guildHomeY;
         this.homeZ = guildHomeZ;
+        this.homeYaw = guildHomeYaw;
+        this.homePitch = guildHomePitch;
         this.homeWorld = guildHomeWorld;
         this.homeServer = guildHomeServer;
         blackboardMessages = new ArrayList<>();
@@ -354,7 +367,16 @@ public class Guild implements Comparable<Guild> {
         return homeZ;
     }
 
+    public float getHomeYaw() {
+        return homeYaw;
+    }
+
+    public float getHomePitch() {
+        return homePitch;
+    }
+
     public String getHomeWorld() {
         return homeWorld;
     }
+
 }

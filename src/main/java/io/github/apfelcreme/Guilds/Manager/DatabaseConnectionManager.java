@@ -130,6 +130,8 @@ public class DatabaseConnectionManager {
                     "guildHomeX DOUBLE, " +
                     "guildHomeY DOUBLE, " +
                     "guildHomeZ DOUBLE, " +
+                    "guildHomeYaw FLOAT DEFAULT 0, " +
+                    "guildHomePitch FLOAT DEFAULT 0, " +
                     "guildHomeWorld VARCHAR(50), " +
                     "guildHomeServer VARCHAR(50), " +
                     "FOREIGN KEY (allianceId) references " + plugin.getGuildsConfig().getAllianceTable() + " (allianceId), " +
@@ -215,6 +217,18 @@ public class DatabaseConnectionManager {
                     "FOREIGN KEY (guildId) REFERENCES " + plugin.getGuildsConfig().getGuildsTable() + " (guildId), " +
                     "FOREIGN KEY (player) REFERENCES " + plugin.getGuildsConfig().getPlayerTable() + " (uuid));");
             statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        updateTables();
+    }
+
+    private void updateTables() {
+        try (Connection connection = getConnection()) {
+            connection.createStatement().executeUpdate("ALTER TABLE" +
+                    plugin.getGuildsConfig().getGuildsTable() +
+                    " ADD guildHomePitch FLOAT DEFAULT 0 AFTER guildHomeZ," +
+                    " ADD guildHomeYaw FLOAT DEFAULT 0 AFTER guildHomeZ");
         } catch (SQLException e) {
             e.printStackTrace();
         }

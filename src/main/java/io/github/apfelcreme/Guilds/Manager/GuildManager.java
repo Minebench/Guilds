@@ -93,168 +93,168 @@ public class GuildManager {
      * @param guildId the id of the guild to be reloaded
      */
     public void reloadGuild(final int guildId) {
-        plugin.runAsync(new Runnable() {
-            public void run() {
-                try (Connection connection = plugin.getDatabaseConnection()) {
-                    Guild guild;
-                    /**
-                     * load the players, their ranks and the guild itself
-                     */
-                    PreparedStatement statement = connection.prepareStatement(
-                            "Select " +
-                                    "  g.guildId, g.guild, g.tag, g.color, g.balance, g.exp, g.level, g.founded, " +
-                                    "  g.allianceId, g.guildHomeX, g.guildHomeY, g.guildHomeZ, g.guildHomeWorld, " +
-                                    "  g.guildHomeServer " +
-                                    "from " + plugin.getGuildsConfig().getGuildsTable() + " g " +
-                                    "where g.guildId = ? ");
-                    statement.setInt(1, guildId);
-                    ResultSet resultSet = statement.executeQuery();
+        plugin.runAsync(() -> {
+            try (Connection connection = plugin.getDatabaseConnection()) {
+                Guild guild;
+                /**
+                 * load the players, their ranks and the guild itself
+                 */
+                PreparedStatement statement = connection.prepareStatement(
+                        "Select " +
+                                "  g.guildId, g.guild, g.tag, g.color, g.balance, g.exp, g.level, g.founded, " +
+                                "  g.allianceId, g.guildHomeX, g.guildHomeY, g.guildHomeZ, g.guildHomeWorld, " +
+                                "  g.guildHomeServer " +
+                                "from " + plugin.getGuildsConfig().getGuildsTable() + " g " +
+                                "where g.guildId = ? ");
+                statement.setInt(1, guildId);
+                ResultSet resultSet = statement.executeQuery();
 
-                    if (resultSet.first()) {
-                        int guildId = resultSet.getInt("guildId");
-                        int allianceId = resultSet.getInt("allianceId");
-                        String name = resultSet.getString("guild");
-                        String tag = resultSet.getString("tag");
-                        double balance = resultSet.getDouble("balance");
-                        ChatColor color = ChatColor.valueOf(resultSet.getString("color"));
-                        int exp = resultSet.getInt("exp");
-                        int level = resultSet.getInt("level");
-                        Date founded = new Date(resultSet.getLong("founded"));
-                        Double guildHomeX = resultSet.getDouble("guildHomeX");
-                        Double guildHomeY = resultSet.getDouble("guildHomeY");
-                        Double guildHomeZ = resultSet.getDouble("guildHomeZ");
-                        String guildHomeWorld = resultSet.getString("guildHomeWorld");
-                        String guildHomeServer = resultSet.getString("guildHomeServer");
-                        List<GuildMember> members = new ArrayList<GuildMember>();
+                if (resultSet.first()) {
+                    int guildId1 = resultSet.getInt("guildId");
+                    int allianceId = resultSet.getInt("allianceId");
+                    String name = resultSet.getString("guild");
+                    String tag = resultSet.getString("tag");
+                    double balance = resultSet.getDouble("balance");
+                    ChatColor color = ChatColor.valueOf(resultSet.getString("color"));
+                    int exp = resultSet.getInt("exp");
+                    int level = resultSet.getInt("level");
+                    Date founded = new Date(resultSet.getLong("founded"));
+                    double guildHomeX = resultSet.getDouble("guildHomeX");
+                    double guildHomeY = resultSet.getDouble("guildHomeY");
+                    double guildHomeZ = resultSet.getDouble("guildHomeZ");
+                    float guildHomeYaw = resultSet.getFloat("guildHomeYaw");
+                    float guildHomePitch = resultSet.getFloat("guildHomePitch");
+                    String guildHomeWorld = resultSet.getString("guildHomeWorld");
+                    String guildHomeServer = resultSet.getString("guildHomeServer");
+                    List<GuildMember> members = new ArrayList<>();
 
-                        statement = connection.prepareStatement("select p.*, r.* " +
-                                "from " + plugin.getGuildsConfig().getPlayerTable() + " p " +
-                                "left join " + plugin.getGuildsConfig().getRanksTable() + " r on p.rankId = r.rankId " +
-                                "where p.guildId = ?");
-                        statement.setInt(1, guildId);
-                        resultSet = statement.executeQuery();
+                    statement = connection.prepareStatement("select p.*, r.* " +
+                            "from " + plugin.getGuildsConfig().getPlayerTable() + " p " +
+                            "left join " + plugin.getGuildsConfig().getRanksTable() + " r on p.rankId = r.rankId " +
+                            "where p.guildId = ?");
+                    statement.setInt(1, guildId1);
+                    resultSet = statement.executeQuery();
 
-                        while (resultSet.next()) {
-                            Player player = plugin.getServer().getPlayer(UUID.fromString(resultSet.getString("uuid")));
-                            GuildMember guildMember = new GuildMember(
-                                    UUID.fromString(resultSet.getString("uuid")),
-                                    resultSet.getString("playerName"),
-                                    resultSet.getLong("lastSeen"),
-                                    resultSet.getLong("joined"),
-                                    resultSet.getString("prefix"),
-                                    new Rank(
-                                            resultSet.getInt("rankId"),
-                                            resultSet.getString("rankName"),
-                                            resultSet.getBoolean("canInvite"),
-                                            resultSet.getBoolean("canKick"),
-                                            resultSet.getBoolean("canPromote"),
-                                            resultSet.getBoolean("canDisband"),
-                                            resultSet.getBoolean("canUpgrade"),
-                                            resultSet.getBoolean("canWithdrawMoney"),
-                                            resultSet.getBoolean("canUseBlackboard"),
-                                            resultSet.getBoolean("canDoDiplomacy"),
-                                            resultSet.getBoolean("isBaseRank"),
-                                            resultSet.getBoolean("isLeader")
-                                    ),
-                                    player != null && player.isOnline()
-                            );
-                            members.add(guildMember);
-                        }
-
-                        /**
-                         * load all the ranks (this has to be done, as some ranks may exist but no one carries
-                         * them at this time.
-                         */
-                        statement = connection.prepareStatement(
-                                " Select r.rankId, r.rankName, r.canInvite, r.canKick, r.canPromote, " +
-                                        "r.canDisband, r.canUpgrade, r.canWithdrawMoney, r.canUseBlackboard, " +
-                                        "r.canDoDiplomacy, r.isBaseRank, r.isLeader " +
-                                        "FROM " + plugin.getGuildsConfig().getRanksTable() + " r " +
-                                        "where guildId = ?");
-                        statement.setInt(1, guildId);
-                        resultSet = statement.executeQuery();
-
-                        List<Rank> ranks = new ArrayList<Rank>();
-                        while (resultSet.next()) {
-                            ranks.add(new Rank(
-                                    resultSet.getInt("rankId"),
-                                    resultSet.getString("rankName"),
-                                    resultSet.getBoolean("canInvite"),
-                                    resultSet.getBoolean("canKick"),
-                                    resultSet.getBoolean("canPromote"),
-                                    resultSet.getBoolean("canDisband"),
-                                    resultSet.getBoolean("canUpgrade"),
-                                    resultSet.getBoolean("canWithdrawMoney"),
-                                    resultSet.getBoolean("canUseBlackboard"),
-                                    resultSet.getBoolean("canDoDiplomacy"),
-                                    resultSet.getBoolean("isBaseRank"),
-                                    resultSet.getBoolean("isLeader")
-                            ));
-                        }
-
-                        GuildLevel guildLevel = plugin.getGuildsConfig().getLevelData(level);
-
-                        guild = new Guild(guildId, GuildsUtil.replaceChatColors(name),
-                                GuildsUtil.replaceChatColors(tag), color, balance, exp, members,
-                                ranks, guildLevel, founded, guildHomeX, guildHomeY, guildHomeZ, guildHomeWorld,
-                                guildHomeServer);
-
-                        for (Rank rank : guild.getRanks()) {
-                            rank.setGuild(guild);
-                        }
-                        for (GuildMember guildMember : guild.getMembers()) {
-                            guildMember.getRank().setGuild(guild);
-                            guildMember.setGuild(guild);
-                        }
-
-                        /**
-                         * load the latest blackboard messages
-                         */
-                        statement = connection.prepareStatement(
-                                "SELECT s.* from (Select messageId, player, message, timestamp from "
-                                        + plugin.getGuildsConfig().getBlackboardTable() + " " +
-                                        "where guildId = ? and cleared = 0 " +
-                                        "ORDER BY timestamp desc LIMIT ?) as s order by timestamp asc");
-                        statement.setInt(1, guildId);
-                        statement.setInt(2, plugin.getGuildsConfig().getBlackboardMessageLimit());
-                        resultSet = statement.executeQuery();
-                        resultSet.beforeFirst();
-                        while (resultSet.next()) {
-                            int messageId = resultSet.getInt("messageId");
-                            UUID sender = UUID.fromString(resultSet.getString("player"));
-                            String message = resultSet.getString("message");
-                            Timestamp timestamp = resultSet.getTimestamp("timestamp");
-                            guild.addBlackboardMessage(new BlackboardMessage(messageId, sender, timestamp, message, guild));
-                        }
-
-                        /**
-                         * load the pending invites which are yet to be accepted or declined
-                         */
-                        statement = connection.prepareStatement(
-                                "SELECT player, targetPlayer " +
-                                        "from " + plugin.getGuildsConfig().getInvitesTable() +
-                                        " where status = 0 and guildId = ?");
-                        statement.setInt(1, guildId);
-                        resultSet = statement.executeQuery();
-                        resultSet.beforeFirst();
-                        while (resultSet.next()) {
-                            UUID targetPlayer = UUID.fromString(resultSet.getString("targetPlayer"));
-                            guild.putPendingInvite(targetPlayer, new Invite(guild, targetPlayer,
-                                    guild.getMember(UUID.fromString(resultSet.getString("player"))), null));
-                        }
-
-                        guilds.remove(guildId);
-                        guilds.put(guildId, guild);
-
-//                        plugin.getAllianceManager().checkForReload(allianceId);
-                        plugin.getAllianceManager().reload(allianceId);
+                    while (resultSet.next()) {
+                        Player player = plugin.getServer().getPlayer(UUID.fromString(resultSet.getString("uuid")));
+                        GuildMember guildMember = new GuildMember(
+                                UUID.fromString(resultSet.getString("uuid")),
+                                resultSet.getString("playerName"),
+                                resultSet.getLong("lastSeen"),
+                                resultSet.getLong("joined"),
+                                resultSet.getString("prefix"),
+                                new Rank(
+                                        resultSet.getInt("rankId"),
+                                        resultSet.getString("rankName"),
+                                        resultSet.getBoolean("canInvite"),
+                                        resultSet.getBoolean("canKick"),
+                                        resultSet.getBoolean("canPromote"),
+                                        resultSet.getBoolean("canDisband"),
+                                        resultSet.getBoolean("canUpgrade"),
+                                        resultSet.getBoolean("canWithdrawMoney"),
+                                        resultSet.getBoolean("canUseBlackboard"),
+                                        resultSet.getBoolean("canDoDiplomacy"),
+                                        resultSet.getBoolean("isBaseRank"),
+                                        resultSet.getBoolean("isLeader")
+                                ),
+                                player != null && player.isOnline()
+                        );
+                        members.add(guildMember);
                     }
 
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                } catch (ConcurrentModificationException e) {
-                    plugin.getLogger().log(Level.WARNING, "Error while loading guild " + guildId + "!", e);
+                    /**
+                     * load all the ranks (this has to be done, as some ranks may exist but no one carries
+                     * them at this time.
+                     */
+                    statement = connection.prepareStatement(
+                            " Select r.rankId, r.rankName, r.canInvite, r.canKick, r.canPromote, " +
+                                    "r.canDisband, r.canUpgrade, r.canWithdrawMoney, r.canUseBlackboard, " +
+                                    "r.canDoDiplomacy, r.isBaseRank, r.isLeader " +
+                                    "FROM " + plugin.getGuildsConfig().getRanksTable() + " r " +
+                                    "where guildId = ?");
+                    statement.setInt(1, guildId1);
+                    resultSet = statement.executeQuery();
+
+                    List<Rank> ranks = new ArrayList<Rank>();
+                    while (resultSet.next()) {
+                        ranks.add(new Rank(
+                                resultSet.getInt("rankId"),
+                                resultSet.getString("rankName"),
+                                resultSet.getBoolean("canInvite"),
+                                resultSet.getBoolean("canKick"),
+                                resultSet.getBoolean("canPromote"),
+                                resultSet.getBoolean("canDisband"),
+                                resultSet.getBoolean("canUpgrade"),
+                                resultSet.getBoolean("canWithdrawMoney"),
+                                resultSet.getBoolean("canUseBlackboard"),
+                                resultSet.getBoolean("canDoDiplomacy"),
+                                resultSet.getBoolean("isBaseRank"),
+                                resultSet.getBoolean("isLeader")
+                        ));
+                    }
+
+                    GuildLevel guildLevel = plugin.getGuildsConfig().getLevelData(level);
+
+                    guild = new Guild(guildId1, GuildsUtil.replaceChatColors(name),
+                            GuildsUtil.replaceChatColors(tag), color, balance, exp, members,
+                            ranks, guildLevel, founded, guildHomeX, guildHomeY, guildHomeZ, guildHomeYaw, guildHomePitch, guildHomeWorld,
+                            guildHomeServer);
+
+                    for (Rank rank : guild.getRanks()) {
+                        rank.setGuild(guild);
+                    }
+                    for (GuildMember guildMember : guild.getMembers()) {
+                        guildMember.getRank().setGuild(guild);
+                        guildMember.setGuild(guild);
+                    }
+
+                    /**
+                     * load the latest blackboard messages
+                     */
+                    statement = connection.prepareStatement(
+                            "SELECT s.* from (Select messageId, player, message, timestamp from "
+                                    + plugin.getGuildsConfig().getBlackboardTable() + " " +
+                                    "where guildId = ? and cleared = 0 " +
+                                    "ORDER BY timestamp desc LIMIT ?) as s order by timestamp asc");
+                    statement.setInt(1, guildId1);
+                    statement.setInt(2, plugin.getGuildsConfig().getBlackboardMessageLimit());
+                    resultSet = statement.executeQuery();
+                    resultSet.beforeFirst();
+                    while (resultSet.next()) {
+                        int messageId = resultSet.getInt("messageId");
+                        UUID sender = UUID.fromString(resultSet.getString("player"));
+                        String message = resultSet.getString("message");
+                        Timestamp timestamp = resultSet.getTimestamp("timestamp");
+                        guild.addBlackboardMessage(new BlackboardMessage(messageId, sender, timestamp, message, guild));
+                    }
+
+                    /**
+                     * load the pending invites which are yet to be accepted or declined
+                     */
+                    statement = connection.prepareStatement(
+                            "SELECT player, targetPlayer " +
+                                    "from " + plugin.getGuildsConfig().getInvitesTable() +
+                                    " where status = 0 and guildId = ?");
+                    statement.setInt(1, guildId1);
+                    resultSet = statement.executeQuery();
+                    resultSet.beforeFirst();
+                    while (resultSet.next()) {
+                        UUID targetPlayer = UUID.fromString(resultSet.getString("targetPlayer"));
+                        guild.putPendingInvite(targetPlayer, new Invite(guild, targetPlayer,
+                                guild.getMember(UUID.fromString(resultSet.getString("player"))), null));
+                    }
+
+                    guilds.remove(guildId1);
+                    guilds.put(guildId1, guild);
+
+//                        plugin.getAllianceManager().checkForReload(allianceId);
+                    plugin.getAllianceManager().reload(allianceId);
                 }
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } catch (ConcurrentModificationException e) {
+                plugin.getLogger().log(Level.WARNING, "Error while loading guild " + guildId + "!", e);
             }
         });
     }
@@ -917,16 +917,20 @@ public class GuildManager {
                                     "guildHomeX = ?, " +
                                     "guildHomeY = ?, " +
                                     "guildHomeZ = ?, " +
+                                    "guildHomeYaw = ?, " +
+                                    "guildHomePitch = ?, " +
                                     "guildHomeWorld = ?, " +
                                     "guildHomeServer = ? " +
                                     "where guildId = ?");
                     statement.setDouble(1, location.getX());
                     statement.setDouble(2, location.getY());
                     statement.setDouble(3, location.getZ());
-                    statement.setString(4, location.getWorld().getName());
-                    statement.setString(5, plugin.getServer().getIp() + ":"
+                    statement.setFloat(4, location.getYaw());
+                    statement.setFloat(5, location.getPitch());
+                    statement.setString(6, location.getWorld().getName());
+                    statement.setString(7, plugin.getServer().getIp() + ":"
                             + plugin.getServer().getPort());
-                    statement.setInt(6, guild.getId());
+                    statement.setInt(8, guild.getId());
                     statement.executeUpdate();
 
                     plugin.getBungeeConnection().forceGuildSync(guild.getId());
@@ -1197,7 +1201,7 @@ public class GuildManager {
         if (guild.getHomeWorld() != null && guild.getHomeServer() != null) {
             World world = plugin.getServer().getWorld(guild.getHomeWorld());
             if(world != null) {
-                return new Location(world, guild.getHomeX(), guild.getHomeY(), guild.getHomeZ());
+                return new Location(world, guild.getHomeX(), guild.getHomeY(), guild.getHomeZ(), guild.getHomeYaw(), guild.getHomePitch());
             }
         }
         return null;
