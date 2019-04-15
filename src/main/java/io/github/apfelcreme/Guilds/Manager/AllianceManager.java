@@ -12,6 +12,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.ConcurrentModificationException;
@@ -324,7 +325,7 @@ public class AllianceManager {
             public void run() {
                 try (Connection connection = plugin.getDatabaseConnection()) {
                     PreparedStatement statement = connection.prepareStatement(
-                            "INSERT INTO " + plugin.getGuildsConfig().getAllianceTable() + "(alliance, founded, tag, color) VALUES (?, ?, ?, ?)");
+                            "INSERT INTO " + plugin.getGuildsConfig().getAllianceTable() + "(alliance, founded, tag, color) VALUES (?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
                     statement.setString(1, alliance.getName());
                     statement.setLong(2, new Date().getTime());
                     statement.setString(3, alliance.getTag());

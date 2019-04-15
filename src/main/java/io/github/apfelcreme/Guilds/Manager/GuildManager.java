@@ -467,7 +467,7 @@ public class GuildManager {
                 try (Connection connection = plugin.getDatabaseConnection()) {
                     PreparedStatement statement = connection
                             .prepareStatement("INSERT INTO " + plugin.getGuildsConfig().getGuildsTable() +
-                                    " (guild, tag, color, balance, exp, level, founded) VALUES (?, ?, ?, ?, ?, 1, ?);");
+                                    " (guild, tag, color, balance, exp, level, founded) VALUES (?, ?, ?, ?, ?, 1, ?);", Statement.RETURN_GENERATED_KEYS);
                     statement.setString(1, guild.getName());
                     statement.setString(2, guild.getTag());
                     statement.setString(3, guild.getColor().name());
