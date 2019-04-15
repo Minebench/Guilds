@@ -100,11 +100,7 @@ public class GuildManager {
                  * load the players, their ranks and the guild itself
                  */
                 PreparedStatement statement = connection.prepareStatement(
-                        "Select " +
-                                "  g.guildId, g.guild, g.tag, g.color, g.balance, g.exp, g.level, g.founded, " +
-                                "  g.allianceId, g.guildHomeX, g.guildHomeY, g.guildHomeZ, g.guildHomeWorld, " +
-                                "  g.guildHomeServer " +
-                                "from " + plugin.getGuildsConfig().getGuildsTable() + " g " +
+                        "Select * from " + plugin.getGuildsConfig().getGuildsTable() + " g " +
                                 "where g.guildId = ? ");
                 statement.setInt(1, guildId);
                 ResultSet resultSet = statement.executeQuery();
