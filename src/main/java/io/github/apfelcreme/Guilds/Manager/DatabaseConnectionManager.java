@@ -225,7 +225,7 @@ public class DatabaseConnectionManager {
 
     private void updateTables() {
         try (Connection connection = getConnection()) {
-            connection.createStatement().executeUpdate("ALTER TABLE" +
+            connection.createStatement().executeUpdate("ALTER TABLE " +
                     plugin.getGuildsConfig().getGuildsTable() +
                     " ADD guildHomePitch FLOAT DEFAULT 0 AFTER guildHomeZ," +
                     " ADD guildHomeYaw FLOAT DEFAULT 0 AFTER guildHomeZ");
