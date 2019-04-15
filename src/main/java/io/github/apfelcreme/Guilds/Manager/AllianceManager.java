@@ -324,8 +324,7 @@ public class AllianceManager {
             public void run() {
                 try (Connection connection = plugin.getDatabaseConnection()) {
                     PreparedStatement statement = connection.prepareStatement(
-                            "INSERT INTO " + plugin.getGuildsConfig().getAllianceTable() + "(alliance, founded, tag, color) VALUES (?, ?, ?, ?)",
-                            new String[]{"allianceId"});
+                            "INSERT INTO " + plugin.getGuildsConfig().getAllianceTable() + "(alliance, founded, tag, color) VALUES (?, ?, ?, ?)");
                     statement.setString(1, alliance.getName());
                     statement.setLong(2, new Date().getTime());
                     statement.setString(3, alliance.getTag());
@@ -333,8 +332,8 @@ public class AllianceManager {
                     statement.executeUpdate();
 
                     ResultSet resultSet = statement.getGeneratedKeys();
-                    resultSet.first();
-                    alliance.setId(resultSet.getInt("allianceId"));
+                    resultSet.next();
+                    alliance.setId(resultSet.getInt(1));
 
                     for (Guild guild : alliance.getGuilds()) {
                         statement = connection.prepareStatement(

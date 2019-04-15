@@ -467,8 +467,7 @@ public class GuildManager {
                 try (Connection connection = plugin.getDatabaseConnection()) {
                     PreparedStatement statement = connection
                             .prepareStatement("INSERT INTO " + plugin.getGuildsConfig().getGuildsTable() +
-                                    " (guild, tag, color, balance, exp, level, founded) VALUES (?, ?, ?, ?, ?, 1, ?);"
-                                    , new String[]{"guildId"});
+                                    " (guild, tag, color, balance, exp, level, founded) VALUES (?, ?, ?, ?, ?, 1, ?);");
                     statement.setString(1, guild.getName());
                     statement.setString(2, guild.getTag());
                     statement.setString(3, guild.getColor().name());
@@ -478,8 +477,8 @@ public class GuildManager {
                     statement.executeUpdate();
 
                     ResultSet resultSet = statement.getGeneratedKeys();
-                    resultSet.first();
-                    guild.setId(resultSet.getInt("guildId"));
+                    resultSet.next();
+                    guild.setId(resultSet.getInt(1));
 
                     statement = connection.prepareStatement("INSERT IGNORE INTO "
                             + plugin.getGuildsConfig().getPlayerTable() + " (playerName, uuid, guildId, lastSeen, joined) " +
