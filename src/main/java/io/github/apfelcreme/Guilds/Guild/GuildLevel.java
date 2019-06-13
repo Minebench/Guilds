@@ -1,7 +1,5 @@
 package io.github.apfelcreme.Guilds.Guild;
 
-import io.github.apfelcreme.Guilds.Guilds;
-import io.github.apfelcreme.Guilds.GuildsConfig;
 import org.bukkit.Material;
 
 import java.util.HashMap;
@@ -34,12 +32,13 @@ public class GuildLevel {
     private double specialDropChance;
     private double furnaceExpGainRatio;
     private double cost;
+    private int players;
     private int expCost;
     private HashMap<Material, Integer> materialRequirements;
 
     public GuildLevel(Integer level, String name, int playerLimit, double enchantmentCost,
-                      double doubleCraftProbability, double specialDropChance, double furnaceExpGainRatio, double cost, int expCost,
-                      HashMap<Material, Integer> materialRequirements) {
+                      double doubleCraftProbability, double specialDropChance, double furnaceExpGainRatio, double cost,
+                      int players, int expCost, HashMap<Material, Integer> materialRequirements) {
         this.level = level;
         this.name = name;
         this.playerLimit = playerLimit;
@@ -48,6 +47,7 @@ public class GuildLevel {
         this.specialDropChance = specialDropChance;
         this.furnaceExpGainRatio = furnaceExpGainRatio;
         this.cost = cost;
+        this.players = players;
         this.expCost = expCost;
         this.materialRequirements = materialRequirements;
     }
@@ -122,6 +122,15 @@ public class GuildLevel {
      */
     public double getCost() {
         return cost;
+    }
+
+    /**
+     * returns the upgrade players amount
+     *
+     * @return the upgrade players amount
+     */
+    public int getRequiredPlayers() {
+        return players;
     }
 
     /**

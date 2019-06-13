@@ -3,12 +3,10 @@ package io.github.apfelcreme.Guilds.Command.Guild.Command;
 import io.github.apfelcreme.Guilds.Command.SubCommand;
 import io.github.apfelcreme.Guilds.Guild.GuildLevel;
 import io.github.apfelcreme.Guilds.Guilds;
-import io.github.apfelcreme.Guilds.GuildsConfig;
 import io.github.apfelcreme.Guilds.GuildsUtil;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 import java.util.Map;
@@ -57,6 +55,10 @@ public class LevelCommand extends SubCommand {
                     plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("info.guild.level.head")
                             .replace("{0}", level.getName()));
 
+                    if (plugin.getGuildsConfig().requirePlayersForUpgrade()) {
+                        plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("info.guild.level.players")
+                                .replace("{0}", Integer.toString(level.getRequiredPlayers())));
+                    }
                     if (plugin.getGuildsConfig().requireMoneyForUpgrade()) {
                         plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("info.guild.level.cost")
                                 .replace("{0}", Double.toString(level.getCost())));

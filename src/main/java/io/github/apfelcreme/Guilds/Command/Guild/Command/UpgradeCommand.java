@@ -10,7 +10,6 @@ import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.Map;
 
@@ -62,6 +61,19 @@ public class UpgradeCommand extends SubCommand {
                                 plugin.getChat().sendMessage(sender,
                                         plugin.getGuildsConfig().getColoredText("info.guild.upgrade.requirementsMissing", guild.getColor())
                                                 .replace("{0}", plugin.getGuildManager().getNextLevel(guild).getName()));
+                            }
+                            if (plugin.getGuildsConfig().requirePlayersForUpgrade()) {
+                                if (guild.getMembers().size() >= plugin.getGuildManager().getNextLevel(guild).getRequiredPlayers()) {
+                                    plugin.getChat().sendMessage(sender,
+                                            plugin.getGuildsConfig().getColoredText("info.guild.upgrade.enoughPlayers", guild.getColor())
+                                                    .replace("{0}", Integer.toString(guild.getMembers().size()))
+                                                    .replace("{1}", Integer.toString(plugin.getGuildManager().getNextLevel(guild).getRequiredPlayers())));
+                                } else {
+                                    plugin.getChat().sendMessage(sender,
+                                            plugin.getGuildsConfig().getColoredText("info.guild.upgrade.notEnoughPlayers", guild.getColor())
+                                                    .replace("{0}", Integer.toString(guild.getMembers().size()))
+                                                    .replace("{1}", Integer.toString(plugin.getGuildManager().getNextLevel(guild).getRequiredPlayers())));
+                                }
                             }
                             if (plugin.getGuildsConfig().requireMoneyForUpgrade()) {
                                 if (guild.getBalance() >= plugin.getGuildManager().getNextLevel(guild).getCost()) {

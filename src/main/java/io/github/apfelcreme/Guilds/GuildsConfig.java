@@ -328,6 +328,8 @@ public class GuildsConfig {
                 .getDouble("level." + level + ".furnaceExpGainRatio");
         double cost = plugin.getConfig()
                 .getDouble("level." + level + ".upgradeCost");
+        int players = plugin.getConfig()
+                .getInt("level." + level + ".upgradePlayers");
         int expCost = plugin.getConfig()
                 .getInt("level." + level + ".upgradeExpCost");
         HashMap<Material, Integer> materialRequirements = new HashMap<>();
@@ -343,7 +345,7 @@ public class GuildsConfig {
             }
         }
         return new GuildLevel(level, name, playerLimit, enchantmentCost, doubleCraftProbability, specialDropChance,
-                furnaceExpGainRatio, cost, expCost, materialRequirements);
+                furnaceExpGainRatio, cost, players, expCost, materialRequirements);
     }
 
     /**
@@ -482,6 +484,14 @@ public class GuildsConfig {
      */
     public boolean requireExpForUpgrade() {
         return plugin.getConfig().getBoolean("upgrade.requireExp");
+    }
+
+    /**
+     * Whether or not one must meet the players requirements while upgrading
+     * @return true or false
+     */
+    public boolean requirePlayersForUpgrade() {
+        return plugin.getConfig().getBoolean("upgrade.requirePlayers");
     }
 
     /**

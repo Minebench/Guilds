@@ -41,6 +41,7 @@ specialDrops:
   LAPIS_LAZULI: 1.0
 upgrade:
   requireMoney: true
+  requirePlayers: true
   requireExp: true
   requireMaterial: true
 level:
@@ -52,6 +53,7 @@ level:
     specialDropChance: 0.01
     furnaceExpGainRatio: 1.05
     upgradeCost: 2500
+    upgradePlayers: 0
     upgradeExpCost: 0
     upgradeMaterials:
       # the list must not be emtpy, ignore this
@@ -64,6 +66,7 @@ level:
     specialDropChance: 0.02
     furnaceExpGainRatio: 1.1
     upgradeCost: 5000
+    upgradePlayers: 5
     upgradeExpCost: 3500
     upgradeMaterials:
       DIAMOND: 16
@@ -78,6 +81,7 @@ level:
     specialDropChance: 0.03
     furnaceExpGainRatio: 1.15
     upgradeCost: 7500
+    upgradePlayers: 6
     upgradeExpCost: 10000
     upgradeMaterials:
       DIAMOND: 24
@@ -93,6 +97,7 @@ level:
     specialDropChance: 0.04
     furnaceExpGainRatio: 1.2
     upgradeCost: 10000
+    upgradePlayers: 7
     upgradeExpCost: 15000
     upgradeMaterials:
       DIAMOND: 32
@@ -108,6 +113,7 @@ level:
     specialDropChance: 0.05
     furnaceExpGainRatio: 1.25
     upgradeCost: 15000
+    upgradePlayers: 8
     upgradeExpCost: 30000
     upgradeMaterials:
       GOLD_INGOT: 64
@@ -122,6 +128,7 @@ level:
     specialDropChance: 0.06
     furnaceExpGainRatio: 1.3
     upgradeCost: 20000
+    upgradePlayers: 9
     upgradeExpCost: 40000
     upgradeMaterials:
       SHIELD: 12
@@ -136,6 +143,7 @@ level:
     specialDropChance: 0.07
     furnaceExpGainRatio: 1.35
     upgradeCost: 30000
+    upgradePlayers: 10
     upgradeExpCost: 50000
     upgradeMaterials:
       POPPY: 16
@@ -151,6 +159,7 @@ level:
     specialDropChance: 0.08
     furnaceExpGainRatio: 1.4
     upgradeCost: 40000
+    upgradePlayers: 11
     upgradeExpCost: 75000
     upgradeMaterials:
       WRITABLE_BOOK: 3
@@ -165,6 +174,7 @@ level:
     specialDropChance: 0.09
     furnaceExpGainRatio: 1.45
     upgradeCost: 50000
+    upgradePlayers: 12
     upgradeExpCost: 100000
     upgradeMaterials:
       SHIELD: 16
@@ -182,6 +192,7 @@ level:
     furnaceExpGainRatio: 1.5
     upgradeCost: 60000
     upgradeExpCost: 125000
+    upgradePlayers: 13
     upgradeMaterials:
       BEACON: 1
       DIAMOND_HELMET: 5
@@ -196,6 +207,7 @@ level:
     specialDropChance: 0.11
     furnaceExpGainRatio: 1.55
     upgradeCost: 75000
+    upgradePlayers: 14
     upgradeExpCost: 150000
     upgradeMaterials:
       GOLDEN_APPLE: 64
@@ -210,6 +222,7 @@ level:
     specialDropChance: 0.12
     furnaceExpGainRatio: 1.6
     upgradeCost: 100000
+    upgradePlayers: 15
     upgradeExpCost: 200000
     upgradeMaterials:
       DRAGON_EGG: 1

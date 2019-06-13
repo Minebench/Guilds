@@ -1050,6 +1050,9 @@ public class GuildManager {
         if (nextLevel == null) {
             return false;
         }
+        if (plugin.getGuildsConfig().requirePlayersForUpgrade() && guild.getMembers().size() < nextLevel.getRequiredPlayers()) {
+            return false;
+        }
         if (plugin.getGuildsConfig().requireMoneyForUpgrade() && guild.getBalance() < nextLevel.getCost()) {
             return false;
         }

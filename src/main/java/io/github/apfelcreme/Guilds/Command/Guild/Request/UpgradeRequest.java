@@ -1,13 +1,11 @@
 package io.github.apfelcreme.Guilds.Command.Guild.Request;
 
-import io.github.apfelcreme.Guilds.Command.Request;
 import io.github.apfelcreme.Guilds.Guild.Guild;
 import io.github.apfelcreme.Guilds.Guild.GuildLevel;
 import io.github.apfelcreme.Guilds.Guilds;
 import io.github.apfelcreme.Guilds.GuildsUtil;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.Map;
 
@@ -67,7 +65,7 @@ public class UpgradeRequest extends GuildRequest {
     public void sendInfoMessage() {
         GuildLevel nextLevel = plugin.getGuildManager().getNextLevel(guild);
         if (nextLevel != null) {
-            sendInfoMessage(nextLevel.getName(), String.valueOf(nextLevel.getCost()), String.valueOf(nextLevel.getExpCost()));
+            sendInfoMessage(nextLevel.getName(), String.valueOf(nextLevel.getCost()), String.valueOf(nextLevel.getExpCost()), String.valueOf(nextLevel.getRequiredPlayers()));
         }
     }
 
