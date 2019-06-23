@@ -1,6 +1,7 @@
 package io.github.apfelcreme.Guilds;
 
 
+import com.google.common.collect.ImmutableMap;
 import io.github.apfelcreme.Guilds.Guild.GuildLevel;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -41,6 +42,8 @@ public class GuildsConfig {
     private YamlConfiguration languageConfig;
     private final Guilds plugin;
 
+    private GuildLevel[] levels = {};
+
     public GuildsConfig(Guilds plugin) {
         this.plugin = plugin;
         if (!plugin.getDataFolder().exists()) {
@@ -48,7 +51,23 @@ public class GuildsConfig {
         }
         plugin.saveDefaultConfig();
 
+        reload();
+    }
+
+    /**
+     * reload the config
+     */
+    public void reload() {
         reloadLanguageConfig();
+    }
+
+    private void loadConfig() {
+        GuildLevel data;
+        List<GuildLevel> dataList = new ArrayList<>();
+        for (int level = 1; (data = loadLevelData(level)) != null; level++) {
+            dataList.add(data);
+        }
+        levels = dataList.toArray(new GuildLevel[0]);
     }
 
     /**
@@ -308,9 +327,22 @@ public class GuildsConfig {
      * get the level data by its level integer
      *
      * @param level the guild level
-     * @return the LevelData
+     * @return the LevelData or null if not found
      */
     public GuildLevel getLevelData(int level) {
+        if (level <= 0 || levels.length < level) {
+            return null;
+        }
+        return levels[level - 1];
+    }
+
+    /**
+     * load the level data from the config
+     *
+     * @param level the level number
+     * @return the new LevelData or null if not found
+     */
+    private GuildLevel loadLevelData(int level) {
         String name = plugin.getConfig()
                 .getString("level." + level + ".name");
         if (name == null) {
@@ -345,7 +377,7 @@ public class GuildsConfig {
             }
         }
         return new GuildLevel(level, name, playerLimit, enchantmentCost, doubleCraftProbability, specialDropChance,
-                furnaceExpGainRatio, cost, players, expCost, materialRequirements);
+                furnaceExpGainRatio, cost, players, expCost, ImmutableMap.copyOf(materialRequirements));
     }
 
     /**

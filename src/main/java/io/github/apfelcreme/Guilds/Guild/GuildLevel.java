@@ -1,8 +1,7 @@
 package io.github.apfelcreme.Guilds.Guild;
 
+import com.google.common.collect.ImmutableMap;
 import org.bukkit.Material;
-
-import java.util.HashMap;
 
 /**
  * Copyright (C) 2016 Lord36 aka Apfelcreme
@@ -24,21 +23,21 @@ import java.util.HashMap;
  */
 public class GuildLevel {
 
-    private int level;
-    private String name;
-    private int playerLimit;
-    private double enchantmentCost;
-    private double doubleCraftProbability;
-    private double specialDropChance;
-    private double furnaceExpGainRatio;
-    private double cost;
-    private int players;
-    private int expCost;
-    private HashMap<Material, Integer> materialRequirements;
+    private final int level;
+    private final String name;
+    private final int playerLimit;
+    private final double enchantmentCost;
+    private final double doubleCraftProbability;
+    private final double specialDropChance;
+    private final double furnaceExpGainRatio;
+    private final double cost;
+    private final int players;
+    private final int expCost;
+    private final ImmutableMap<Material, Integer> materialRequirements;
 
     public GuildLevel(Integer level, String name, int playerLimit, double enchantmentCost,
                       double doubleCraftProbability, double specialDropChance, double furnaceExpGainRatio, double cost,
-                      int players, int expCost, HashMap<Material, Integer> materialRequirements) {
+                      int players, int expCost, ImmutableMap<Material, Integer> materialRequirements) {
         this.level = level;
         this.name = name;
         this.playerLimit = playerLimit;
@@ -147,7 +146,7 @@ public class GuildLevel {
      *
      * @return the material requirements
      */
-    public HashMap<Material, Integer> getMaterialRequirements() {
+    public ImmutableMap<Material, Integer> getMaterialRequirements() {
         return materialRequirements;
     }
 }
