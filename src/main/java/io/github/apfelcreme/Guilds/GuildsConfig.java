@@ -58,6 +58,7 @@ public class GuildsConfig {
      * reload the config
      */
     public void reload() {
+        loadConfig();
         reloadLanguageConfig();
     }
 
