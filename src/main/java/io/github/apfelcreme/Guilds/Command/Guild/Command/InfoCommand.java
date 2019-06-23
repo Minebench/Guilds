@@ -78,7 +78,7 @@ public class InfoCommand extends SubCommand {
                         .getColoredText("info.guild.info.players", guild.getColor())
                         .replace("{0}", Integer.toString(guild.getMembers().size()))
                         .replace("{1}", plugin.getGuildManager().hasNextLevel(guild) ?
-                                Integer.toString(plugin.getGuildManager().getNextLevel(guild).getPlayerLimit()) : "X"));
+                                Integer.toString(plugin.getGuildManager().getNextLevel(guild).getRequiredPlayers()) : "X"));
                 plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                         .getColoredText("info.guild.info.currentBalance", guild.getColor())
                         .replace("{0}", Double.toString(guild.getBalance()))
