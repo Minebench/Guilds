@@ -54,12 +54,13 @@ public class GiveExpCommand extends SubCommand {
                             inputIsLevel = true;
                             input = input.substring(0, input.length() - 1);
                         }
-                        if (GuildsUtil.isNumeric(input)) {
-                            int inputNumber = Integer.parseInt(input);
-
-                            int exp = inputIsLevel
-                                    ? GuildsUtil.getTotalExperience(sender.getLevel()) - GuildsUtil.getTotalExperience(sender.getLevel() - inputNumber)
-                                    : inputNumber;
+                        boolean inputIsNumber = GuildsUtil.isNumeric(input);
+                        if (inputIsNumber || "all".equalsIgnoreCase(input)) {
+                            int exp = inputIsNumber
+                                    ? inputIsLevel
+                                            ? GuildsUtil.getTotalExperience(sender.getLevel()) - GuildsUtil.getTotalExperience(sender.getLevel() - Integer.parseInt(input))
+                                            : Integer.parseInt(input)
+                                    : GuildsUtil.getTotalExperience(sender);
 
                             if (GuildsUtil.getTotalExperience(sender) >= exp && exp >= 0) {
                                 plugin.getRequestController().addRequest(new GiveExpRequest(plugin, sender, guild, exp));
