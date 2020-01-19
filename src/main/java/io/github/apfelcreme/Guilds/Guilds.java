@@ -4,6 +4,7 @@ import io.github.apfelcreme.Guilds.Bungee.BungeeChat;
 import io.github.apfelcreme.Guilds.Bungee.BungeeConnection;
 import io.github.apfelcreme.Guilds.Bungee.SimpleBungeeChat;
 import io.github.apfelcreme.Guilds.Command.Admin.AdminCommandExecutor;
+import io.github.apfelcreme.Guilds.Command.Alliance.AllianceTabCompleter;
 import io.github.apfelcreme.Guilds.Command.Chat.AllianceChatCommandExecutor;
 import io.github.apfelcreme.Guilds.Command.Alliance.AllianceCommandExecutor;
 import io.github.apfelcreme.Guilds.Command.Chat.GuildChatCommandExecutor;
@@ -128,6 +129,7 @@ public class Guilds extends JavaPlugin {
         getServer().getPluginCommand("guild").setExecutor(new GuildCommandExecutor(this));
         getServer().getPluginCommand("guild").setTabCompleter(new GuildTabCompleter(this));
         getServer().getPluginCommand("alliance").setExecutor(new AllianceCommandExecutor(this));
+        getServer().getPluginCommand("alliance").setTabCompleter(new AllianceTabCompleter(this));
         getServer().getPluginCommand("guildadmin").setExecutor(new AdminCommandExecutor(this));
         getServer().getPluginCommand(".").setExecutor(new GuildChatCommandExecutor(this));
         getServer().getPluginCommand(",").setExecutor(new AllianceChatCommandExecutor(this));

@@ -1,10 +1,16 @@
 package io.github.apfelcreme.Guilds.Command.Alliance;
 
+import io.github.apfelcreme.Guilds.Alliance.Alliance;
+import io.github.apfelcreme.Guilds.Guild.Guild;
+import io.github.apfelcreme.Guilds.Guilds;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
+import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Alliances
@@ -27,7 +33,49 @@ import java.util.List;
  */
 public class AllianceTabCompleter implements TabCompleter {
 
-    public List<String> onTabComplete(CommandSender commandSender, Command command, String s, String[] strings) {
-        return null;
+    private final Guilds plugin;
+
+    public AllianceTabCompleter(Guilds plugin) {
+        this.plugin = plugin;
+    }
+
+    public List<String> onTabComplete(CommandSender commandSender, Command command, String label, String[] strings) {
+        List<String> list = new ArrayList<>();
+        if (strings.length == 1) {
+            for (AllianceCommandExecutor.AllianceOperation operation : AllianceCommandExecutor.AllianceOperation.values()) {
+                list.add(operation.name().toLowerCase());
+            }
+        } else if (strings.length == 2) {
+            AllianceCommandExecutor.AllianceOperation guildOperation = AllianceCommandExecutor.AllianceOperation.getOperation(strings[0]);
+            if (guildOperation != null) {
+                switch (guildOperation) {
+                    case ACCEPT:
+                        break;
+                    case CONFIRM:
+                        break;
+                    case CREATE:
+                        break;
+                    case DENY:
+                        break;
+                    case INFO:
+                        for (Alliance alliance1 : plugin.getAllianceManager().getAlliances()) {
+                            list.add(alliance1.getName());
+                        }
+                        break;
+                    case INVITE:
+                        for (Guild guild1 : plugin.getGuildManager().getGuilds()) {
+                            list.add(guild1.getName());
+                        }
+                        break;
+                    case LEAVE:
+                        break;
+                    case LIST:
+                        break;
+                }
+            }
+        }
+        return list.stream()
+                .filter(s -> strings.length == 0 || s.toLowerCase().startsWith(strings[strings.length - 1].toLowerCase()))
+                .collect(Collectors.toList());
     }
 }

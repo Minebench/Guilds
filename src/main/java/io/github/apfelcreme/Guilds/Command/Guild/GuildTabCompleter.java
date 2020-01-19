@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Alliances
@@ -39,10 +40,14 @@ public class GuildTabCompleter implements TabCompleter {
         this.plugin = plugin;
     }
 
-    public List<String> onTabComplete(CommandSender commandSender, Command command, String s, String[] strings) {
-        ArrayList<String> list = new ArrayList<String>();
-        if (strings.length >= 1) {
-            Guild guild = plugin.getGuildManager().getGuild((Player) commandSender);
+    public List<String> onTabComplete(CommandSender commandSender, Command command, String label, String[] strings) {
+        List<String> list = new ArrayList<>();
+        if (strings.length == 1) {
+            for (GuildCommandExecutor.GuildOperation operation : GuildCommandExecutor.GuildOperation.values()) {
+                list.add(operation.name().toLowerCase());
+            }
+        } else if (strings.length == 2) {
+            Guild guild = commandSender instanceof Player ? plugin.getGuildManager().getGuild((Player) commandSender) : null;
             GuildCommandExecutor.GuildOperation guildOperation = GuildCommandExecutor.GuildOperation.getOperation(strings[0]);
             if (guildOperation != null) {
                 switch (guildOperation) {
@@ -84,6 +89,7 @@ public class GuildTabCompleter implements TabCompleter {
                         }
                         break;
                     case EXP:
+                        list.add("all");
                         break;
                     case INFO:
                         for (Guild guild1 : plugin.getGuildManager().getGuilds()) {
@@ -157,7 +163,9 @@ public class GuildTabCompleter implements TabCompleter {
                 }
             }
         }
-        return list;
+        return list.stream()
+                .filter(s -> strings.length == 0 || s.toLowerCase().startsWith(strings[strings.length - 1].toLowerCase()))
+                .collect(Collectors.toList());
 
     }
 }
