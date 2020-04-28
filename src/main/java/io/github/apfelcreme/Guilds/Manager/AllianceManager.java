@@ -17,9 +17,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.ConcurrentModificationException;
 import java.util.Date;
-import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 
 /**
@@ -47,31 +47,40 @@ public class AllianceManager {
      */
     private Map<Integer, Alliance> alliances;
 
+    private Map<Integer, Object> allianceLocks;
+
     public AllianceManager(Guilds plugin) {
         this.plugin = plugin;
-        alliances = new Hashtable<Integer, Alliance>();
+        alliances = new ConcurrentHashMap<>();
+        allianceLocks = new ConcurrentHashMap<>();
+    }
+
+    private Object getLock(int allianceId) {
+        return allianceLocks.computeIfAbsent(allianceId, i -> new Object());
+    }
+
+    private Object getLock(Alliance alliance) {
+        return getLock(alliance.getId());
     }
 
     /**
      * loads the list of all guilds
      */
     public void loadAlliances() {
-        plugin.runAsync(new Runnable() {
-            public void run() {
-                try (Connection connection = plugin.getDatabaseConnection()) {
-//                  guilds.clear();
-                    alliances.clear();
-                    PreparedStatement statement = connection.prepareStatement("Select allianceId from " + plugin.getGuildsConfig().getAllianceTable());
-                    ResultSet resultSet = statement.executeQuery();
-                    int z = 0;
-                    while (resultSet.next()) {
-                        reload(resultSet.getInt("allianceId"));
-                        z++;
-                    }
-                    plugin.getLogger().info(z + " Allianzen synchronisiert");
-                } catch (SQLException e) {
-                    e.printStackTrace();
+        plugin.runAsync(() -> {
+            try (Connection connection = plugin.getDatabaseConnection()) {
+//              guilds.clear();
+                alliances.clear();
+                PreparedStatement statement = connection.prepareStatement("Select allianceId from " + plugin.getGuildsConfig().getAllianceTable());
+                ResultSet resultSet = statement.executeQuery();
+                int z = 0;
+                while (resultSet.next()) {
+                    reload(resultSet.getInt("allianceId"));
+                    z++;
                 }
+                plugin.getLogger().info(z + " Allianzen synchronisiert");
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
         });
     }
@@ -82,8 +91,8 @@ public class AllianceManager {
      * @param allianceId the id of the alliance
      */
     public void reload(final int allianceId) {
-        plugin.runAsync(new Runnable() {
-            public void run() {
+        plugin.runAsync(() -> {
+            synchronized (getLock(allianceId)) {
                 try (Connection connection = plugin.getDatabaseConnection()) {
                     Alliance alliance;
 
@@ -95,7 +104,6 @@ public class AllianceManager {
                     ResultSet resultSet = statement.executeQuery();
                     List<Guild> allianceMembers = new ArrayList<Guild>();
                     if (resultSet.next()) {
-                        int allianceId = resultSet.getInt("allianceId");
                         String tag = resultSet.getString("allianceTag");
                         resultSet.beforeFirst();
                         while (resultSet.next()) {
@@ -245,11 +253,11 @@ public class AllianceManager {
      * sets the invite status to 1 (=Accepted)
      */
     public void acceptInvite(final AllianceInvite invite) {
-        plugin.runAsync(new Runnable() {
-            public void run() {
+        plugin.runAsync(() -> {
+            synchronized (invite) {
                 try (Connection connection = plugin.getDatabaseConnection()) {
                     PreparedStatement statement = connection.prepareStatement(
-                            "UPDATE "+ plugin.getGuildsConfig().getAllianceInviteTable()+" SET status = 1 " +
+                            "UPDATE " + plugin.getGuildsConfig().getAllianceInviteTable() + " SET status = 1 " +
                                     "WHERE guildId = ? " +
                                     "AND allianceId = ? ");
                     statement.setInt(1, invite.getGuild().getId());
@@ -257,7 +265,7 @@ public class AllianceManager {
                     statement.executeUpdate();
 
                     statement = connection.prepareStatement(
-                            "UPDATE "+ plugin.getGuildsConfig().getGuildsTable()+
+                            "UPDATE " + plugin.getGuildsConfig().getGuildsTable() +
                                     " SET allianceId = ? where guildId = ?;");
                     statement.setInt(1, invite.getAlliance().getId());
                     statement.setInt(2, invite.getGuild().getId());
@@ -276,8 +284,8 @@ public class AllianceManager {
      * sets the invite status to 2 (=Denied)
      */
     public void denyInvite(final AllianceInvite invite) {
-        plugin.runAsync(new Runnable() {
-            public void run() {
+        plugin.runAsync(() -> {
+            synchronized (invite) {
                 try (Connection connection = plugin.getDatabaseConnection()) {
                     PreparedStatement statement = connection.prepareStatement(
                             "UPDATE " + plugin.getGuildsConfig().getAllianceInviteTable() + " SET status = 2 " +
@@ -297,8 +305,8 @@ public class AllianceManager {
     }
 
     public void addInvite(final AllianceInvite invite) {
-        plugin.runAsync(new Runnable() {
-            public void run() {
+        plugin.runAsync(() -> {
+            synchronized (invite) {
                 try (Connection connection = plugin.getDatabaseConnection()) {
                     PreparedStatement statement = connection.prepareStatement(
                             "INSERT INTO " + plugin.getGuildsConfig().getAllianceInviteTable() + " (allianceId, guildId) " +
@@ -321,8 +329,8 @@ public class AllianceManager {
      * @param alliance The Alliance to add
      */
     public void create(final Alliance alliance) {
-        plugin.runAsync(new Runnable() {
-            public void run() {
+        plugin.runAsync(() -> {
+            synchronized (getLock(alliance)) {
                 try (Connection connection = plugin.getDatabaseConnection()) {
                     PreparedStatement statement = connection.prepareStatement(
                             "INSERT INTO " + plugin.getGuildsConfig().getAllianceTable() + "(alliance, founded, tag, color) VALUES (?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
@@ -358,8 +366,8 @@ public class AllianceManager {
      * @param alliance The Alliance to remove
      */
     public void delete(final Alliance alliance) {
-        plugin.runAsync(new Runnable() {
-            public void run() {
+        plugin.runAsync(() -> {
+            synchronized (getLock(alliance)) {
                 try (Connection connection = plugin.getDatabaseConnection()) {
                     PreparedStatement statement = connection.prepareStatement(
                             "UPDATE " + plugin.getGuildsConfig().getGuildsTable() + " SET allianceId = null " +
@@ -388,8 +396,8 @@ public class AllianceManager {
 
     public void setColor(final Alliance alliance, final ChatColor color) {
         alliance.setColor(color);
-        plugin.runAsync(new Runnable() {
-            public void run() {
+        plugin.runAsync(() -> {
+            synchronized (getLock(alliance)) {
                 try (Connection connection = plugin.getDatabaseConnection()) {
                     PreparedStatement statement = connection.prepareStatement(
                             "UPDATE " + plugin.getGuildsConfig().getAllianceTable() +
@@ -400,7 +408,7 @@ public class AllianceManager {
                     statement.close();
                     connection.close();
 
-                    plugin.getBungeeConnection().forceGuildSync(alliance.getId());
+                    plugin.getBungeeConnection().forceAllianceSync(alliance.getId());
 
                 } catch (SQLException e) {
                     e.printStackTrace();
@@ -410,8 +418,8 @@ public class AllianceManager {
     }
 
     public void removeMember(final Alliance alliance, final Guild guild) {
-        plugin.runAsync(new Runnable() {
-            public void run() {
+        plugin.runAsync(() -> {
+            synchronized (plugin.getGuildManager().getLock(guild)) {
                 try (Connection connection = plugin.getDatabaseConnection()) {
                     PreparedStatement statement = connection.prepareStatement(
                             "UPDATE " + plugin.getGuildsConfig().getGuildsTable() +

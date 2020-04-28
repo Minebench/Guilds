@@ -93,7 +93,7 @@ public class BungeeConnection {
      */
     public void forceGuildSync(int guildId) {
         if (!plugin.getGuildsConfig().useBungeeCord()) {
-            plugin.getGuildManager().reloadGuild(guildId);
+            plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> plugin.getGuildManager().reloadGuild(guildId));
             return;
         }
         send("sync", "guild", guildId);
@@ -104,7 +104,7 @@ public class BungeeConnection {
      */
     public void forceAlliancesSync() {
         if (!plugin.getGuildsConfig().useBungeeCord()) {
-            plugin.getAllianceManager().loadAlliances();
+            plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> plugin.getAllianceManager().loadAlliances());
             return;
         }
         send("sync", "alliances");
@@ -115,7 +115,7 @@ public class BungeeConnection {
      */
     public void forceAllianceSync(int allianceId) {
         if (!plugin.getGuildsConfig().useBungeeCord()) {
-            plugin.getAllianceManager().reload(allianceId);
+            plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> plugin.getAllianceManager().reload(allianceId));
             return;
         }
         send("sync", "alliance", allianceId);
