@@ -45,7 +45,7 @@ public class GiveExpRequest extends GuildRequest {
                     .getText("error.notEnoughExp"));
             return;
         }
-        plugin.getGuildManager().setExp(guild, guild.getExp() + exp);
+        plugin.getGuildManager().modifyExp(guild, exp);
         sender.setTotalExperience(0);
         sender.setLevel(0);
         sender.setExp(0.0f);

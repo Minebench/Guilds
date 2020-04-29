@@ -736,17 +736,17 @@ public class GuildManager {
     /**
      * sets the guilds balance to a given amount
      *
-     * @param balance the new balance
+     * @param amount the amount to add or subtract
      */
-    public void setBalance(final Guild guild, final double balance) {
-        guild.setBalance(balance);
+    public void modifyBalance(final Guild guild, final double amount) {
+        guild.setBalance(guild.getBalance() + amount);
         plugin.runAsync(() -> {
             synchronized (getLock(guild)) {
                 try (Connection connection = plugin.getDatabaseConnection()) {
                     PreparedStatement statement = connection.prepareStatement(
                             "UPDATE " + plugin.getGuildsConfig().getGuildsTable() +
-                                    " SET balance = ? where guildId = ? ");
-                    statement.setDouble(1, balance);
+                                    " SET balance = balance + ? where guildId = ? ");
+                    statement.setDouble(1, amount);
                     statement.setInt(2, guild.getId());
                     statement.executeUpdate();
 
@@ -863,13 +863,13 @@ public class GuildManager {
      *
      * @param exp the new exp
      */
-    public void setExp(final Guild guild, final int exp) {
+    public void modifyExp(final Guild guild, final int exp) {
         plugin.runAsync(() -> {
             synchronized (getLock(guild)) {
                 try (Connection connection = plugin.getDatabaseConnection()) {
                     PreparedStatement statement = connection.prepareStatement(
                             "UPDATE " + plugin.getGuildsConfig().getGuildsTable() +
-                                    " SET exp = ? where guildId = ? ");
+                                    " SET exp = exp + ? where guildId = ? ");
                     statement.setInt(1, exp);
                     statement.setInt(2, guild.getId());
                     statement.executeUpdate();

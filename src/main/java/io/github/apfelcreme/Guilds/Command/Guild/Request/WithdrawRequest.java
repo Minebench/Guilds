@@ -1,9 +1,7 @@
 package io.github.apfelcreme.Guilds.Command.Guild.Request;
 
-import io.github.apfelcreme.Guilds.Command.Request;
 import io.github.apfelcreme.Guilds.Guild.Guild;
 import io.github.apfelcreme.Guilds.Guilds;
-import io.github.apfelcreme.Guilds.GuildsConfig;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.entity.Player;
 
@@ -44,7 +42,7 @@ public class WithdrawRequest extends GuildRequest {
         }
         EconomyResponse economyResponse = plugin.getEconomy().depositPlayer(sender.getPlayer(), amount);
         if (economyResponse.transactionSuccess()) {
-            plugin.getGuildManager().setBalance(guild, guild.getBalance() - amount);
+            plugin.getGuildManager().modifyBalance(guild, -amount);
             plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                     .getColoredText("info.guild.withdrawMoney.withdrewMoney", guild.getColor())
                     .replace("{0}", Double.toString(amount)));
@@ -52,7 +50,7 @@ public class WithdrawRequest extends GuildRequest {
                     plugin.getGuildsConfig().getText("info.chat.playerWithdrew")
                             .replace("{0}", sender.getName())
                             .replace("{1}", Double.toString(amount)));
-            plugin.getLogger().info(sender.getName() + " has withdrew " + Double.toString(amount) + " from" +
+            plugin.getLogger().info(sender.getName() + " has withdrew " + amount + " from" +
                     " guild '" + guild.getName() + "'");
             plugin.getGuildManager().logMoneyOperation(guild, sender.getUniqueId(), -amount);
         }

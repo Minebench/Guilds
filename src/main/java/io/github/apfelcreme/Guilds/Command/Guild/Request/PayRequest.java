@@ -1,9 +1,7 @@
 package io.github.apfelcreme.Guilds.Command.Guild.Request;
 
-import io.github.apfelcreme.Guilds.Command.Request;
 import io.github.apfelcreme.Guilds.Guild.Guild;
 import io.github.apfelcreme.Guilds.Guilds;
-import io.github.apfelcreme.Guilds.GuildsConfig;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.entity.Player;
 
@@ -39,7 +37,7 @@ public class PayRequest extends GuildRequest {
     public void execute() {
         EconomyResponse economyResponse = plugin.getEconomy().withdrawPlayer(sender.getPlayer(), amount);
         if (economyResponse.transactionSuccess()) {
-            plugin.getGuildManager().setBalance(guild, guild.getBalance() + amount);
+            plugin.getGuildManager().modifyBalance(guild, amount);
             plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                     .getColoredText("info.guild.pay.paidMoney", guild.getColor())
                     .replace("{0}", Double.toString(amount)));
