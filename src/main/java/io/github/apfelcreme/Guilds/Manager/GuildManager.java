@@ -745,9 +745,10 @@ public class GuildManager {
                 try (Connection connection = plugin.getDatabaseConnection()) {
                     PreparedStatement statement = connection.prepareStatement(
                             "UPDATE " + plugin.getGuildsConfig().getGuildsTable() +
-                                    " SET balance = balance + ? where guildId = ? ");
+                                    " SET balance = balance + ? where guildId = ? and balance >= ?");
                     statement.setDouble(1, amount);
                     statement.setInt(2, guild.getId());
+                    statement.setDouble(3, amount < 0 ? -amount : 0);
                     statement.executeUpdate();
 
                     plugin.getBungeeConnection().forceGuildSync(guild.getId());
@@ -893,11 +894,13 @@ public class GuildManager {
                     GuildLevel nextLevel = getNextLevel(guild);
                     PreparedStatement statement = connection.prepareStatement(
                             "UPDATE " + plugin.getGuildsConfig().getGuildsTable() +
-                                    " SET level = ?, balance = ?, exp = ? where guildId = ? ");
+                                    " SET level = ?, balance = balance - ?, exp = exp - ? where guildId = ? and balance >= ? and exp >= ?");
                     statement.setInt(1, nextLevel.getLevel());
-                    statement.setDouble(2, guild.getBalance() - nextLevel.getCost());
-                    statement.setDouble(3, guild.getExp() - nextLevel.getExpCost());
+                    statement.setDouble(2, nextLevel.getCost());
+                    statement.setDouble(3, nextLevel.getExpCost());
                     statement.setInt(4, guild.getId());
+                    statement.setDouble(5, nextLevel.getCost());
+                    statement.setDouble(6, nextLevel.getExpCost());
                     statement.executeUpdate();
 
                     plugin.getBungeeConnection().forceGuildSync(guild.getId());
