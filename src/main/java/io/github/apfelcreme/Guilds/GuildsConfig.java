@@ -351,6 +351,8 @@ public class GuildsConfig {
         }
         int playerLimit = plugin.getConfig()
                 .getInt("level." + level + ".limit");
+        long bankLimit = plugin.getConfig()
+                .getLong("level." + level + ".bankLimit", -1);
         double enchantmentCost = plugin.getConfig()
                 .getDouble("level." + level + ".enchantmentCost");
         double doubleCraftProbability = plugin.getConfig()
@@ -377,7 +379,8 @@ public class GuildsConfig {
                 }
             }
         }
-        return new GuildLevel(level, name, playerLimit, enchantmentCost, doubleCraftProbability, specialDropChance,
+        return new GuildLevel(level, name, playerLimit, bankLimit,
+                enchantmentCost, doubleCraftProbability, specialDropChance,
                 furnaceExpGainRatio, cost, players, expCost, ImmutableMap.copyOf(materialRequirements));
     }
 

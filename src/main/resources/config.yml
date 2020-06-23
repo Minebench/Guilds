@@ -48,6 +48,7 @@ level:
   '1':
     name: 'Bruderschaft'
     limit: 10
+    bankLimit: 5000
     enchantmentCost: 0.97
     doubleCraftProbability: 0.01
     specialDropChance: 0.01
@@ -61,6 +62,7 @@ level:
   '2':
     name: 'Gruppe'
     limit: 15
+    bankLimit: 7500
     enchantmentCost: 0.95
     doubleCraftProbability: 0.02
     specialDropChance: 0.02
@@ -76,6 +78,7 @@ level:
   '3':
     name: 'Mannschaft'
     limit: 20
+    bankLimit: 10000
     enchantmentCost: 0.93
     doubleCraftProbability: 0.03
     specialDropChance: 0.03
@@ -92,6 +95,7 @@ level:
   '4':
     name: 'Horde'
     limit: 25
+    bankLimit: 15000
     enchantmentCost: 0.9
     doubleCraftProbability: 0.04
     specialDropChance: 0.04
@@ -108,6 +112,7 @@ level:
   '5':
     name: 'Schar'
     limit: 30
+    bankLimit: 20000
     enchantmentCost: 0.87
     doubleCraftProbability: 0.05
     specialDropChance: 0.05
@@ -123,6 +128,7 @@ level:
   '6':
     name: 'Front'
     limit: 35
+    bankLimit: 30000
     enchantmentCost: 0.83
     doubleCraftProbability: 0.06
     specialDropChance: 0.06
@@ -138,6 +144,7 @@ level:
   '7':
     name: 'Bund'
     limit: 40
+    bankLimit: 40000
     enchantmentCost: 0.80
     doubleCraftProbability: 0.07
     specialDropChance: 0.07
@@ -154,6 +161,7 @@ level:
   '8':
     name: 'Liga'
     limit: 45
+    bankLimit: 50000
     enchantmentCost: 0.77
     doubleCraftProbability: 0.08
     specialDropChance: 0.08
@@ -169,6 +177,7 @@ level:
   '9':
     name: 'Legion'
     limit: 50
+    bankLimit: 60000
     enchantmentCost: 0.73
     doubleCraftProbability: 0.09
     specialDropChance: 0.09
@@ -186,6 +195,7 @@ level:
   '10':
     name: 'Armee'
     limit: 60
+    bankLimit: 75000
     enchantmentCost: 0.70
     doubleCraftProbability: 0.1
     specialDropChance: 0.10
@@ -202,6 +212,7 @@ level:
   '11':
     name: 'Heer'
     limit: 75
+    bankLimit: 100000
     enchantmentCost: 0.67
     doubleCraftProbability: 0.11
     specialDropChance: 0.11
@@ -217,6 +228,7 @@ level:
   '12':
     name: 'Streitmacht'
     limit: 100
+    bankLimit: -1
     enchantmentCost: 0.63
     doubleCraftProbability: 0.12
     specialDropChance: 0.12

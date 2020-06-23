@@ -47,6 +47,8 @@ texts:
     cannotDeleteLeaderRank: '&c Du kannst den Leaderrang nicht löschen!'
     cannotLeaveLeader: '&c Du kannst deine eigene Gilde nicht verlassen!'
     guildFull: '&c Du kannst keine weiteren Spieler einladen! Vergrößere deine Gilde um mehr Spieler einzuladen!'
+    guildBankFull: '&c Du kannst kein weiteres Geld in die Gildenkasse einlaggern! Vergrößere deine Gilde um mehr Geld einzulagern!'
+    guildBankLimit: '&c Deine Gildenkasse ist über dem Limit ({0} Bench). Du must mindestes {1} Bench abheben um unter das Limit zu kommen!'
     unknownLevel: '&c Dieses Level existiert nicht!'
     noNumber: '&c {0} ist keine Zahl!'
     noVault: '&c Auf diesem Server ist keine Wirtschaft aktiv. Bitte wechsele auf einen anderen Server!'
@@ -189,7 +191,7 @@ texts:
         alliance: '&mainColor Allianz:&accent &7[{1}&7] &accent{0}'
         limit: '&mainColor Maximal &accent{1} Spieler'
         players: '&mainColor Spieler: &accent{0}&mainColor/{1}'
-        currentBalance: '&mainColor Gildenkasse: &accent{0}&mainColor/{1}'
+        currentBalance: '&mainColor Gildenkasse: &accent{0}&mainColor/{2}'
         currentExpBalance: '&mainColor Erfahrung: &accent{0}&mainColor/{1}'
         currentLevel: '&mainColor Level: &accent{0}'
         founded: '&mainColor Gegründet: &accent{0}'
@@ -231,6 +233,7 @@ texts:
         joined: '&mainColor Beigetreten: &accent{0}'
         lastSeen: '&mainColor Zuletzt gesehen: &accent{0}'
       pay:
+        partial: '&mainColor Du kannst nur &accent{0}&mainColor Bench einzahlen da die Kasse dann voll ist!'
         paidMoney: '&mainColor Du hast &accent{0}&mainColor Bench in die Gildenkasse eingezahlt!'
       prefix:
         prefixSet: '&mainColor Du hast den Präfix von &accent{0}&mainColor auf &accent{1}&mainColor gesetzt!'

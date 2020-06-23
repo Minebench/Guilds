@@ -4,9 +4,7 @@ import io.github.apfelcreme.Guilds.Command.Guild.Request.PayRequest;
 import io.github.apfelcreme.Guilds.Command.SubCommand;
 import io.github.apfelcreme.Guilds.Guild.Guild;
 import io.github.apfelcreme.Guilds.Guilds;
-import io.github.apfelcreme.Guilds.GuildsConfig;
 import io.github.apfelcreme.Guilds.GuildsUtil;
-import io.github.apfelcreme.Guilds.Manager.RequestController;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -51,7 +49,18 @@ public class PayCommand extends SubCommand {
                         Guild guild = plugin.getGuildManager().getGuild(sender);
                         if (guild != null) {
                             if (plugin.getEconomy().getBalance(sender) >= amount) {
-                                plugin.getRequestController().addRequest(new PayRequest(plugin, sender, guild, amount));
+                                long bankLimit = guild.getCurrentLevel().getBankLimit();
+                                if (bankLimit > -1 && guild.getBalance() >= bankLimit) {
+                                    if (guild.getBalance() + amount > bankLimit) {
+                                        amount = guild.getBalance() + amount - bankLimit;
+                                        plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
+                                                .getText("pay.partial", String.valueOf(amount)));
+                                    }
+                                    plugin.getRequestController().addRequest(new PayRequest(plugin, sender, guild, amount));
+                                } else {
+                                    plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
+                                            .getText("error.guildBankFull", String.valueOf(bankLimit)));
+                                }
                             } else {
                                 plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.notEnoughMoney"));
                             }

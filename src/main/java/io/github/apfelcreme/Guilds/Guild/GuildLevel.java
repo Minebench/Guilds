@@ -26,6 +26,7 @@ public class GuildLevel {
     private final int level;
     private final String name;
     private final int playerLimit;
+    private final long bankLimit;
     private final double enchantmentCost;
     private final double doubleCraftProbability;
     private final double specialDropChance;
@@ -35,12 +36,13 @@ public class GuildLevel {
     private final int expCost;
     private final ImmutableMap<Material, Integer> materialRequirements;
 
-    public GuildLevel(Integer level, String name, int playerLimit, double enchantmentCost,
+    public GuildLevel(Integer level, String name, int playerLimit, long bankLimit, double enchantmentCost,
                       double doubleCraftProbability, double specialDropChance, double furnaceExpGainRatio, double cost,
                       int players, int expCost, ImmutableMap<Material, Integer> materialRequirements) {
         this.level = level;
         this.name = name;
         this.playerLimit = playerLimit;
+        this.bankLimit = bankLimit;
         this.enchantmentCost = enchantmentCost;
         this.doubleCraftProbability = doubleCraftProbability;
         this.specialDropChance = specialDropChance;
@@ -76,6 +78,15 @@ public class GuildLevel {
      */
     public int getPlayerLimit() {
         return playerLimit;
+    }
+
+    /**
+     * returns the bank limit
+     *
+     * @return the bank limit
+     */
+    public long getBankLimit() {
+        return bankLimit;
     }
 
     /**
