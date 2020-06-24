@@ -50,8 +50,8 @@ public class PayCommand extends SubCommand {
                         if (guild != null) {
                             if (plugin.getEconomy().getBalance(sender) >= amount) {
                                 long bankLimit = guild.getCurrentLevel().getBankLimit();
-                                if (bankLimit > -1 && guild.getBalance() >= bankLimit) {
-                                    if (guild.getBalance() + amount > bankLimit) {
+                                if (bankLimit < 0 || guild.getBalance() >= bankLimit) {
+                                    if (bankLimit > -1 && guild.getBalance() + amount > bankLimit) {
                                         amount = guild.getBalance() + amount - bankLimit;
                                         plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                                 .getText("pay.partial", String.valueOf(amount)));
