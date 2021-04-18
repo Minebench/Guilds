@@ -3,14 +3,11 @@ package io.github.apfelcreme.Guilds.Command.Guild.Command;
 import io.github.apfelcreme.Guilds.Command.Guild.Request.PromoteRequest;
 import io.github.apfelcreme.Guilds.Command.SubCommand;
 import io.github.apfelcreme.Guilds.Guild.Guild;
+import io.github.apfelcreme.Guilds.Guild.GuildMember;
 import io.github.apfelcreme.Guilds.Guilds;
 import io.github.apfelcreme.Guilds.Guild.Rank;
-import io.github.apfelcreme.Guilds.GuildsConfig;
-import io.github.apfelcreme.Guilds.Manager.RequestController;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
-import java.util.UUID;
 
 /**
  * Guilds
@@ -45,45 +42,65 @@ public class PromoteCommand extends SubCommand {
      */
     public void execute(CommandSender commandSender, String[] strings) {
         Player sender = (Player) commandSender;
-        if (sender.hasPermission("Guilds.promoteGuildMember")) {
-            if (strings.length >= 3) {
-                UUID uuid = plugin.getUUID(strings[1]);
-                if (uuid != null) {
-                    Guild guild = plugin.getGuildManager().getGuild(sender);
-                    Guild targetGuild = plugin.getGuildManager().getGuild(uuid);
-                    if (guild != null) {
-                        if (targetGuild != null && guild.equals(targetGuild)) {
-                            if (guild.getMember(sender.getUniqueId()).getRank().canPromote()) {
-                                Rank rank = guild.getRank(strings[2]);
-                                if (rank != null) {
-                                    plugin.getRequestController().addRequest(
-                                            new PromoteRequest(plugin,
-                                                    sender, guild.getMember(uuid),
-                                                    guild, rank));
-                                } else {
-                                    plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.unknownRank"));
-                                }
-                            } else {
-                                plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
-                                        .getText("error.rank.noPermission").replace("{0}", plugin.getGuildsConfig().getText("info.guild.rank.info.promote")));
-                            }
-                        } else {
-                            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.notInThisGuild")
-                                    .replace("{0}", strings[1]).replace("{1}", guild.getName()));
-                        }
-                    } else {
-                        plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noCurrentGuild"));
-                    }
-                } else {
-                    plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.playerDoesntExist")
-                            .replace("{0}", strings[1]));
-                }
-            } else {
-                plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.wrongUsage.promote"));
-            }
-        } else {
+        if (!sender.hasPermission("Guilds.promoteGuildMember")) {
             plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noPermission"));
+            return;
         }
+
+        if (strings.length < 3) {
+            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.wrongUsage.promote"));
+            return;
+        }
+
+        Guild guild = plugin.getGuildManager().getGuild(sender);
+        if (guild == null) {
+            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noCurrentGuild"));
+            return;
+        }
+
+        GuildMember targetMember = guild.getMember(strings[1]);
+        if (targetMember == null) {
+            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.notInThisGuild", strings[1], guild.getName()));
+            return;
+        }
+
+        GuildMember member = guild.getMember(sender.getUniqueId());
+        if (!member.getRank().canPromote()) {
+            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
+                    .getText("error.rank.noPermission", plugin.getGuildsConfig().getText("info.guild.rank.info.promote")));
+            return;
+        }
+
+        if (targetMember.getRank().isLeader()) {
+            if (!member.getRank().isLeader()) {
+                plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
+                        .getText("error.rank.cantChangeLeader", targetMember.getRank().getName()));
+                return;
+            }
+
+            if (guild.getMembers(targetMember.getRank()).size() == 1) {
+                plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
+                        .getText("error.rank.needsOneLeader", targetMember.getRank().getName()));
+                return;
+            }
+        }
+
+        Rank rank = guild.getRank(strings[2]);
+        if (rank == null) {
+            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.unknownRank"));
+            return;
+        }
+
+        if (rank.isLeader() && !member.getRank().isLeader()) {
+            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
+                    .getText("error.rank.cantPromoteToLeader", targetMember.getRank().getName()));
+            return;
+        }
+
+        plugin.getRequestController().addRequest(
+                new PromoteRequest(plugin,
+                        sender, targetMember,
+                        guild, rank));
 
     }
 }

@@ -12,6 +12,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * Guilds
@@ -195,6 +196,16 @@ public class Guild implements Comparable<Guild> {
     }
 
     /**
+     * returns a member list by their rank
+     *
+     * @param rank The rank to get the members for
+     * @return the list of members based on their rank
+     */
+    public Collection<GuildMember> getMembers(Rank rank) {
+        return members.values().stream().filter(m -> m.getRank().equals(rank)).collect(Collectors.toList());
+    }
+
+    /**
      * returns the clan tag
      *
      * @return the clan tag
@@ -220,6 +231,21 @@ public class Guild implements Comparable<Guild> {
      */
     public GuildMember getMember(UUID uuid) {
         return members.get(uuid);
+    }
+
+    /**
+     * returns the player with the given name
+     *
+     * @param name the name
+     * @return the matching player object
+     */
+    public GuildMember getMember(String name) {
+        for (GuildMember member : members.values()) {
+            if (member.getName().equalsIgnoreCase(name)) {
+                return member;
+            }
+        }
+        return null;
     }
 
     /**

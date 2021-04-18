@@ -236,5 +236,13 @@ public class Rank implements Comparable<Rank> {
         }
         return 0;
     }
+
+    public boolean equals(Object o) {
+        if (!(o instanceof Rank)) {
+            return false;
+        }
+
+        return ((Rank) o).getId().equals(this.getId());
+    }
 }
 

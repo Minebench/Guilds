@@ -56,6 +56,9 @@ texts:
     unknown: 'unbekannt'
     rank:
       noPermission: '&c Dir fehlt die Berechtigung ''{0}''!'
+      cantChangeLeader: '&c Nur der {0} kann den Rang anderer {0} ändern!'
+      needsOneLeader: '&c Deine Gilde benötigt mindestens einen {0}! Befördere zuerst eines deiner anderen Mitglieder!'
+      cantPromoteToLeader: '&c Nur ein {0} kann neue {0} bestimmen!'
     wrongUsage:
       addAdmin: '&c Falsche Eingabe! Probiere /guildadmin add <Spieler> <Gilde>!'
       color: '&c Falsche Eingabe! Probiere /guild color <Farbe>!'
