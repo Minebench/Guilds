@@ -59,6 +59,7 @@ texts:
       cantChangeLeader: '&c Nur der {0} kann den Rang anderer {0} ändern!'
       needsOneLeader: '&c Deine Gilde benötigt mindestens einen {0}! Befördere zuerst eines deiner anderen Mitglieder!'
       cantPromoteToLeader: '&c Nur ein {0} kann neue {0} bestimmen!'
+      newCantPromote: '&4 Warnung: &7Du bist dabei deinen Rang auf {0} zu ändern welcher nicht befördern kann!'
     wrongUsage:
       addAdmin: '&c Falsche Eingabe! Probiere /guildadmin add <Spieler> <Gilde>!'
       color: '&c Falsche Eingabe! Probiere /guild color <Farbe>!'

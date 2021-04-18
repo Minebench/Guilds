@@ -52,11 +52,13 @@ public class PromoteCommand extends SubCommand {
             return;
         }
 
-        Guild guild = plugin.getGuildManager().getGuild(sender);
-        if (guild == null) {
+        GuildMember member = plugin.getGuildManager().getGuildMember(sender.getUniqueId());
+        if (member == null) {
             plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noCurrentGuild"));
             return;
         }
+
+        Guild guild = member.getGuild();
 
         GuildMember targetMember = guild.getMember(strings[1]);
         if (targetMember == null) {
@@ -64,7 +66,6 @@ public class PromoteCommand extends SubCommand {
             return;
         }
 
-        GuildMember member = guild.getMember(sender.getUniqueId());
         if (!member.getRank().canPromote()) {
             plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                     .getText("error.rank.noPermission", plugin.getGuildsConfig().getText("info.guild.rank.info.promote")));
@@ -95,6 +96,11 @@ public class PromoteCommand extends SubCommand {
             plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                     .getText("error.rank.cantPromoteToLeader", targetMember.getRank().getName()));
             return;
+        }
+
+        if (member == targetMember && !rank.canPromote()) {
+            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
+                    .getText("error.rank.newCantPromote", rank.getName()));
         }
 
         plugin.getRequestController().addRequest(
