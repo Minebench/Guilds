@@ -66,7 +66,7 @@ public class PromoteCommand extends SubCommand {
             return;
         }
 
-        if (!member.getRank().canPromote()) {
+        if (!member.getRank().isLeader() && !member.getRank().canPromote()) {
             plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                     .getText("error.rank.noPermission", plugin.getGuildsConfig().getText("info.guild.rank.info.promote")));
             return;

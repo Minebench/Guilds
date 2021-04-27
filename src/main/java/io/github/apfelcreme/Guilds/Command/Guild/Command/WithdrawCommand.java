@@ -3,6 +3,7 @@ package io.github.apfelcreme.Guilds.Command.Guild.Command;
 import io.github.apfelcreme.Guilds.Command.Guild.Request.WithdrawRequest;
 import io.github.apfelcreme.Guilds.Command.SubCommand;
 import io.github.apfelcreme.Guilds.Guild.Guild;
+import io.github.apfelcreme.Guilds.Guild.Rank;
 import io.github.apfelcreme.Guilds.Guilds;
 import io.github.apfelcreme.Guilds.GuildsConfig;
 import io.github.apfelcreme.Guilds.Manager.RequestController;
@@ -50,7 +51,8 @@ public class WithdrawCommand extends SubCommand {
                         Double amount = Double.parseDouble(strings[1]);
                         Guild guild = plugin.getGuildManager().getGuild(sender);
                         if (guild != null) {
-                            if (guild.getMember(sender.getUniqueId()).getRank().canWithdrawMoney()) {
+                            Rank rank = guild.getMember(sender.getUniqueId()).getRank();
+                            if (rank.isLeader() || rank.canWithdrawMoney()) {
                                 if (guild.getBalance() >= amount) {
                                     long bankLimit = guild.getCurrentLevel().getBankLimit();
                                     if (bankLimit < 0 || guild.getBalance() - amount < bankLimit) {

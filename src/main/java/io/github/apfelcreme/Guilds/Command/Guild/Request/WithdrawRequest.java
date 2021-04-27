@@ -1,6 +1,7 @@
 package io.github.apfelcreme.Guilds.Command.Guild.Request;
 
 import io.github.apfelcreme.Guilds.Guild.Guild;
+import io.github.apfelcreme.Guilds.Guild.Rank;
 import io.github.apfelcreme.Guilds.Guilds;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.entity.Player;
@@ -35,6 +36,12 @@ public class WithdrawRequest extends GuildRequest {
 
     @Override
     public void execute() {
+        Rank rank = guild.getMember(sender.getUniqueId()).getRank();
+        if (!rank.isLeader() && !rank.canWithdrawMoney()) {
+            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
+                    .getText("error.rank.noPermission", plugin.getGuildsConfig().getText("info.guild.rank.info.withdrawMoney")));
+            return;
+        }
         if (guild.getBalance() < amount) {
             plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                     .getText("error.guildNotEnoughMoney").replace("{0}", String.valueOf(amount)).replace("{1}", String.valueOf(guild.getBalance())));

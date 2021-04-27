@@ -48,7 +48,7 @@ public class DeleteRankCommand extends SubCommand {
                 Guild guild = plugin.getGuildManager().getGuild(sender);
                 if (guild != null) {
                     Rank senderRank = guild.getMember(sender.getUniqueId()).getRank();
-                    if (senderRank.canPromote()) {
+                    if (senderRank.isLeader() || senderRank.canPromote()) {
                         Rank rank = guild.getRank(strings[1]);
                         if (rank != null) {
                             if (!rank.isBaseRank()) {

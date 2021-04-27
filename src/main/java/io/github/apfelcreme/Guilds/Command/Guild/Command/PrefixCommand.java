@@ -2,6 +2,7 @@ package io.github.apfelcreme.Guilds.Command.Guild.Command;
 
 import io.github.apfelcreme.Guilds.Command.SubCommand;
 import io.github.apfelcreme.Guilds.Guild.Guild;
+import io.github.apfelcreme.Guilds.Guild.Rank;
 import io.github.apfelcreme.Guilds.Guilds;
 import io.github.apfelcreme.Guilds.GuildsUtil;
 import org.bukkit.command.CommandSender;
@@ -52,7 +53,8 @@ public class PrefixCommand extends SubCommand {
                     if (uuid != null) {
                         if (guild != null) {
                             if (targetGuild != null && guild.equals(targetGuild)) {
-                                if (guild.getMember(sender.getUniqueId()).getRank().canPromote()) {
+                                Rank rank = guild.getMember(sender.getUniqueId()).getRank();
+                                if (rank.isLeader() || rank.canPromote()) {
                                     plugin.getGuildManager().setMemberPrefix(guild.getMember(uuid), prefix);
                                     plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                             .getColoredText("info.guild.prefix.prefixSet", guild.getColor())

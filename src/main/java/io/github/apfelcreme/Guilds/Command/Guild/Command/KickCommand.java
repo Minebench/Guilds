@@ -3,6 +3,7 @@ package io.github.apfelcreme.Guilds.Command.Guild.Command;
 import io.github.apfelcreme.Guilds.Command.Guild.Request.KickRequest;
 import io.github.apfelcreme.Guilds.Command.SubCommand;
 import io.github.apfelcreme.Guilds.Guild.Guild;
+import io.github.apfelcreme.Guilds.Guild.Rank;
 import io.github.apfelcreme.Guilds.Guilds;
 import io.github.apfelcreme.Guilds.Manager.RequestController;
 import org.bukkit.command.CommandSender;
@@ -52,7 +53,8 @@ public class KickCommand extends SubCommand {
                         Guild targetGuild = plugin.getGuildManager().getGuild(uuid);
                         if (guild != null) {
                             if (targetGuild != null && guild.equals(targetGuild)) {
-                                if (guild.getMember(sender.getUniqueId()).getRank().canKick()) {
+                                Rank rank = guild.getMember(sender.getUniqueId()).getRank();
+                                if (rank.isLeader() || rank.canKick()) {
                                     plugin.getRequestController().addRequest(
                                             new KickRequest(plugin, sender, guild.getMember(uuid), guild));
                                 } else {

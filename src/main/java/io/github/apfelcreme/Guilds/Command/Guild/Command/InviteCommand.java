@@ -3,6 +3,7 @@ package io.github.apfelcreme.Guilds.Command.Guild.Command;
 import io.github.apfelcreme.Guilds.Command.SubCommand;
 import io.github.apfelcreme.Guilds.Guild.Guild;
 import io.github.apfelcreme.Guilds.Guild.Invite;
+import io.github.apfelcreme.Guilds.Guild.Rank;
 import io.github.apfelcreme.Guilds.Guilds;
 import io.github.apfelcreme.Guilds.GuildsConfig;
 import org.bukkit.command.CommandSender;
@@ -52,7 +53,8 @@ public class InviteCommand extends SubCommand {
                         Guild targetGuild = plugin.getGuildManager().getGuild(uuid);
                         if (guild != null) {
                             if (!guild.getPendingInvites().containsKey(uuid)) {
-                                if (guild.getMember(sender.getUniqueId()).getRank().canInvite()) {
+                                Rank rank = guild.getMember(sender.getUniqueId()).getRank();
+                                if (rank.isLeader() || rank.canInvite()) {
                                     if (guild.getMembers().size() < guild.getCurrentLevel().getPlayerLimit()) {
                                         if (targetGuild == null) {
                                             plugin.getGuildManager().addInvite(new Invite(

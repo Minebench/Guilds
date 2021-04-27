@@ -2,6 +2,7 @@ package io.github.apfelcreme.Guilds.Command.Guild.Request;
 
 import io.github.apfelcreme.Guilds.Command.Request;
 import io.github.apfelcreme.Guilds.Guild.Guild;
+import io.github.apfelcreme.Guilds.Guild.Rank;
 import io.github.apfelcreme.Guilds.Guilds;
 import io.github.apfelcreme.Guilds.GuildsConfig;
 import org.bukkit.entity.Player;
@@ -33,6 +34,12 @@ public class DisbandRequest extends GuildRequest {
 
     @Override
     public void execute() {
+        Rank rank = guild.getMember(sender.getUniqueId()).getRank();
+        if (!rank.isLeader() && !rank.canDisband()) {
+            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
+                    .getText("error.rank.noPermission", plugin.getGuildsConfig().getText("info.guild.rank.info.disband")));
+            return;
+        }
         plugin.getGuildManager().delete(guild);
         plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                 .getColoredText("info.guild.disband.guildDisbanded", guild.getColor()));

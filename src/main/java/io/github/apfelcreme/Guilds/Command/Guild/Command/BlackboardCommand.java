@@ -3,6 +3,7 @@ package io.github.apfelcreme.Guilds.Command.Guild.Command;
 import io.github.apfelcreme.Guilds.Command.SubCommand;
 import io.github.apfelcreme.Guilds.Guild.BlackboardMessage;
 import io.github.apfelcreme.Guilds.Guild.Guild;
+import io.github.apfelcreme.Guilds.Guild.Rank;
 import io.github.apfelcreme.Guilds.Guilds;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -48,7 +49,8 @@ public class BlackboardCommand extends SubCommand {
             if (guild != null) {
                 if (strings.length >= 2) {
                     // /guild bb [message]
-                    if (guild.getMember(sender.getUniqueId()).getRank().canUseBlackboard()) {
+                    Rank rank = guild.getMember(sender.getUniqueId()).getRank();
+                    if (rank.isLeader() || rank.canUseBlackboard()) {
                         if ((strings.length == 2) && strings[1].equalsIgnoreCase("clear")) {
                             plugin.getGuildManager().clearMessages(guild);
                             plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()

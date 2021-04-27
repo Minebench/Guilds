@@ -48,7 +48,8 @@ public class EditRankCommand extends SubCommand {
             if (strings.length >= 2) {
                 Guild guild = plugin.getGuildManager().getGuild(sender);
                 if (guild != null) {
-                    if (guild.getMember(sender.getUniqueId()).getRank().canPromote()) {
+                    Rank senderRank = guild.getMember(sender.getUniqueId()).getRank();
+                    if (senderRank.isLeader() || senderRank.canPromote()) {
                         EditRankSession editRankSession = SessionController.getInstance().getEditRankSession(
                                 guild.getMember(sender.getUniqueId()));
                         if (editRankSession == null) {

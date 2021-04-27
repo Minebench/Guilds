@@ -3,6 +3,7 @@ package io.github.apfelcreme.Guilds.Command.Guild.Command;
 import io.github.apfelcreme.Guilds.Command.Guild.Request.UpgradeRequest;
 import io.github.apfelcreme.Guilds.Command.SubCommand;
 import io.github.apfelcreme.Guilds.Guild.Guild;
+import io.github.apfelcreme.Guilds.Guild.Rank;
 import io.github.apfelcreme.Guilds.Guilds;
 import io.github.apfelcreme.Guilds.GuildsUtil;
 import org.apache.commons.lang.WordUtils;
@@ -51,7 +52,8 @@ public class UpgradeCommand extends SubCommand {
             if (sender.hasPermission("Guilds.upgradeGuild")) {
                 Guild guild = plugin.getGuildManager().getGuild(sender);
                 if (guild != null) {
-                    if (guild.getMember(sender.getUniqueId()).getRank().canUpgrade()) {
+                    Rank rank = guild.getMember(sender.getUniqueId()).getRank();
+                    if (rank.isLeader() || rank.canUpgrade()) {
                         if (plugin.getGuildManager().hasNextLevel(guild)) {
                             if (plugin.getGuildManager().canBeUpgraded(guild, sender)) {
                                 plugin.getChat().sendMessage(sender,

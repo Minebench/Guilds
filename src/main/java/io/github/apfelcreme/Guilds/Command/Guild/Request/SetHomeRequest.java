@@ -3,6 +3,7 @@ package io.github.apfelcreme.Guilds.Command.Guild.Request;
 import io.github.apfelcreme.Guilds.Bungee.BungeeConnection;
 import io.github.apfelcreme.Guilds.Command.Request;
 import io.github.apfelcreme.Guilds.Guild.Guild;
+import io.github.apfelcreme.Guilds.Guild.Rank;
 import io.github.apfelcreme.Guilds.Guilds;
 import io.github.apfelcreme.Guilds.GuildsConfig;
 import org.bukkit.Location;
@@ -42,6 +43,11 @@ public class SetHomeRequest extends GuildRequest {
     @Override
     public void execute() {
         if (location != null) {
+            if (!guild.getMember(sender.getUniqueId()).getRank().isLeader()) {
+                plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
+                        .getText("error.rank.noPermission", plugin.getGuildsConfig().getText("info.guild.rank.info.leader")));
+                return;
+            }
             plugin.getGuildManager().setHome(guild, location);
             plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                     .getColoredText("info.guild.setHome.guildHomeSet", guild.getColor()));

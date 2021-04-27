@@ -38,6 +38,12 @@ public class DeleteRankRequest extends GuildRequest {
 
     @Override
     public void execute() {
+        Rank rank = guild.getMember(sender.getUniqueId()).getRank();
+        if (!rank.isLeader() && !rank.canPromote()) {
+            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
+                    .getText("error.rank.noPermission", plugin.getGuildsConfig().getText("info.guild.rank.info.promote")));
+            return;
+        }
         plugin.getGuildManager().deleteRank(rank);
         plugin.getChat().sendMessage(sender,
                 plugin.getGuildsConfig().getColoredText("info.guild.deleteRank.rankDeleted", guild.getColor()).replace("{0}", rank.getName()));

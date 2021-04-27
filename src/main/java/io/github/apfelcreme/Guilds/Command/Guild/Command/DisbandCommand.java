@@ -3,6 +3,7 @@ package io.github.apfelcreme.Guilds.Command.Guild.Command;
 import io.github.apfelcreme.Guilds.Command.Guild.Request.DisbandRequest;
 import io.github.apfelcreme.Guilds.Command.SubCommand;
 import io.github.apfelcreme.Guilds.Guild.Guild;
+import io.github.apfelcreme.Guilds.Guild.Rank;
 import io.github.apfelcreme.Guilds.Guilds;
 import io.github.apfelcreme.Guilds.GuildsConfig;
 import io.github.apfelcreme.Guilds.Manager.RequestController;
@@ -45,7 +46,8 @@ public class DisbandCommand extends SubCommand {
         if (sender.hasPermission("Guilds.disbandGuild")) {
             Guild guild = plugin.getGuildManager().getGuild(sender);
             if (guild != null) {
-                if (guild.getMember(sender.getUniqueId()).getRank().canDisband()) {
+                Rank rank = guild.getMember(sender.getUniqueId()).getRank();
+                if (rank.isLeader() || rank.canDisband()) {
                     plugin.getRequestController().addRequest(new DisbandRequest(plugin, sender, guild));
                     if (guild.getBalance() > 0) {
                         plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()

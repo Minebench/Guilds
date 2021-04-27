@@ -2,6 +2,7 @@ package io.github.apfelcreme.Guilds.Command.Guild.Request;
 
 import io.github.apfelcreme.Guilds.Guild.Guild;
 import io.github.apfelcreme.Guilds.Guild.GuildLevel;
+import io.github.apfelcreme.Guilds.Guild.Rank;
 import io.github.apfelcreme.Guilds.Guilds;
 import io.github.apfelcreme.Guilds.GuildsUtil;
 import org.bukkit.Material;
@@ -36,6 +37,12 @@ public class UpgradeRequest extends GuildRequest {
 
     @Override
     public void execute() {
+        Rank rank = guild.getMember(sender.getUniqueId()).getRank();
+        if (!rank.isLeader() && !rank.canUpgrade()) {
+            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
+                    .getText("error.rank.noPermission", plugin.getGuildsConfig().getText("info.guild.rank.info.upgrade")));
+            return;
+        }
         if (!plugin.getGuildManager().canBeUpgraded(guild, sender)) {
             plugin.getChat().sendMessage(sender,
                     plugin.getGuildsConfig().getColoredText("info.guild.upgrade.requirementsMissing", guild.getColor())
