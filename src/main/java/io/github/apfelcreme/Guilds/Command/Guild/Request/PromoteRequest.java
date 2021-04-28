@@ -40,8 +40,8 @@ public class PromoteRequest extends GuildRequest {
 
     @Override
     public void execute() {
-        Rank rank = guild.getMember(sender.getUniqueId()).getRank();
-        if (!rank.isLeader() && !rank.canPromote()) {
+        Rank senderRank = guild.getMember(sender.getUniqueId()).getRank();
+        if (!senderRank.isLeader() && !senderRank.canPromote()) {
             plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                     .getText("error.rank.noPermission", plugin.getGuildsConfig().getText("info.guild.rank.info.promote")));
             return;
