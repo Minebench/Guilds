@@ -45,7 +45,12 @@ public class RankListCommand extends SubCommand {
     public void execute(CommandSender commandSender, String[] strings) {
         Player sender = (Player) commandSender;
         if (sender.hasPermission("Guilds.rankList")) {
-            Guild guild = plugin.getGuildManager().getGuild(sender);
+            Guild guild;
+            if (strings.length > 1 && sender.hasPermission("Guilds.viewOtherRanks")) {
+                guild = plugin.getGuildManager().getGuild(strings[0]);
+            } else {
+                guild = plugin.getGuildManager().getGuild(sender);
+            }
             if (guild != null) {
                 plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                         .getColoredText("info.guild.ranks.head", guild.getColor()));

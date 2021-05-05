@@ -43,9 +43,16 @@ public class RankInfoCommand extends SubCommand {
         Player sender = (Player) commandSender;
         if (sender.hasPermission("Guilds.rankInfo")) {
             if (strings.length >= 2) {
-                Guild guild = plugin.getGuildManager().getGuild(sender);
+                Guild guild;
+                int rankIndex = 1;
+                if (strings.length > 2 && sender.hasPermission("Guilds.viewOtherRanks")) {
+                    guild = plugin.getGuildManager().getGuild(strings[0]);
+                    rankIndex = 2;
+                } else {
+                    guild = plugin.getGuildManager().getGuild(sender);
+                }
                 if (guild != null) {
-                    Rank rank = guild.getRank(strings[1]);
+                    Rank rank = guild.getRank(strings[rankIndex]);
                     if (rank != null) {
                         plugin.getChat().sendMessage(sender,
                                 plugin.getGuildsConfig().getColoredText("info.guild.rank.head", guild.getColor())

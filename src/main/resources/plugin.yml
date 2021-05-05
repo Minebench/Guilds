@@ -46,6 +46,7 @@ permissions:
       Guilds.changeTag: true
       Guilds.changeName: true
       Guilds.allSeen: true
+      Guilds.viewOtherRanks: true
   Guilds.user:
     description: all other commands
     children:
@@ -102,6 +103,8 @@ permissions:
     description: change a guilds name
   Guilds.allSeen:
     description: allows you to see the last seen value of all players
+  Guilds.viewOtherRanks:
+    description: allows you to see rank information of other guilds
   Guilds.createAlliance:
     description: create an alliance
   Guilds.disbandAlliance:
