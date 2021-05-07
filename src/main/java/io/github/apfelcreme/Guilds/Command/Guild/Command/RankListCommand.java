@@ -47,7 +47,7 @@ public class RankListCommand extends SubCommand {
         if (sender.hasPermission("Guilds.rankList")) {
             Guild guild;
             if (strings.length > 1 && sender.hasPermission("Guilds.viewOtherRanks")) {
-                guild = plugin.getGuildManager().getGuild(strings[0]);
+                guild = plugin.getGuildManager().getGuild(strings[1]);
             } else {
                 guild = plugin.getGuildManager().getGuild(sender);
             }
