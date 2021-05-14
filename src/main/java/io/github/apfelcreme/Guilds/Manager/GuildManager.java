@@ -622,38 +622,6 @@ public class GuildManager {
             synchronized (getLock(guild)) {
                 try (Connection connection = plugin.getDatabaseConnection()) {
                     PreparedStatement statement = connection.prepareStatement(
-                            "UPDATE " + plugin.getGuildsConfig().getPlayerTable() + " SET guildId = NULL, rankId = NULL" +
-                                    " where guildId = ? "
-                    );
-                    statement.setInt(1, guild.getId());
-                    statement.executeUpdate();
-                    statement.close();
-
-                    statement = connection.prepareStatement(
-                            "DELETE FROM " + plugin.getGuildsConfig().getInvitesTable() + " WHERE guildId = ? ");
-                    statement.setInt(1, guild.getId());
-                    statement.executeUpdate();
-                    statement.close();
-
-                    statement = connection.prepareStatement(
-                            "DELETE FROM " + plugin.getGuildsConfig().getAllianceInviteTable() + " WHERE guildId = ? ");
-                    statement.setInt(1, guild.getId());
-                    statement.executeUpdate();
-                    statement.close();
-
-                    statement = connection.prepareStatement(
-                            "DELETE FROM " + plugin.getGuildsConfig().getBlackboardTable() + " WHERE guildId = ? ");
-                    statement.setInt(1, guild.getId());
-                    statement.executeUpdate();
-                    statement.close();
-
-                    statement = connection.prepareStatement(
-                            "DELETE FROM " + plugin.getGuildsConfig().getRanksTable() + " WHERE guildId = ? ");
-                    statement.setInt(1, guild.getId());
-                    statement.executeUpdate();
-                    statement.close();
-
-                    statement = connection.prepareStatement(
                             "DELETE FROM " + plugin.getGuildsConfig().getGuildsTable() + " WHERE guildId = ? ");
                     statement.setInt(1, guild.getId());
                     statement.executeUpdate();

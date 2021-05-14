@@ -134,7 +134,7 @@ public class DatabaseConnectionManager {
                     "guildHomePitch FLOAT DEFAULT 0, " +
                     "guildHomeWorld VARCHAR(50), " +
                     "guildHomeServer VARCHAR(50), " +
-                    "FOREIGN KEY (allianceId) references " + plugin.getGuildsConfig().getAllianceTable() + " (allianceId), " +
+                    "FOREIGN KEY (allianceId) references " + plugin.getGuildsConfig().getAllianceTable() + " (allianceId) ON DELETE SET NULL, " +
                     "PRIMARY KEY (guildId));");
             statement.executeUpdate();
 
@@ -153,7 +153,7 @@ public class DatabaseConnectionManager {
                     "isBaseRank TINYINT(1) default 0, " +
                     "isLeader TINYINT(1) default 0, " +
                     "guildId INTEGER, " +
-                    "FOREIGN KEY (guildId) REFERENCES " + plugin.getGuildsConfig().getGuildsTable() + " (guildId), " +
+                    "FOREIGN KEY (guildId) REFERENCES " + plugin.getGuildsConfig().getGuildsTable() + " (guildId) ON DELETE CASCADE, " +
                     "PRIMARY KEY (rankId));");
             statement.executeUpdate();
 
@@ -166,8 +166,8 @@ public class DatabaseConnectionManager {
                     "rankId INTEGER, " +
                     "joined BIGINT, " +
                     "lastSeen BIGINT, " +
-                    "FOREIGN KEY (guildId) REFERENCES " + plugin.getGuildsConfig().getGuildsTable() + " (guildId), " +
-                    "FOREIGN KEY (rankId) REFERENCES " + plugin.getGuildsConfig().getRanksTable() + " (rankId), " +
+                    "FOREIGN KEY (guildId) REFERENCES " + plugin.getGuildsConfig().getGuildsTable() + " (guildId) ON DELETE SET NULL, " +
+                    "FOREIGN KEY (rankId) REFERENCES " + plugin.getGuildsConfig().getRanksTable() + " (rankId) ON DELETE SET NULL, " +
                     "PRIMARY KEY (uuid));");
             statement.executeUpdate();
 
@@ -180,7 +180,7 @@ public class DatabaseConnectionManager {
                     "timestamp TIMESTAMP, " +
                     "cleared TINYINT DEFAULT 0, " +
                     "FOREIGN KEY (player) REFERENCES " + plugin.getGuildsConfig().getPlayerTable() + " (uuid), " +
-                    "FOREIGN KEY (guildId) REFERENCES " + plugin.getGuildsConfig().getGuildsTable() + " (guildId), " +
+                    "FOREIGN KEY (guildId) REFERENCES " + plugin.getGuildsConfig().getGuildsTable() + " (guildId) ON DELETE CASCADE, " +
                     "PRIMARY KEY (messageId));");
             statement.executeUpdate();
 
@@ -191,7 +191,7 @@ public class DatabaseConnectionManager {
                     "targetPlayer VARCHAR(36) NOT NULL, " +
                     "guildId INTEGER NOT NULL, " +
                     "status SMALLINT DEFAULT 0, " +
-                    "FOREIGN KEY (guildId) REFERENCES " + plugin.getGuildsConfig().getGuildsTable() + " (guildId), " +
+                    "FOREIGN KEY (guildId) REFERENCES " + plugin.getGuildsConfig().getGuildsTable() + " (guildId) ON DELETE CASCADE, " +
                     "FOREIGN KEY (player) REFERENCES " + plugin.getGuildsConfig().getPlayerTable() + " (uuid), " +
                     "FOREIGN KEY (targetPlayer) REFERENCES " + plugin.getGuildsConfig().getPlayerTable() + " (uuid), " +
                     "PRIMARY KEY (inviteId));");
@@ -203,8 +203,8 @@ public class DatabaseConnectionManager {
                     "allianceId INTEGER NOT NULL, " +
                     "guildId INTEGER NOT NULL, " +
                     "status SMALLINT DEFAULT 0, " +
-                    "FOREIGN KEY (guildId) REFERENCES " + plugin.getGuildsConfig().getGuildsTable() + " (guildId), " +
-                    "FOREIGN KEY (allianceId) REFERENCES " + plugin.getGuildsConfig().getAllianceTable() + " (allianceId), " +
+                    "FOREIGN KEY (guildId) REFERENCES " + plugin.getGuildsConfig().getGuildsTable() + " (guildId) ON DELETE CASCADE, " +
+                    "FOREIGN KEY (allianceId) REFERENCES " + plugin.getGuildsConfig().getAllianceTable() + " (allianceId) ON DELETE CASCADE, " +
                     "PRIMARY KEY (allianceInviteId));");
             statement.executeUpdate();
 
@@ -214,7 +214,7 @@ public class DatabaseConnectionManager {
                     "player VARCHAR(36) NOT NULL, " +
                     "balanceChange DOUBLE NOT NULL, " +
                     "timestamp TIMESTAMP, " +
-                    "FOREIGN KEY (guildId) REFERENCES " + plugin.getGuildsConfig().getGuildsTable() + " (guildId), " +
+                    "FOREIGN KEY (guildId) REFERENCES " + plugin.getGuildsConfig().getGuildsTable() + " (guildId) ON DELETE CASCADE, " +
                     "FOREIGN KEY (player) REFERENCES " + plugin.getGuildsConfig().getPlayerTable() + " (uuid));");
             statement.executeUpdate();
         } catch (SQLException e) {

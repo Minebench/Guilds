@@ -369,18 +369,7 @@ public class AllianceManager {
         plugin.runAsync(() -> {
             synchronized (getLock(alliance)) {
                 try (Connection connection = plugin.getDatabaseConnection()) {
-                    PreparedStatement statement = connection.prepareStatement(
-                            "UPDATE " + plugin.getGuildsConfig().getGuildsTable() + " SET allianceId = null " +
-                                    "WHERE allianceId = ? ");
-                    statement.setInt(1, alliance.getId());
-                    statement.executeUpdate();
-
-                    statement = connection.prepareStatement("DELETE FROM " + plugin.getGuildsConfig().getAllianceInviteTable() +
-                            " WHERE allianceId = ? ");
-                    statement.setInt(1, alliance.getId());
-                    statement.executeUpdate();
-
-                    statement = connection.prepareStatement("DELETE FROM " + plugin.getGuildsConfig().getAllianceTable() +
+                    PreparedStatement statement = connection.prepareStatement("DELETE FROM " + plugin.getGuildsConfig().getAllianceTable() +
                             " WHERE allianceId = ? ");
                     statement.setInt(1, alliance.getId());
                     statement.executeUpdate();
