@@ -72,7 +72,13 @@ public class DatabaseConnectionManager {
                     throw new RuntimeException("Could not find database driver or data source class! Plugin wont work without a database!");
                 }
             }
-            ds.addDataSourceProperty("url", "jdbc:mysql://" + plugin.getGuildsConfig().getMysqlUrl() + "/" + plugin.getGuildsConfig().getMysqlDatabase() + plugin.getGuildsConfig().getMysqlParameters());
+
+            String url = "jdbc:mysql://" + plugin.getGuildsConfig().getMysqlUrl() + "/" + plugin.getGuildsConfig().getMysqlDatabase() + plugin.getGuildsConfig().getMysqlParameters();
+            if (dataSourceClassName != null) {
+                ds.addDataSourceProperty("url", url);
+            } else {
+                ds.setJdbcUrl(url);
+            }
             ds.setUsername(plugin.getGuildsConfig().getMysqlUser());
             ds.setPassword(plugin.getGuildsConfig().getMysqlPassword());
             ds.setConnectionTimeout(5000);
