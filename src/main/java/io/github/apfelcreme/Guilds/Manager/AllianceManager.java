@@ -105,11 +105,9 @@ public class AllianceManager {
                     List<Guild> allianceMembers = new ArrayList<Guild>();
                     if (resultSet.next()) {
                         String tag = resultSet.getString("allianceTag");
-                        resultSet.beforeFirst();
-                        while (resultSet.next()) {
+                        do {
                             allianceMembers.add(plugin.getGuildManager().getGuild(resultSet.getInt("guildId")));
-                        }
-                        resultSet.first();
+                        } while (resultSet.next());
                         alliance = new Alliance(allianceId,
                                 GuildsUtil.replaceChatColors(resultSet.getString("a.alliance")),
                                 GuildsUtil.replaceChatColors(resultSet.getString("allianceTag")),
@@ -126,7 +124,6 @@ public class AllianceManager {
                                         " where status = 0 and allianceId = ?");
                         statement.setInt(1, allianceId);
                         resultSet = statement.executeQuery();
-                        resultSet.beforeFirst();
                         while (resultSet.next()) {
                             Guild guild = plugin.getGuildManager().getGuild(resultSet.getInt("guildId"));
                             alliance.putPendingAllianceInvite(

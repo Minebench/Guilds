@@ -115,7 +115,7 @@ public class GuildManager {
                     statement.setInt(1, guildId);
                     ResultSet resultSet = statement.executeQuery();
 
-                    if (resultSet.first()) {
+                    if (resultSet.next()) {
                         int allianceId = resultSet.getInt("allianceId");
                         String name = resultSet.getString("guild");
                         String tag = resultSet.getString("tag");
@@ -530,8 +530,6 @@ public class GuildManager {
                     statement.setString(1, plugin.getGuildsConfig().getText("standard.founderRank"));
                     statement.setInt(2, guild.getId());
                     resultSet = statement.executeQuery();
-
-                    resultSet.first();
 
                     Rank leaderRank =
                             new Rank(
