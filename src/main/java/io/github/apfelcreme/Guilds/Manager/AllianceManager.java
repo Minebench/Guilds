@@ -104,16 +104,14 @@ public class AllianceManager {
                     ResultSet resultSet = statement.executeQuery();
                     List<Guild> allianceMembers = new ArrayList<Guild>();
                     if (resultSet.next()) {
-                        String tag = resultSet.getString("allianceTag");
+                        String name = GuildsUtil.replaceChatColors(resultSet.getString("a.alliance"));
+                        String tag = GuildsUtil.replaceChatColors(resultSet.getString("allianceTag"));
+                        ChatColor color = ChatColor.valueOf(resultSet.getString("allianceColor"));
+                        long founded = resultSet.getLong("founded");
                         do {
                             allianceMembers.add(plugin.getGuildManager().getGuild(resultSet.getInt("guildId")));
                         } while (resultSet.next());
-                        alliance = new Alliance(allianceId,
-                                GuildsUtil.replaceChatColors(resultSet.getString("a.alliance")),
-                                GuildsUtil.replaceChatColors(resultSet.getString("allianceTag")),
-                                ChatColor.valueOf(resultSet.getString("allianceColor")),
-                                resultSet.getLong("founded"),
-                                allianceMembers);
+                        alliance = new Alliance(allianceId, name, tag, color, founded, allianceMembers);
 
                         /**
                          * load the pending AllianceInvites which are yet to be accepted or declined
