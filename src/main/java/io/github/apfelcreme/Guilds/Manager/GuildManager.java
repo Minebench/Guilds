@@ -224,7 +224,6 @@ public class GuildManager {
                         statement.setInt(1, guildId);
                         statement.setInt(2, plugin.getGuildsConfig().getBlackboardMessageLimit());
                         resultSet = statement.executeQuery();
-                        resultSet.beforeFirst();
                         while (resultSet.next()) {
                             int messageId = resultSet.getInt("messageId");
                             UUID sender = UUID.fromString(resultSet.getString("player"));
@@ -242,7 +241,6 @@ public class GuildManager {
                                         " where status = 0 and guildId = ?");
                         statement.setInt(1, guildId);
                         resultSet = statement.executeQuery();
-                        resultSet.beforeFirst();
                         while (resultSet.next()) {
                             UUID targetPlayer = UUID.fromString(resultSet.getString("targetPlayer"));
                             guild.putPendingInvite(targetPlayer, new Invite(guild, targetPlayer,
