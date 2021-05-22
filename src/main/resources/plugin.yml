@@ -9,29 +9,29 @@ commands:
       aliases: [clan, gilde]
       description: Alle Gildencommands
       usage:
-      permission:
+      permission: Guilds.command.guild
       permission-message:
    alliance:
       aliases: [allianz]
       description: Alle Allianzcommands
       usage:
-      permission:
+      permission: Guilds.command.alliance
       permission-message:
    '.':
       description: Gildenchat
       usage:
-      permission:
+      permission: Guilds.command.guildchat
       permission-message:
    ',':
       description: Allianzchat
       usage:
-      permission:
+      permission: Guilds.command.alliancechat
       permission-message:
    guildadmin:
       aliases: [ga]
       description: Alle Admincommands
       usage:
-      permission:
+      permission: Guilds.command.alliance
       permission-message:
 permissions:
   Guilds.*:
@@ -39,6 +39,7 @@ permissions:
   Guilds.mod:
     description: reload & sync
     children:
+      Guilds.command.admin: true
       Guilds.admin.reload: true
       Guilds.admin.sync: true
       Guilds.admin.add: true
@@ -50,6 +51,10 @@ permissions:
   Guilds.user:
     description: all other commands
     children:
+      Guilds.command.guild: true
+      Guilds.command.alliance: true
+      Guilds.command.guildchat: true
+      Guilds.command.alliancechat: true
       Guilds.createAlliance: true
       Guilds.disbandAlliance: true
       Guilds.allianceInfo: true
@@ -90,6 +95,16 @@ permissions:
       Guilds.tag: true
       Guilds.upgradeGuild: true
       Guilds.withdrawFromGuild: true
+  Guilds.command.guild:
+    description: access to the /guild command
+  Guilds.command.alliance:
+    description: access to the /alliance command
+  Guilds.command.guildchat:
+    description: access to the /. guild chat command
+  Guilds.command.alliancechat:
+    description: access to the /, alliance chat command
+  Guilds.command.admin:
+    description: access to the /guildadmin command
   Guilds.admin.reload:
     description: reload the config
   Guilds.admin.sync:

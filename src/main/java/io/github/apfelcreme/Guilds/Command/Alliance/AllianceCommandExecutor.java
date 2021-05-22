@@ -45,47 +45,43 @@ public class AllianceCommandExecutor extends PluginCommandExecutor {
     public boolean onCommand(CommandSender commandSender, Command command, String label, String[] strings) {
         if (commandSender instanceof Player) {
             Player sender = (Player) commandSender;
-            if (sender.hasPermission("Guilds.user")) {
-                SubCommand subCommand = null;
-                if (strings.length > 0) {
-                    AllianceOperation operation = AllianceOperation.getOperation(strings[0]);
-                    if (operation != null) {
-                        switch (operation) {
-                            case ACCEPT:
-                                subCommand = new InviteAcceptCommand(plugin);
-                                break;
-                            case CONFIRM:
-                                subCommand = new ConfirmRequestCommand(plugin);
-                                break;
-                            case CREATE:
-                                subCommand = new CreateCommand(plugin);
-                                break;
-                            case DENY:
-                                subCommand = new InviteDenyCommand(plugin);
-                                break;
-                            case INVITE:
-                                subCommand = new InviteCommand(plugin);
-                                break;
-                            case LEAVE:
-                                subCommand = new LeaveCommand(plugin);
-                                break;
-                            case LIST:
-                                subCommand = new ListCommand(plugin);
-                                break;
-                            case INFO:
-                                subCommand = new InfoCommand(plugin);
-                                break;
-                        }
-                    } else {
-                        subCommand = new MenuCommand(plugin);
+            SubCommand subCommand = null;
+            if (strings.length > 0) {
+                AllianceOperation operation = AllianceOperation.getOperation(strings[0]);
+                if (operation != null) {
+                    switch (operation) {
+                        case ACCEPT:
+                            subCommand = new InviteAcceptCommand(plugin);
+                            break;
+                        case CONFIRM:
+                            subCommand = new ConfirmRequestCommand(plugin);
+                            break;
+                        case CREATE:
+                            subCommand = new CreateCommand(plugin);
+                            break;
+                        case DENY:
+                            subCommand = new InviteDenyCommand(plugin);
+                            break;
+                        case INVITE:
+                            subCommand = new InviteCommand(plugin);
+                            break;
+                        case LEAVE:
+                            subCommand = new LeaveCommand(plugin);
+                            break;
+                        case LIST:
+                            subCommand = new ListCommand(plugin);
+                            break;
+                        case INFO:
+                            subCommand = new InfoCommand(plugin);
+                            break;
                     }
                 } else {
                     subCommand = new MenuCommand(plugin);
                 }
-                subCommand.execute(sender, strings);
             } else {
-                plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noPermission"));
+                subCommand = new MenuCommand(plugin);
             }
+            subCommand.execute(sender, strings);
         }
         return false;
     }

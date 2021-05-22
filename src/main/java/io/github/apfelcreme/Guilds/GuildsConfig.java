@@ -60,6 +60,13 @@ public class GuildsConfig {
     public void reload() {
         loadConfig();
         reloadLanguageConfig();
+
+        String noPermissionMessage = getText("error.noPermission");
+        plugin.getServer().getPluginCommand("guild").setPermissionMessage(noPermissionMessage);
+        plugin.getServer().getPluginCommand("alliance").setPermissionMessage(noPermissionMessage);
+        plugin.getServer().getPluginCommand("guildadmin").setPermissionMessage(noPermissionMessage);
+        plugin.getServer().getPluginCommand(".").setPermissionMessage(noPermissionMessage);
+        plugin.getServer().getPluginCommand(",").setPermissionMessage(noPermissionMessage);
     }
 
     private void loadConfig() {

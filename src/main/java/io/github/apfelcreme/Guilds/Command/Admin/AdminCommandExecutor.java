@@ -46,44 +46,40 @@ public class AdminCommandExecutor extends PluginCommandExecutor {
     public boolean onCommand(CommandSender commandSender, Command command, String label, String[] strings) {
         if (commandSender instanceof Player) {
             Player sender = (Player) commandSender;
-            if (sender.hasPermission("Guilds.mod")) {
-                SubCommand subCommand = null;
-                if (strings.length > 0) {
-                    AdminOperation operation = AdminOperation.getOperation(strings[0]);
-                    if (operation != null) {
-                        switch (operation) {
-                            case ADD:
-                                subCommand = new AdminAddCommand(plugin);
-                                break;
-                            case CHANGENAME:
-                                subCommand = new AdminChangeGuildNameCommand(plugin);
-                                break;
-                            case CHANGETAG:
-                                subCommand = new AdminChangeGuildTagCommand(plugin);
-                                break;
-                            case CONFIRM:
-                                subCommand = new ConfirmRequestCommand(plugin);
-                                break;
-                            case KICKGUILD:
-                                subCommand = new AdminKickFromAllianceCommand(plugin);
-                                break;
-                            case RELOAD:
-                                subCommand = new AdminConfigReloadCommand(plugin);
-                                break;
-                            case SYNC:
-                                subCommand = new AdminSyncCommand(plugin);
-                                break;
-                        }
-                    } else {
-                        subCommand = new AdminMenuCommand(plugin);
+            SubCommand subCommand = null;
+            if (strings.length > 0) {
+                AdminOperation operation = AdminOperation.getOperation(strings[0]);
+                if (operation != null) {
+                    switch (operation) {
+                        case ADD:
+                            subCommand = new AdminAddCommand(plugin);
+                            break;
+                        case CHANGENAME:
+                            subCommand = new AdminChangeGuildNameCommand(plugin);
+                            break;
+                        case CHANGETAG:
+                            subCommand = new AdminChangeGuildTagCommand(plugin);
+                            break;
+                        case CONFIRM:
+                            subCommand = new ConfirmRequestCommand(plugin);
+                            break;
+                        case KICKGUILD:
+                            subCommand = new AdminKickFromAllianceCommand(plugin);
+                            break;
+                        case RELOAD:
+                            subCommand = new AdminConfigReloadCommand(plugin);
+                            break;
+                        case SYNC:
+                            subCommand = new AdminSyncCommand(plugin);
+                            break;
                     }
                 } else {
                     subCommand = new AdminMenuCommand(plugin);
                 }
-                subCommand.execute(sender, strings);
             } else {
-                plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noPermission"));
+                subCommand = new AdminMenuCommand(plugin);
             }
+            subCommand.execute(sender, strings);
         }
         return false;
     }
