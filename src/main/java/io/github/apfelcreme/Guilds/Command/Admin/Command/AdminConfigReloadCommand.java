@@ -39,7 +39,7 @@ public class AdminConfigReloadCommand extends SubCommand {
      */
     public void execute(CommandSender commandSender, String[] strings) {
         Player sender = (Player) commandSender;
-        if (sender.hasPermission("Guilds.reload")) {
+        if (sender.hasPermission("Guilds.admin.reload")) {
             plugin.reloadConfig();
             plugin.getGuildsConfig().reload();
             plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()

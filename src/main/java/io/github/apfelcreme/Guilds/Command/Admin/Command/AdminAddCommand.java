@@ -42,7 +42,7 @@ public class AdminAddCommand extends SubCommand {
      */
     public void execute(CommandSender commandSender, String[] strings) {
         Player sender = (Player) commandSender;
-        if (sender.hasPermission("Guilds.addCommand")) {
+        if (sender.hasPermission("Guilds.admin.addCommand")) {
             if (strings.length >= 2) {
                 UUID uuid = plugin.getUUID(strings[1]);
                 if (uuid != null) {

@@ -38,26 +38,30 @@ public class AddToGuildRequest extends AdminRequest {
 
     @Override
     public void execute() {
-        String targetName = plugin.getPlayerName(target);
-        plugin.getGuildManager().addMember(guild, target);
-        plugin.getChat().sendMessage(sender,
-                plugin.getGuildsConfig().getText("info.guildadmin.add.addedPlayer")
-                        .replace("{0}", targetName != null ? targetName :
-                                plugin.getGuildsConfig().getText("info.chat.playerGotAddedUnknownName"))
-                        .replace("{1}", guild.getName()));
-        plugin.getChat().sendGuildChannelBroadcast(
-                guild,
-                plugin.getGuildsConfig().getText("info.chat.playerGotAdded")
-                        .replace("{0}", targetName != null ? targetName :
-                                plugin.getGuildsConfig().getText("info.chat.playerGotAddedUnknownName")));
-        Player messageReceiver = plugin.getServer().getPlayer(target);
-        if (messageReceiver != null) {
-            plugin.getChat().sendMessage(messageReceiver,
-                    plugin.getGuildsConfig().getText("info.guildadmin.add.youGotAdded")
-                            .replace("{0}", sender.getName())
+        if (sender.hasPermission("Guilds.admin.addCommand")) {
+            String targetName = plugin.getPlayerName(target);
+            plugin.getGuildManager().addMember(guild, target);
+            plugin.getChat().sendMessage(sender,
+                    plugin.getGuildsConfig().getText("info.guildadmin.add.addedPlayer")
+                            .replace("{0}", targetName != null ? targetName :
+                                    plugin.getGuildsConfig().getText("info.chat.playerGotAddedUnknownName"))
                             .replace("{1}", guild.getName()));
+            plugin.getChat().sendGuildChannelBroadcast(
+                    guild,
+                    plugin.getGuildsConfig().getText("info.chat.playerGotAdded")
+                            .replace("{0}", targetName != null ? targetName :
+                                    plugin.getGuildsConfig().getText("info.chat.playerGotAddedUnknownName")));
+            Player messageReceiver = plugin.getServer().getPlayer(target);
+            if (messageReceiver != null) {
+                plugin.getChat().sendMessage(messageReceiver,
+                        plugin.getGuildsConfig().getText("info.guildadmin.add.youGotAdded")
+                                .replace("{0}", sender.getName())
+                                .replace("{1}", guild.getName()));
+            }
+            plugin.getLogger().info("Player '" + (targetName != null ? targetName + "/" : "") + target + "' was added to '" + guild.getName() + "' by force!");
+        } else {
+            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noPermission"));
         }
-        plugin.getLogger().info("Player '" + (targetName != null ? targetName + "/" : "") + target + "' was added to '" + guild.getName() + "' by force!");
     }
 
     public void sendInfoMessage() {

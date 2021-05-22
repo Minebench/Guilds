@@ -42,7 +42,7 @@ public class AdminChangeGuildTagCommand extends SubCommand {
      */
     public void execute(CommandSender commandSender, String[] strings) {
         Player sender = (Player) commandSender;
-        if (sender.hasPermission("Guilds.changeTag")) {
+        if (sender.hasPermission("Guilds.admin.changeTag")) {
             if (strings.length >= 2) {
                 Guild guild = plugin.getGuildManager().getGuild(strings[1]);
                 if (guild != null) {
@@ -50,13 +50,13 @@ public class AdminChangeGuildTagCommand extends SubCommand {
                     if (GuildsUtil.strip(newTag).length() <= plugin.getGuildsConfig().getGuildTagLength()) {
                         plugin.getRequestController().addRequest(new ChangeGuildTagRequest(plugin, sender, guild, newTag));
                     } else {
-                        plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.nameTooLong"));
+                        plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.tagTooLong"));
                     }
                 } else {
                     plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.guildDoesntExist"));
                 }
             } else {
-                plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.wrongUsage.changeNameAdmin"));
+                plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.wrongUsage.changeTagAdmin"));
             }
         } else {
             plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noPermission"));

@@ -41,14 +41,17 @@ public class ChangeGuildTagRequest extends AdminRequest {
      */
     @Override
     public void execute() {
-        plugin.getGuildManager().setTag(guild, newTag);
-        plugin.getLogger().info(guild.getName() + "'s tag was changed to '"
-                + newTag + "' by '" + sender.getName() + "'");
-        plugin.getChat().sendMessage(sender,
-                plugin.getGuildsConfig().getText("info.guildadmin.changeTag.changedTag")
-                        .replace("{0}", guild.getName())
-                        .replace("{1}", GuildsUtil.replaceChatColors(newTag)));
-
+        if (sender.hasPermission("Guilds.admin.changeTag")) {
+            plugin.getGuildManager().setTag(guild, newTag);
+            plugin.getLogger().info(guild.getName() + "'s tag was changed to '"
+                    + newTag + "' by '" + sender.getName() + "'");
+            plugin.getChat().sendMessage(sender,
+                    plugin.getGuildsConfig().getText("info.guildadmin.changeTag.changedTag")
+                            .replace("{0}", guild.getName())
+                            .replace("{1}", GuildsUtil.replaceChatColors(newTag)));
+        } else {
+            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noPermission"));
+        }
     }
 
     public void sendInfoMessage() {

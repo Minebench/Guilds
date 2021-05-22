@@ -68,7 +68,7 @@ public class LookupCommand extends SubCommand {
                                     .replace("{0}",
                                             new SimpleDateFormat("dd.MM.YY HH:mm").format(
                                                     new Date(guildMember.getJoined()))));
-                            if(guild.getMember(sender.getUniqueId()) != null || sender.hasPermission("Guilds.allSeen")) {
+                            if(guild.getMember(sender.getUniqueId()) != null || sender.hasPermission("Guilds.admin.allSeen")) {
                                 plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                         .getColoredText("info.guild.lookup.lastSeen", guild.getColor())
                                         .replace("{0}",

@@ -41,14 +41,17 @@ public class ChangeGuildNameRequest extends AdminRequest {
      */
     @Override
     public void execute() {
-        plugin.getGuildManager().setName(guild, newName);
-        plugin.getLogger().info(guild.getName() + "'s name was changed to '"
-                + newName + "' by '" + sender.getName() + "'");
-        plugin.getChat().sendMessage(sender,
-                plugin.getGuildsConfig().getText("info.guildadmin.changeName.changedName")
-                        .replace("{0}", guild.getName())
-                        .replace("{1}", GuildsUtil.replaceChatColors(newName)));
-
+        if (sender.hasPermission("Guilds.admin.changeName")) {
+            plugin.getGuildManager().setName(guild, newName);
+            plugin.getLogger().info(guild.getName() + "'s name was changed to '"
+                    + newName + "' by '" + sender.getName() + "'");
+            plugin.getChat().sendMessage(sender,
+                    plugin.getGuildsConfig().getText("info.guildadmin.changeName.changedName")
+                            .replace("{0}", guild.getName())
+                            .replace("{1}", GuildsUtil.replaceChatColors(newName)));
+        } else {
+            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noPermission"));
+        }
     }
 
     public void sendInfoMessage() {

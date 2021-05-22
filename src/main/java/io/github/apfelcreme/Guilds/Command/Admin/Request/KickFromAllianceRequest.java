@@ -40,26 +40,30 @@ public class KickFromAllianceRequest extends AdminRequest {
      */
     @Override
     public void execute() {
-        if (alliance.getGuilds().size() > 1) {
-            plugin.getAllianceManager().removeMember(alliance, guild);
-            plugin.getLogger().info(guild.getName() + " was kicked from alliance '"
-                    + guild.getName() + "' by '" + sender.getName() + "'");
+        if (sender.hasPermission("Guilds.admin.kickFromAlliance")) {
+            if (alliance.getGuilds().size() > 1) {
+                plugin.getAllianceManager().removeMember(alliance, guild);
+                plugin.getLogger().info(guild.getName() + " was kicked from alliance '"
+                        + guild.getName() + "' by '" + sender.getName() + "'");
+            } else {
+                plugin.getAllianceManager().delete(alliance);
+                plugin.getLogger().info(guild.getName() + " was kicked from alliance '"
+                        + guild.getName() + "' by '" + sender.getName() + "'. The alliance was disbanded as " +
+                        "they were the last members!");
+            }
+            plugin.getChat().sendMessage(sender,
+                    plugin.getGuildsConfig().getText("info.guildadmin.kickguild.kickedGuildFromAlliance")
+                            .replace("{0}", guild.getName())
+                            .replace("{1}", alliance.getName()));
+            plugin.getChat().sendGuildChannelBroadcast(
+                    guild, plugin.getGuildsConfig().getText("info.chat.youGotKickedFromAlliance")
+                            .replace("{0}", alliance.getName()));
+            plugin.getChat().sendAllianceChannelBroadcast(
+                    alliance, plugin.getGuildsConfig().getText("info.chat.guildKickedFromAlliance")
+                            .replace("{0}", guild.getName()));
         } else {
-            plugin.getAllianceManager().delete(alliance);
-            plugin.getLogger().info(guild.getName() + " was kicked from alliance '"
-                    + guild.getName() + "' by '" + sender.getName() + "'. The alliance was disbanded as " +
-                    "they were the last members!");
+            plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.noPermission"));
         }
-        plugin.getChat().sendMessage(sender,
-                plugin.getGuildsConfig().getText("info.guildadmin.kickguild.kickedGuildFromAlliance")
-                        .replace("{0}", guild.getName())
-                        .replace("{1}", alliance.getName()));
-        plugin.getChat().sendGuildChannelBroadcast(
-                guild, plugin.getGuildsConfig().getText("info.chat.youGotKickedFromAlliance")
-                        .replace("{0}", alliance.getName()));
-        plugin.getChat().sendAllianceChannelBroadcast(
-                alliance, plugin.getGuildsConfig().getText("info.chat.guildKickedFromAlliance")
-                        .replace("{0}", guild.getName()));
     }
 
     public void sendInfoMessage() {

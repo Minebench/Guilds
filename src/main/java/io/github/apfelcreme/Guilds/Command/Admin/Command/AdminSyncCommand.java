@@ -40,7 +40,7 @@ public class AdminSyncCommand extends SubCommand {
      */
     public void execute(CommandSender commandSender, String[] strings) {
         Player sender = (Player) commandSender;
-        if (sender.hasPermission("Guilds.sync")) {
+        if (sender.hasPermission("Guilds.admin.sync")) {
             plugin.getBungeeConnection().forceGuildsSync();
             plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("info.guildadmin.sync.synced"));
         } else {

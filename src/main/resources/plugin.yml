@@ -39,14 +39,14 @@ permissions:
   Guilds.mod:
     description: reload & sync
     children:
-      Guilds.reload: true
-      Guilds.sync: true
-      Guilds.add: true
-      Guilds.kickFromAlliance: true
-      Guilds.changeTag: true
-      Guilds.changeName: true
-      Guilds.allSeen: true
-      Guilds.viewOtherRanks: true
+      Guilds.admin.reload: true
+      Guilds.admin.sync: true
+      Guilds.admin.add: true
+      Guilds.admin.kickFromAlliance: true
+      Guilds.admin.changeTag: true
+      Guilds.admin.changeName: true
+      Guilds.admin.allSeen: true
+      Guilds.admin.viewOtherRanks: true
   Guilds.user:
     description: all other commands
     children:
@@ -89,21 +89,21 @@ permissions:
       Guilds.setGuildHome: true
       Guilds.upgradeGuild: true
       Guilds.withdrawFromGuild: true
-  Guilds.reload:
+  Guilds.admin.reload:
     description: reload the config
-  Guilds.sync:
+  Guilds.admin.sync:
     description: make all servers sync the guilds and alliances
-  Guilds.add:
+  Guilds.admin.add:
     description: add a player to a guild without invitation
-  Guilds.kickFromAlliance:
+  Guilds.admin.kickFromAlliance:
     description: kick a guild from an alliance by force
-  Guilds.changeTag:
+  Guilds.admin.changeTag:
     description: change a guilds tag
-  Guilds.changeName:
+  Guilds.admin.changeName:
     description: change a guilds name
-  Guilds.allSeen:
+  Guilds.admin.allSeen:
     description: allows you to see the last seen value of all players
-  Guilds.viewOtherRanks:
+  Guilds.admin.viewOtherRanks:
     description: allows you to see rank information of other guilds
   Guilds.createAlliance:
     description: create an alliance

@@ -42,7 +42,7 @@ public class AdminKickFromAllianceCommand extends SubCommand {
      */
     public void execute(CommandSender commandSender, String[] strings) {
         Player sender = (Player) commandSender;
-        if (sender.hasPermission("Guilds.kickFromAlliance")) {
+        if (sender.hasPermission("Guilds.admin.kickFromAlliance")) {
             if (strings.length >= 2) {
                 Guild guild = plugin.getGuildManager().getGuild(strings[1]);
                 if (guild != null) {

@@ -45,7 +45,7 @@ public class RankInfoCommand extends SubCommand {
             if (strings.length >= 2) {
                 Guild guild;
                 int rankIndex = 1;
-                if (strings.length > 2 && sender.hasPermission("Guilds.viewOtherRanks")) {
+                if (strings.length > 2 && sender.hasPermission("Guilds.admin.viewOtherRanks")) {
                     guild = plugin.getGuildManager().getGuild(strings[1]);
                     rankIndex = 2;
                 } else {
