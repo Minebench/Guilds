@@ -14,6 +14,7 @@ texts:
     noRequest: '&c Es gibt nichts zu bestätigen!'
     nameTooLong: '&c Der angegebene Name ist zu lang!'
     tagTooLong: '&c Der angegebene Tag ist zu lang!'
+    tagNotSame: '&c Der angegebene Tag "{0}&c" hat nicht den selben Text wie der alte Tag "{1}&c"!'
     prefixTooLong: '&c Der angegebene Präfix ist zu lang!'
     noPendingInvites: '&c Du hast derzeit keine Einladungen offen!'
     noCurrentGuild: '&c Du bist derzeit nicht Mitglied einer Gilde!'
@@ -68,6 +69,7 @@ texts:
       create: '&c Falsche Eingabe! Probiere /guild create <Name> <Tag> <Farbe>!'
       createAlliance: '&c Falsche Eingabe! Probiere /alliance create <Name> <Tag> <Farbe>'
       createRank: '&c Falsche Eingabe! Probiere /gilde createrank <?>'
+      changeTag: '&c Falsche Eingabe! Probiere /guild changetag <Tag>!'
       deletePrefix: '&c Falsche Eingabe! Probiere /guild deleteprefix <Name>'
       deleteRank: '&c Falsche Eingabe! Probiere /guild deleterank <Rang>'
       editRank: '&c Falsche Eingabe! Probiere /guild editrank <Name>'
@@ -274,6 +276,8 @@ texts:
         bottom: '&mainColor Für andere Seiten: &accent /guild roster <Gilde> <#>:'
       setHome:
         guildHomeSet: '&mainColor Du hast das Guild-Home gesetzt!'
+      tag:
+        changedTag: '&accent Du hast den Tag deiner Gilde auf&mainColor {0}&accent geändert!'
       upgrade:
         upgradedGuild: '&mainColor Du hast deine Gilde geupgraded!'
         requirementsMissing: '&mainColor Du hast noch nicht alle Anforderungen für ein Upgrade auf den Rang &accent{0}&mainColor erfüllt: '

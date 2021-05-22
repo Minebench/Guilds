@@ -87,6 +87,7 @@ permissions:
       Guilds.rankList: true
       Guilds.roster: true
       Guilds.setGuildHome: true
+      Guilds.tag: true
       Guilds.upgradeGuild: true
       Guilds.withdrawFromGuild: true
   Guilds.admin.reload:
@@ -183,6 +184,10 @@ permissions:
     description: shows a list of all players of a guild
   Guilds.setGuildHome:
     description: set the guild home
+  Guilds.tag:
+    description: change a guild tag
+  Guilds.tag.full:
+    description: change the guild tag fully and not just the formatting
   Guilds.upgradeGuild:
     description: upgrades a guild
   Guilds.upgradeGuildCreative:

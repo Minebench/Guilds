@@ -4,9 +4,7 @@ import io.github.apfelcreme.Guilds.Command.Guild.Command.*;
 import io.github.apfelcreme.Guilds.Command.PluginCommandExecutor;
 import io.github.apfelcreme.Guilds.Command.SubCommand;
 import io.github.apfelcreme.Guilds.Guilds;
-import io.github.apfelcreme.Guilds.GuildsConfig;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -136,6 +134,9 @@ public class GuildCommandExecutor extends PluginCommandExecutor {
                             case SETHOME:
                                 subCommand = new SetHomeCommand(plugin);
                                 break;
+                            case TAG:
+                                subCommand = new TagChangeCommand(plugin);
+                                break;
                             case UPGRADE:
                                 subCommand = new UpgradeCommand(plugin);
                                 break;
@@ -162,7 +163,7 @@ public class GuildCommandExecutor extends PluginCommandExecutor {
      */
     public enum GuildOperation {
         ACCEPT, BB, BLACKBOARD, COLOR, CONFIRM, CREATE, CREATERANK, DELETEPREFIX, DELETERANK, DENY, DISBAND, EDITRANK, EXP, HOME, INFO, INVITE,
-        KICK, LEAVE, LEVEL, LEVELS, LIST, LOOKUP, PAY, PREFIX, PROMOTE, RANK, RANKS, ROSTER, SETHOME, UPGRADE, WITHDRAW;
+        KICK, LEAVE, LEVEL, LEVELS, LIST, LOOKUP, PAY, PREFIX, PROMOTE, RANK, RANKS, ROSTER, SETHOME, TAG, UPGRADE, WITHDRAW;
 
         /**
          * returns the matching operation
