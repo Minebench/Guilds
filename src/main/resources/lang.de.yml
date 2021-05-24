@@ -341,7 +341,7 @@ texts:
       command:
         add: '&2add <Spieler> <Gilde>: &aFüge &2Spieler&a zu einer &2Gilde&a hinzu'
         changeName: '&2changename <Gilde> <Name>:&a Ändert den &2Namen&a einer &2Gilde&a!'
-        changeTag: '&2changetag <Gilde> <Tag>:&a Ändert den &Tag&a einer &2Gilde&a'
+        changeTag: '&2changetag <Gilde> <Tag>:&a Ändert den &2Tag&a einer &2Gilde&a'
         confirm: '&2confirm:&a Führe eine zu bestätigende Aktion aus'
         kickGuild: '&2 kickguild <Gilde> <Allianz>: Kickt eine &aGilde&2 aus einer &aAllianz&2'
         sync: '&2sync:&a Sychronisiert alle Gilden und Allianzen'
@@ -369,6 +369,7 @@ texts:
           ranks: '&2ranks:&a Zeige eine Liste aller Ränge deiner Gilde'
           roster: '&2roster:&a Zeige die Mitglieder deiner Gilde'
           sethome: '&2sethome:&a Setze das Guild-Home an deiner Position'
+          tag: '&2tag <Tag>:&a Ändert den &2Tag&a deiner Gilde'
           upgrade: '&2upgrade:&a Upgrade deine Gilde'
           withdraw: '&2withdraw <Geld>:&a Nimm &2Geld&a aus deiner Gildenkasse'
         hasNoGuild:
