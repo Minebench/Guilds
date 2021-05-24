@@ -44,7 +44,7 @@ public class TagChangeRequest extends GuildRequest {
                 plugin.getLogger().info(guild.getName() + "'s tag was changed to '"
                         + newTag + "' by '" + sender.getName() + "'");
                 plugin.getChat().sendMessage(sender,
-                        plugin.getGuildsConfig().getText("info.guild.tag.changedTag",
+                        plugin.getGuildsConfig().getColoredText("info.guild.tag.changedTag", guild.getColor(),
                                 GuildsUtil.replaceChatColors(newTag)));
             } else {
                 plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.tagNotSame"));
