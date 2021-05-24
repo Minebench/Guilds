@@ -41,10 +41,10 @@ public class TagChangeCommand extends SubCommand {
     public void execute(CommandSender commandSender, String[] strings) {
         Player sender = (Player) commandSender;
         if (sender.hasPermission("Guilds.tag")) {
-            if (strings.length >= 1) {
+            if (strings.length >= 2) {
                 Guild guild = plugin.getGuildManager().getGuild(sender.getUniqueId());
                 if (guild != null) {
-                    String newTag = strings[2];
+                    String newTag = strings[1];
                     if (GuildsUtil.strip(newTag).length() <= plugin.getGuildsConfig().getGuildTagLength()) {
                         if (GuildsUtil.strip(newTag).equalsIgnoreCase(GuildsUtil.strip(guild.getTag())) || sender.hasPermission("Guilds.tag.full")) {
                             plugin.getRequestController().addRequest(new TagChangeRequest(plugin, sender, guild, newTag));
