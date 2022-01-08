@@ -562,6 +562,11 @@ public class GuildManager {
                     plugin.getBungeeConnection().forceGuildSync(guild.getId());
                 } catch (SQLException e) {
                     e.printStackTrace();
+                    if (guild.getId() > -1) {
+                        plugin.getLogger().severe("Error while creating new guild " + guild.getName() + "? Deleting guild...");
+                        delete(guild);
+                        plugin.getEconomy().depositPlayer(founder, plugin.getGuildsConfig().getLevelData(1).getCost());
+                    }
                 }
             }
         });
