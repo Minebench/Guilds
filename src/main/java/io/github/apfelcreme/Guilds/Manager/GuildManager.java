@@ -481,7 +481,11 @@ public class GuildManager {
                     statement.executeUpdate();
 
                     ResultSet resultSet = statement.getGeneratedKeys();
-                    resultSet.next();
+                    if (!resultSet.next()) {
+                        plugin.getLogger().severe("Unable to save new guild " + guild.getName() + " to database. No ID returned?");
+                        plugin.getEconomy().depositPlayer(founder, plugin.getGuildsConfig().getLevelData(1).getCost());
+                        return;
+                    }
                     guild.setId(resultSet.getInt(1));
 
                     statement = connection.prepareStatement("INSERT IGNORE INTO "
@@ -528,6 +532,12 @@ public class GuildManager {
                     statement.setString(1, plugin.getGuildsConfig().getText("standard.founderRank"));
                     statement.setInt(2, guild.getId());
                     resultSet = statement.executeQuery();
+                    if (!resultSet.next()) {
+                        plugin.getLogger().severe("Unable to get leader rank for new guild " + guild.getName() + " from database? Deleting guild...");
+                        delete(guild);
+                        plugin.getEconomy().depositPlayer(founder, plugin.getGuildsConfig().getLevelData(1).getCost());
+                        return;
+                    }
 
                     Rank leaderRank =
                             new Rank(
