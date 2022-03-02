@@ -52,7 +52,7 @@ public class PayCommand extends SubCommand {
                                 long bankLimit = guild.getCurrentLevel().getBankLimit();
                                 if (bankLimit < 0 || guild.getBalance() < bankLimit) {
                                     if (bankLimit > -1 && guild.getBalance() + amount > bankLimit) {
-                                        amount = guild.getBalance() + amount - bankLimit;
+                                        amount = bankLimit - guild.getBalance();
                                         plugin.getChat().sendMessage(sender, plugin.getGuildsConfig()
                                                 .getText("pay.partial", String.valueOf(amount)));
                                     }
