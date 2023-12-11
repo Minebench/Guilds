@@ -17,6 +17,10 @@ import net.zaiyers.UUIDDB.bukkit.UUIDDB;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.server.ServiceRegisterEvent;
+import org.bukkit.event.server.ServiceUnregisterEvent;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -96,11 +100,31 @@ public class Guilds extends JavaPlugin {
      */
     public void onEnable() {
 
-        if (!setupEconomy() ) {
+        if (!setupEconomy()) {
             getLogger().severe("No Vault economy found?");
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
+
+        getServer().getPluginManager().registerEvents(new Listener() {
+            @EventHandler
+            public void onServiceRegister(ServiceRegisterEvent event) {
+                if (event.getProvider().getProvider() instanceof Economy) {
+                    setupEconomy();
+                }
+            }
+
+            @EventHandler
+            public void onServiceUnregister(ServiceUnregisterEvent event) {
+                if (event.getProvider().getProvider() instanceof Economy) {
+                    if (!setupEconomy() ) {
+                        getLogger().severe("Vault economy plugin was disabled?");
+                        getServer().getPluginManager().disablePlugin(Guilds.this);
+                    }
+                }
+            }
+
+        }, this);
 
 
 
@@ -171,6 +195,7 @@ public class Guilds extends JavaPlugin {
             return false;
         }
         economy = rsp.getProvider();
+        getLogger().info("Using " + economy.getName() + " as economy provider");
         return economy != null;
     }
 
