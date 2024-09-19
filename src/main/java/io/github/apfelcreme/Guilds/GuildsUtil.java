@@ -226,7 +226,7 @@ public class GuildsUtil {
     public static Collection<ItemStack> getDrops(Block block, ItemStack tool) {
         Collection<ItemStack> drops = block.getDrops(tool);
 
-        if(drops.size() > 0 && tool.containsEnchantment(Enchantment.SILK_TOUCH)) {
+        if(!drops.isEmpty() && tool.containsEnchantment(Enchantment.SILK_TOUCH) && block.getType().isItem()) {
             drops.clear();
             drops.add(new ItemStack(block.getType()));
         }
