@@ -11,14 +11,14 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <minecraft.plugin.version>${project.version} ${buildDescription}</minecraft.plugin.version>
-        <maven.compiler.target>1.8</maven.compiler.target>
-        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+        <maven.compiler.source>21</maven.compiler.source>
     </properties>
 
     <repositories>
         <repository>
             <id>paper-repo</id>
-            <url>https://papermc.io/repo/</url>
+            <url>https://repo.papermc.io/</url>
         </repository>
         <repository>
             <id>minebench-repo</id>
@@ -28,9 +28,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.destroystokyo.paper</groupId>
+            <groupId>io.papermc.paper</groupId>
             <artifactId>paper-api</artifactId>
-            <version>1.13.2-R0.1-SNAPSHOT</version>
+            <version>1.21.10-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
             <type>jar</type>
         </dependency>
@@ -98,7 +98,7 @@
         <plugins>
             <plugin>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.2.4</version>
+                <version>3.6.1</version>
                 <configuration>
                     <minimizeJar>true</minimizeJar>
                     <relocations>

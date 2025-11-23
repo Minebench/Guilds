@@ -1,6 +1,6 @@
 name: Guilds
 version: '${minecraft.plugin.version}'
-api-version: 1.13
+api-version: 1.21
 main: io.github.apfelcreme.Guilds.Guilds
 depend: [Vault]
 softdepend: [UUIDDB]
