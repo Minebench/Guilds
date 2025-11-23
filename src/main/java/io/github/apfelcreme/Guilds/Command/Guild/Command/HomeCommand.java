@@ -41,7 +41,16 @@ public class HomeCommand extends SubCommand {
 
         final Player sender = (Player) commandSender;
         if (sender.hasPermission("Guilds.guildHome")) {
-            final Guild guild = plugin.getGuildManager().getGuild(sender);
+            Guild guild;
+            if (strings.length > 1 && sender.hasPermission("Guilds.admin.guildHome")) {
+                guild = plugin.getGuildManager().getGuild(strings[1]);
+                if (guild == null) {
+                    plugin.getChat().sendMessage(sender, plugin.getGuildsConfig().getText("error.guildDoesntExist"));
+                    return;
+                }
+            } else {
+                guild = plugin.getGuildManager().getGuild(sender);
+            }
             if (guild != null) {
                 if (guild.getHomeServer() != null) {
                     plugin.getBungeeConnection().sendPlayerToGuildHome(sender, guild);

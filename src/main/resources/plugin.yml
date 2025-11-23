@@ -48,6 +48,7 @@ permissions:
       Guilds.admin.changeName: true
       Guilds.admin.allSeen: true
       Guilds.admin.viewOtherRanks: true
+      Guilds.admin.guildHome: true
   Guilds.user:
     description: all other commands
     children:
@@ -121,6 +122,8 @@ permissions:
     description: allows you to see the last seen value of all players
   Guilds.admin.viewOtherRanks:
     description: allows you to see rank information of other guilds
+  Guilds.admin.guildHome:
+    description: allows you to teleport to the home of other guilds
   Guilds.createAlliance:
     description: create an alliance
   Guilds.disbandAlliance:

@@ -191,6 +191,7 @@ texts:
         paidExp: '&mainColor Du hast der Gilde &accent{0} Erfahrung&mainColor gespendet!'
       home:
         teleportedToHome: '&mainColor Du wurdest zu deinem Gilden-Home teleportiert!'
+        teleportedToOthersHome: '&mainColor Du wurdest zu dem Gilden-Home von &accent{0}&mainColor teleportiert!'
       info:
         head: '&mainColor Deine Gilde sieht derzeit folgendermaßen aus:'
         name: '&mainColor Name: &accent[{1}] &accent{0}'

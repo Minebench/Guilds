@@ -137,9 +137,15 @@ public class BungeeConnection {
                     + ":" + plugin.getServer().getPort();
             if (serverAddress.equals(guild.getHomeServer())) {
                 player.teleportAsync(plugin.getGuildManager().getHome(guild)).thenAccept(success -> {
-                    plugin.getChat().sendMessage(player,
-                            plugin.getGuildsConfig().getColoredText(
-                                    "info.guild.home.teleportedToHome", guild.getColor()));
+                    if (guild.getMember(player.getUniqueId()) != null) {
+                        plugin.getChat().sendMessage(player,
+                                plugin.getGuildsConfig().getColoredText(
+                                        "info.guild.home.teleportedToHome", guild.getColor()));
+                    } else {
+                        plugin.getChat().sendMessage(player,
+                                plugin.getGuildsConfig().getColoredText(
+                                        "info.guild.home.teleportedToOthersHome", guild.getColor(), guild.getName()));
+                    }
                 });
             } else {
                 plugin.getChat().sendMessage(player,
